@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Networking &amp; Modem: Zero to Hero</title>
+  <meta name="description" content="A ground-up, interactive course on how networks and cellular modems really work — from bits on a wire to 4G paging and RRC state machines." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+  <meta name="theme-color" content="#2c7be5" />
+  <!-- Docsify theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
+  <!-- Custom styling + interactive quiz styling -->
+  <link rel="stylesheet" href="assets/custom.css" />
+  <link rel="stylesheet" href="assets/quiz.css" />
+</head>
+<body>
+  <div id="app">Loading the course…</div>
+  <script>
+    window.$docsify = {
+      name: 'Networking &amp; Modem',
+      repo: '', // set to 'your-username/networking-modem-course' after you create the repo
+      loadSidebar: true,
+      loadNavbar: false,
+      coverpage: true,
+      onlyCover: false,
+      auto2top: true,
+      maxLevel: 3,
+      subMaxLevel: 3,
+      homepage: 'README.md',
+      search: {
+        placeholder: 'Search the whole course…',
+        noData: 'No results.',
+        depth: 4
+      },
+      pagination: {
+        crossChapter: true,
+        crossChapterText: true
+      },
+      // Render ```mermaid fenced blocks as diagrams
+      markdown: {
+        renderer: {
+          code: function (code, lang) {
+            if (lang === 'mermaid') {
+              return '<div class="mermaid">' + code + '</div>';
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      plugins: [
+        // Re-render mermaid + wire up interactive quizzes after every page load
+        function (hook) {
+          hook.doneEach(function () {
+            if (window.mermaid) {
+              try { window.mermaid.init(undefined, document.querySelectorAll('.mermaid')); }
+              catch (e) { /* ignore double-init on re-render */ }
+            }
+            if (window.initQuizzes) { window.initQuizzes(); }
+          });
+        }
+      ]
+    };
+  </script>
+  <!-- Docsify core -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <!-- Plugins: search, copy-to-clipboard for code, image zoom -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <!-- Mermaid for diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) { window.mermaid.initialize({ startOnLoad: false, theme: 'default' }); }
+  </script>
+  <!-- Interactive quiz engine -->
+  <script src="assets/quiz.js"></script>
+</body>
+</html>

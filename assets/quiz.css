@@ -1,0 +1,97 @@
+/* Interactive quiz styling */
+.quiz {
+  border: 1px solid var(--quiz-border, #d7e3f0);
+  border-left: 4px solid #2c7be5;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  background: #f7fbff;
+}
+.quiz .q {
+  font-weight: 600;
+  margin-top: 0;
+}
+.quiz .q::before {
+  content: "🧠 Quiz";
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #2c7be5;
+  background: #e6f0fd;
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-right: 0.6rem;
+  vertical-align: middle;
+}
+.quiz ul.options {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+}
+.quiz ul.options > li {
+  border: 1px solid #cdd9e5;
+  border-radius: 6px;
+  padding: 0.55rem 0.8rem;
+  margin: 0.45rem 0;
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.12s, border-color 0.12s;
+  user-select: none;
+}
+.quiz ul.options > li:hover:not(.locked) {
+  border-color: #2c7be5;
+  background: #eef5ff;
+}
+.quiz ul.options > li.locked { cursor: default; }
+.quiz ul.options > li.correct {
+  border-color: #1e9e5a;
+  background: #e7f7ee;
+}
+.quiz ul.options > li.correct::after {
+  content: " ✓";
+  color: #1e9e5a;
+  font-weight: 700;
+}
+.quiz ul.options > li.incorrect {
+  border-color: #d64545;
+  background: #fdeaea;
+}
+.quiz ul.options > li.incorrect::after {
+  content: " ✗";
+  color: #d64545;
+  font-weight: 700;
+}
+.quiz .quiz-verdict {
+  font-weight: 600;
+  margin: 0.7rem 0 0.3rem;
+}
+.quiz .quiz-verdict.good { color: #1e9e5a; }
+.quiz .quiz-verdict.bad { color: #d64545; }
+.quiz .explain {
+  margin-top: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  background: #eef2f7;
+  border-radius: 6px;
+  font-size: 0.94rem;
+}
+.quiz .quiz-reset {
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
+  color: #5b6b7b;
+  background: transparent;
+  border: 1px solid #cdd9e5;
+  border-radius: 5px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.quiz .quiz-reset:hover { border-color: #2c7be5; color: #2c7be5; }
+
+/* Dark mode friendliness (if a dark theme is ever applied) */
+@media (prefers-color-scheme: dark) {
+  .quiz { background: #12202f; border-color: #24374a; }
+  .quiz ul.options > li { background: #0f1a26; border-color: #24374a; color: #dbe6f0; }
+  .quiz ul.options > li:hover:not(.locked) { background: #16283a; }
+  .quiz .explain { background: #0f1a26; }
+}

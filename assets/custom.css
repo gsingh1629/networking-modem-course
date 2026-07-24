@@ -1,0 +1,47 @@
+/* Course theme tweaks on top of docsify vue theme */
+:root {
+  --theme-color: #2c7be5;
+}
+
+.markdown-section {
+  max-width: 900px;
+}
+
+/* Callout styling for our > blockquote mental-models and ⚡/🔧 lines */
+.markdown-section blockquote {
+  border-left: 4px solid #2c7be5;
+  background: #f2f8ff;
+  border-radius: 0 6px 6px 0;
+  color: #24435f;
+}
+
+/* Nicer tables */
+.markdown-section table {
+  display: table;
+  width: 100%;
+}
+
+/* Code blocks a touch denser */
+.markdown-section pre {
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+/* Sidebar active item pop */
+.sidebar-nav li.active > a {
+  font-weight: 700;
+  color: #2c7be5;
+}
+
+/* Cover page tuning */
+section.cover .cover-main > p:last-child a {
+  border-radius: 8px;
+}
+section.cover h1 { font-size: 2.4rem; }
+
+/* Mermaid diagrams centered with breathing room */
+.mermaid {
+  text-align: center;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
