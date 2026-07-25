@@ -25,6 +25,7 @@
 | [Q02](#q02--publish-it-under-my-github) | 2026-07-25 | Setup | Set it up on my GitHub profile (gsingh1629). |
 | [Q03](#q03--keep-a-record-of-all-my-questions) | 2026-07-25 | Meta | Record every question + explanation in a uniquely-named file in the repo root. |
 | [Q04](#q04--how-does-the-physical-signal-travel--how-do-bits-form) | 2026-07-25 | Module 02 | How does data become 0s/1s, and how does the signal travel across? |
+| [Q05](#q05--headers-add-size--why-add-them) | 2026-07-25 | Module 01/11 | Adding headers grows the packet — why add them at all? |
 
 ---
 
@@ -142,6 +143,48 @@ The short version:
 **Key takeaway:** L1 doesn't convert data to bits (that already happened) — it converts
 **bits ↔ physical signal**, and the "travel time" is a budget of four separate delays, of
 which only *transmission* depends on bandwidth.
+
+---
+
+### Q05 — Headers add size — why add them?
+**Asked:** 2026-07-25 · **Topic:** Module 01 (encapsulation) → Module 11 (PDCP/ROHC)
+
+**Question**
+> As we go down the layers, we add headers and more headers. But this increases the size of
+> the whole packet right? Why is this added?
+
+**Explanation**
+Yes — headers are pure **overhead**, and yes, they grow the packet. They're added because
+**each layer needs its own control information to do its job**, and in a layered design that
+info must travel *in-band* (attached to the data) so the matching layer on the other side can
+read it. Concretely, each header answers a question only that layer cares about:
+
+- **Ethernet header (~14B) + CRC trailer (4B):** which device on this link (dest/src MAC),
+  what's inside (EtherType), and did it arrive intact (checksum)?
+- **IP header (~20B):** which *machine* globally (src/dst IP), how many hops left (TTL),
+  what's the next protocol?
+- **TCP header (~20B):** which *program* (ports), byte ordering & reliability (sequence/ack
+  numbers), flow control (window), integrity (checksum)?
+
+Strip any of these and that layer literally cannot function — no MAC = can't reach the next
+hop; no ports = can't tell which app; no seq numbers = no reliability/ordering. The overhead
+is **the price of modularity**: independent, swappable, interoperable layers.
+
+**The nuance you're intuiting is real, though:** overhead *ratio* depends on payload size.
+The ~54 bytes of TCP/IP/Ethernet headers are:
+- **~3.6%** of a full 1500-byte packet → negligible (amortized over lots of data).
+- **~98%** of a 1-byte payload → terrible. This is why big transfers use large packets and
+  batching.
+
+And when overhead genuinely hurts — e.g. **VoIP**, where ~32 bytes of audio ride under ~40
+bytes of IP/UDP/RTP headers (>50% waste) — networks fight back with **header compression**.
+Cellular's **PDCP** layer uses **ROHC (Robust Header Compression)** to squash those 40 bytes
+down to ~1–3 bytes over the air, because radio spectrum is precious. (We'll cover this in
+Module 11 — it's a direct payoff of understanding *why* headers exist.)
+
+**Key takeaway:** headers are the unavoidable cost of the layered model — each layer's
+"shipping label." The cost is negligible for big payloads, painful for tiny ones, which is
+exactly why header *compression* (PDCP/ROHC on cellular, HPACK/QPACK in HTTP/2/3) exists.
 
 ---
 
