@@ -3,6 +3,7 @@
 - **Getting started**
   - [Home & roadmap](README.md)
   - [Glossary](GLOSSARY.md)
+  - [📡 Signal Log (Q&A)](SIGNAL-LOG.md)
 
 - **Part I — Foundations**
   - [01 · The Layered Model](01-the-layered-model.md)

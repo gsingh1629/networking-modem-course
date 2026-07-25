@@ -29,6 +29,8 @@ and hands-on hardware/software projects all get first-class treatment.
   **Cheat-sheet** you can skim later.
 - A running **[GLOSSARY.md](GLOSSARY.md)** collects every term. When you hit a word you
   don't know, it's there.
+- The **[📡 Signal Log](SIGNAL-LOG.md)** is a dated, searchable trace of every question
+  asked while building this course and the explanation given — a growing personal FAQ.
 - We build **projects** as we go — labeled `🔧 Project` — using real tools (Wireshark,
   `tcpdump`, SDR, etc.).
 
