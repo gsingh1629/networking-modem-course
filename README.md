@@ -104,7 +104,7 @@ correctly.
 ## Progress tracker
 
 - [x] 01 — The Layered Model
-- [ ] 02 — How data physically moves
+- [x] 02 — How data physically moves
 - [ ] 03 — Link layer
 - [ ] 04 — Network layer
 - [ ] 05 — Transport layer

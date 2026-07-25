@@ -37,3 +37,43 @@ Kept plain-English on purpose.
 - **Bandwidth** — capacity/width of a link (bits per second it *can* carry).
 - **Latency** — time for data to travel from A to B (delay), independent of bandwidth.
 - **Throughput** — the rate actually achieved in practice (≤ bandwidth).
+
+## Module 02 — How Data Physically Moves
+
+- **Character encoding** — the rule mapping characters to numbers/bits (ASCII, UTF-8).
+  e.g. `A` = 65 = `01000001`.
+- **ADC / DAC** — analog-to-digital / digital-to-analog converter; turns real-world signals
+  (sound, radio) into numbers and back.
+- **Line coding (baseband)** — representing bits directly as voltage levels on a wire
+  (NRZ, Manchester, 8b/10b).
+- **NRZ** — Non-Return-to-Zero; simplest line code (one level = 1, another = 0). Suffers
+  clock drift on long runs of the same bit.
+- **Manchester encoding** — self-clocking line code with a transition in every bit slot.
+- **Self-clocking / clock recovery** — deriving bit timing from the signal itself so the
+  receiver stays in sync.
+- **Carrier** — a steady sine wave whose properties are varied to carry data.
+- **Modulation (passband)** — encoding bits by varying a carrier's amplitude, frequency,
+  or phase. The core function of a modem.
+- **ASK / FSK / PSK** — Amplitude / Frequency / Phase Shift Keying; modulate one property.
+- **QAM** — Quadrature Amplitude Modulation; varies amplitude *and* phase to pack many bits
+  per symbol (16-/64-/256-/1024-QAM).
+- **Symbol** — one signaling state on the medium; can represent several bits.
+- **Constellation diagram** — plot of all possible symbols by amplitude (radius) and phase
+  (angle).
+- **Baud rate** — symbols per second. (Bit rate = baud × bits/symbol.)
+- **SNR (Signal-to-Noise Ratio)** — how strong the signal is versus background noise; sets
+  how rich a modulation can be used.
+- **Shannon capacity** — max error-free bits/sec = Bandwidth × log₂(1 + SNR).
+- **Adaptive modulation & coding (AMC)** — dynamically choosing the richest modulation the
+  current signal quality supports; why speed drops with weak signal.
+- **Attenuation** — signal weakening with distance.
+- **Crosstalk** — interference leaking between adjacent wires (why pairs are twisted).
+- **Multipath / fading** — radio signal arriving via multiple bounced paths, adding or
+  cancelling.
+- **Total internal reflection** — the effect that keeps light bouncing inside a fiber core.
+- **Transmission delay** — time to push bits onto the link = bits / bandwidth.
+- **Propagation delay** — time for the signal to travel the distance = distance / speed;
+  the latency floor, unaffected by bandwidth.
+- **Processing delay** — router/switch time to inspect and forward a packet.
+- **Queuing delay** — time a packet waits in a buffer; the main congestion-driven latency.
+- **Jitter** — variation in latency between packets.

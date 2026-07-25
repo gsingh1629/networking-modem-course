@@ -24,6 +24,7 @@
 | [Q01](#q01--make-it-an-interactive-github-repo) | 2026-07-24 | Setup | Turn the course into an interactive GitHub repo others can learn from? |
 | [Q02](#q02--publish-it-under-my-github) | 2026-07-25 | Setup | Set it up on my GitHub profile (gsingh1629). |
 | [Q03](#q03--keep-a-record-of-all-my-questions) | 2026-07-25 | Meta | Record every question + explanation in a uniquely-named file in the repo root. |
+| [Q04](#q04--how-does-the-physical-signal-travel--how-do-bits-form) | 2026-07-25 | Module 02 | How does data become 0s/1s, and how does the signal travel across? |
 
 ---
 
@@ -105,6 +106,42 @@ lost and you can revisit or search it anytime.
 
 **Key takeaway:** ask freely — every question becomes a permanent, searchable part of the
 course.
+
+---
+
+### Q04 — How does the physical signal travel & how do bits form?
+**Asked:** 2026-07-25 · **Topic:** Module 02 (Physical layer)
+
+**Question**
+> How does this physical signal travels? Like let's say we reach on the physical layer, but
+> how does this data gets converted into 0's and 1's? and let's say it gets converted but how
+> does this data travel across?
+
+**Explanation**
+This question *is* Module 02, written in full: **[02 · How data physically moves](02-how-data-moves.md)**.
+The short version:
+
+- **The data is already bits before L1 ever sees it.** Text (via ASCII/UTF-8, e.g. `A`=65=
+  `01000001`), numbers (base-2), images (RGB values), and sound (sampled by an ADC) are all
+  binary in memory. So the physical layer's job isn't *data → bits* — it's **bits → signal →
+  bits**.
+- **Turning bits into a signal** happens two ways: **line coding** (put voltage levels
+  directly on copper — but you must keep the clock synced, e.g. Manchester encoding) and
+  **modulation** (vary a carrier wave's amplitude/frequency/phase — **this is literally what
+  a modem does**: modulator-demodulator). Combining amplitude+phase gives **QAM**, packing
+  many bits per **symbol** (256-QAM = 8 bits/symbol). You can't pack infinitely many because
+  **noise** limits it (Shannon: capacity = bandwidth × log₂(1+SNR)) — which is why weak
+  signal → slower speeds (adaptive modulation).
+- **The signal travels** as an electromagnetic wave through the medium: **copper** (voltage,
+  ~0.6c, hurt by attenuation/crosstalk), **fiber** (light pulses via total internal
+  reflection, low loss + huge bandwidth), or **radio** (modulated carrier from an antenna,
+  ≈c, hurt by path loss/interference/multipath — the reason cellular is hard).
+- **What travelling costs = the delay budget:** transmission (bits/bandwidth) + propagation
+  (distance/speed — the latency floor bandwidth can't fix) + processing + queuing.
+
+**Key takeaway:** L1 doesn't convert data to bits (that already happened) — it converts
+**bits ↔ physical signal**, and the "travel time" is a budget of four separate delays, of
+which only *transmission* depends on bandwidth.
 
 ---
 

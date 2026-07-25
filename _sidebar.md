@@ -7,7 +7,7 @@
 
 - **Part I — Foundations**
   - [01 · The Layered Model](01-the-layered-model.md)
-  - 02 · How data physically moves *(soon)*
+  - [02 · How data physically moves](02-how-data-moves.md)
 
 - **Part II — Core networking**
   - 03 · Link layer *(soon)*
