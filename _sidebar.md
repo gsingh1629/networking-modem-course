@@ -2,6 +2,7 @@
 
 - **Getting started**
   - [Home & roadmap](README.md)
+  - [🌐 Deep dive: hitting google.com](deep-dive-loading-google.md)
   - [Glossary](GLOSSARY.md)
   - [📡 Signal Log (Q&A)](SIGNAL-LOG.md)
 

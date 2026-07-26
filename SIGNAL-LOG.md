@@ -26,6 +26,7 @@
 | [Q03](#q03--keep-a-record-of-all-my-questions) | 2026-07-25 | Meta | Record every question + explanation in a uniquely-named file in the repo root. |
 | [Q04](#q04--how-does-the-physical-signal-travel--how-do-bits-form) | 2026-07-25 | Module 02 | How does data become 0s/1s, and how does the signal travel across? |
 | [Q05](#q05--headers-add-size--why-add-them) | 2026-07-25 | Module 01/11 | Adding headers grows the packet — why add them at all? |
+| [Q06](#q06--what-happens-when-we-hit-googlecom) | 2026-07-26 | Cross-cutting | What happens end-to-end when we hit google.com? |
 
 ---
 
@@ -185,6 +186,45 @@ Module 11 — it's a direct payoff of understanding *why* headers exist.)
 **Key takeaway:** headers are the unavoidable cost of the layered model — each layer's
 "shipping label." The cost is negligible for big payloads, painful for tiny ones, which is
 exactly why header *compression* (PDCP/ROHC on cellular, HPACK/QPACK in HTTP/2/3) exists.
+
+---
+
+### Q06 — What happens when we hit google.com?
+**Asked:** 2026-07-26 · **Topic:** Cross-cutting (ties every layer together)
+
+**Question**
+> One most basic question I think, What happens when we hit google.com? Explain it in depth.
+
+**Explanation**
+This is the canonical end-to-end walkthrough — it touches every layer, so I wrote it as a
+flagship deep-dive page: **[🌐 Deep dive: hitting google.com](deep-dive-loading-google.md)**.
+The phases, in order:
+
+1. **Browser processing** — normalize input, HSTS forces `https://`, check for a reusable
+   connection.
+2. **DNS** — name → IP, checking browser/OS/hosts caches, then a recursive resolver that
+   walks root → `.com` TLD → Google's nameservers (over UDP/53; Anycast returns the nearest
+   server; answers cached by TTL).
+3. **ARP / local delivery** — to send packet one, resolve the gateway's MAC. IP stays
+   Google's end-to-end; MAC is the next hop (changes every hop).
+4. **TCP handshake** — SYN / SYN-ACK / ACK to port 443 (1 RTT).
+5. **TLS handshake** — exchange keys + verify Google's certificate (chain of trust to a
+   root CA, hostname, validity). TLS 1.3 ≈ 1 RTT; everything after is encrypted.
+6. **HTTP request** — `GET /` with headers/cookies; HTTP/2 multiplexes, HTTP/3 (QUIC over
+   UDP, Google-invented) collapses setup to 1-/0-RTT.
+7. **Server side** — hits the nearest Google Front End (edge/CDN/load balancer), which
+   serves or fetches the response.
+8. **Rendering** — parse HTML→DOM, fetch subresources (each may repeat the whole race),
+   CSSOM → render tree → layout → paint.
+
+**Latency budget (cold):** DNS (~0–1 RTT) + TCP (1) + TLS (1) + request→first-byte (1) ≈
+**3–4 RTT + server time** before content. Warm/HTTP-3 can be ~1 RTT or less. On mobile, add
+RRC setup (~50–100 ms) if the radio was idle. The RTT floor is physics (propagation delay),
+which is why Google puts servers physically near you.
+
+**Key takeaway:** "loading a page" is a relay race across every layer, run many times — and
+most of a cold load's delay is *setup round-trips*, which is exactly what HTTP/3/QUIC was
+built to eliminate.
 
 ---
 
