@@ -130,6 +130,62 @@ flowchart TD
 2. Is the **intermediate** correctly signed by the **root**? (check with the root's public key)
 3. Is that **root** in my **trusted store**? If yes → the whole chain is trustworthy.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: verifying the certificate chain bottom-up — leaf signed by intermediate, intermediate by root, root trusted — then the chain turns valid.">
+<style>
+.t1-card{stroke-width:2}
+.t1-l{font-size:12px;font-weight:700}
+.t1-s{font-size:9.5px;fill:#8595a7}
+.t1-ok{font-size:16px;font-weight:700;fill:#16a34a}
+.t1-g1{animation:t1g1 7s linear infinite}
+.t1-g2{animation:t1g2 7s linear infinite}
+.t1-g3{animation:t1g3 7s linear infinite}
+.t1-b1{animation:t1g1 7s linear infinite}
+.t1-b2{animation:t1g2 7s linear infinite}
+.t1-b3{animation:t1g3 7s linear infinite}
+.t1-fin{animation:t1fin 7s linear infinite}
+.t1-c1{animation:t1c1 7s linear infinite}
+.t1-c2{animation:t1c2 7s linear infinite}
+.t1-c3{animation:t1c3 7s linear infinite}
+@keyframes t1g1{0%,26%{opacity:0}30%,100%{opacity:1}}
+@keyframes t1g2{0%,50%{opacity:0}54%,100%{opacity:1}}
+@keyframes t1g3{0%,74%{opacity:0}78%,100%{opacity:1}}
+@keyframes t1fin{0%,82%{opacity:0}88%,100%{opacity:1}}
+@keyframes t1c1{0%,4%{opacity:1}28%,100%{opacity:0}}
+@keyframes t1c2{0%,30%{opacity:0}34%,52%{opacity:1}56%,100%{opacity:0}}
+@keyframes t1c3{0%,56%{opacity:0}60%,78%{opacity:1}82%,100%{opacity:0}}
+</style>
+<text x="12" y="18" style="font-size:13px;font-weight:700;fill:#2c7be5">Verify the chain bottom-up, until you reach a root you already trust</text>
+<!-- trust store tag -->
+<rect x="500" y="34" width="200" height="24" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><text x="600" y="51" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#166534">🔒 your trust store (pre-installed)</text>
+<!-- Root -->
+<rect class="t1-card" x="230" y="66" width="240" height="52" rx="9" fill="#fef9c3" stroke="#f59e0b"/>
+<rect class="t1-g3 t1-card" x="230" y="66" width="240" height="52" rx="9" fill="#dcfce7" stroke="#16a34a"/>
+<text class="t1-l" x="350" y="88" text-anchor="middle" fill="#a16207">Root CA — self-signed</text><text class="t1-s" x="350" y="104" text-anchor="middle">trusted because it's in your store</text>
+<text class="t1-ok t1-b3" x="452" y="98" text-anchor="middle">✓</text>
+<!-- Intermediate -->
+<rect class="t1-card" x="230" y="140" width="240" height="52" rx="9" fill="#e0e7ff" stroke="#6366f1"/>
+<rect class="t1-g2 t1-card" x="230" y="140" width="240" height="52" rx="9" fill="#dcfce7" stroke="#16a34a"/>
+<text class="t1-l" x="350" y="162" text-anchor="middle" fill="#4338ca">Intermediate CA</text><text class="t1-s" x="350" y="178" text-anchor="middle">signed by the Root</text>
+<text class="t1-ok t1-b2" x="452" y="172" text-anchor="middle">✓</text>
+<!-- Leaf -->
+<rect class="t1-card" x="230" y="214" width="240" height="52" rx="9" fill="#dbeafe" stroke="#2c7be5"/>
+<rect class="t1-g1 t1-card" x="230" y="214" width="240" height="52" rx="9" fill="#dcfce7" stroke="#16a34a"/>
+<text class="t1-l" x="350" y="236" text-anchor="middle" fill="#1d4ed8">Leaf — google.com</text><text class="t1-s" x="350" y="252" text-anchor="middle">signed by the Intermediate</text>
+<text class="t1-ok t1-b1" x="452" y="246" text-anchor="middle">✓</text>
+<!-- upward arrows -->
+<line x1="200" y1="240" x2="200" y2="192" stroke="#94a3b8" stroke-width="2"/><polygon points="196,196 204,196 200,188" fill="#94a3b8"/>
+<line x1="200" y1="166" x2="200" y2="118" stroke="#94a3b8" stroke-width="2"/><polygon points="196,122 204,122 200,114" fill="#94a3b8"/>
+<line x1="480" y1="92" x2="498" y2="60" stroke="#16a34a" stroke-width="2"/>
+<!-- step captions -->
+<text class="t1-c1" x="360" y="288" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#2c7be5">① Leaf signed by Intermediate? verify with Intermediate's public key ✓</text>
+<text class="t1-c2" x="360" y="288" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#4338ca">② Intermediate signed by Root? verify with Root's public key ✓</text>
+<text class="t1-c3" x="360" y="288" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#a16207">③ Is that Root in my trust store? yes ✓</text>
+<text class="t1-fin" x="360" y="288" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#16a34a">✅ chain valid — identity proven</text>
+</svg>
+<figcaption>Each cert is checked against the one above it, until the chain reaches a <b>root you already trust</b>. Break any link — bad signature, missing intermediate, untrusted root — and the whole thing fails.</figcaption>
+</figure>
+
 > **This is exactly like a chain of vouching in real life:** you trust a stranger's ID because
 > it's signed by a notary, whom you trust because they're licensed by a state authority you
 > already recognize. Break any link (a bad signature, an untrusted root, a missing
@@ -155,6 +211,61 @@ sequenceDiagram
     C->>S: {Finished} + {encrypted application data}
     Note over C,S: all further traffic = fast symmetric encryption
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: the TLS 1.3 handshake — ClientHello, ServerHello with certificate, verification, then encrypted data in one round-trip.">
+<style>
+.h3-line{stroke:#cbd5e1;stroke-width:2}
+.h3-h{font-size:13px;font-weight:700;fill:#1f2d3d}
+.h3-req{stroke:#2c7be5;stroke-width:2.5}
+.h3-res{stroke:#16a34a;stroke-width:2.5}
+.h3-txt{font-size:10px;font-weight:600;fill:#334155}
+.h3-1{animation:h3f1 8s linear infinite}
+.h3-2{animation:h3f2 8s linear infinite}
+.h3-3{animation:h3f3 8s linear infinite}
+.h3-4{animation:h3f4 8s linear infinite}
+.h3-5{animation:h3f5 8s linear infinite}
+@keyframes h3f1{0%,6%{opacity:0}11%,100%{opacity:1}}
+@keyframes h3f2{0%,30%{opacity:0}35%,100%{opacity:1}}
+@keyframes h3f3{0%,54%{opacity:0}59%,100%{opacity:1}}
+@keyframes h3f4{0%,70%{opacity:0}75%,100%{opacity:1}}
+@keyframes h3f5{0%,86%{opacity:0}91%,100%{opacity:1}}
+</style>
+<text x="12" y="18" class="h3-h" fill="#2c7be5">TLS 1.3 handshake — authenticate, then encrypt (1 round-trip)</text>
+<text class="h3-h" x="150" y="42" text-anchor="middle">Client</text>
+<text class="h3-h" x="580" y="42" text-anchor="middle">Server (google.com)</text>
+<line class="h3-line" x1="150" y1="50" x2="150" y2="270"/>
+<line class="h3-line" x1="580" y1="50" x2="580" y2="270"/>
+<!-- 1 ClientHello -->
+<g class="h3-1">
+<line class="h3-req" x1="150" y1="76" x2="580" y2="76"/><polygon points="580,71 580,81 589,76" fill="#2c7be5"/>
+<text class="h3-txt" x="360" y="70" text-anchor="middle" fill="#2c7be5">ClientHello — ciphers · key share · SNI · ALPN</text>
+</g>
+<!-- 2 ServerHello + cert -->
+<g class="h3-2">
+<line class="h3-res" x1="580" y1="118" x2="150" y2="118"/><polygon points="150,113 150,123 141,118" fill="#16a34a"/>
+<text class="h3-txt" x="360" y="104" text-anchor="middle" fill="#16a34a">ServerHello · key share</text>
+<text class="h3-txt" x="360" y="132" text-anchor="middle" fill="#16a34a">Certificate + CertificateVerify (signs transcript) + Finished</text>
+</g>
+<!-- 3 verify note -->
+<g class="h3-3">
+<rect x="30" y="150" width="240" height="46" rx="8" fill="#eff6ff" stroke="#2c7be5" stroke-width="1.5"/>
+<text class="h3-txt" x="150" y="168" text-anchor="middle" fill="#1d4ed8">Client: verify cert chain +</text>
+<text class="h3-txt" x="150" y="184" text-anchor="middle" fill="#1d4ed8">signature, derive shared keys</text>
+</g>
+<!-- 4 Finished + data -->
+<g class="h3-4">
+<line class="h3-req" x1="150" y1="224" x2="580" y2="224"/><polygon points="580,219 580,229 589,224" fill="#2c7be5"/>
+<text class="h3-txt" x="360" y="218" text-anchor="middle" fill="#2c7be5">Finished + 🔒 encrypted application data</text>
+</g>
+<!-- 5 secure banner -->
+<g class="h3-5">
+<rect x="150" y="248" width="430" height="30" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="365" y="268" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#166534">🔒 secure channel — all further traffic is fast symmetric encryption</text>
+</g>
+</svg>
+<figcaption>One round-trip: the client offers keys + SNI, the server proves its identity with a <b>certificate + a signature</b> (CertificateVerify), the client verifies and derives keys, and encrypted data flows. Ephemeral keys give <b>forward secrecy</b>.</figcaption>
+</figure>
 
 Walking it:
 
@@ -209,6 +320,43 @@ handshake, inside the encryption.
 **SNI** solves this: the client puts the **hostname it wants right in the ClientHello**
 ("I'm here for `google.com`"), so the server knows which certificate to present. It's the TLS
 equivalent of HTTP's `Host` header — "which of your many sites do I want."
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 230" role="img" aria-label="Animation: SNI. The ClientHello names the wanted host so a server hosting many sites picks the matching certificate.">
+<style>
+.sn-t{font-size:11px;font-weight:700;fill:#1f4a7a}
+.sn-card{fill:#f1f5f9;stroke:#cbd5e1;stroke-width:1.5}
+.sn-ch{animation:snch 6s linear infinite}
+.sn-sel{animation:snsel 6s linear infinite}
+.sn-cert{animation:sncert 6s linear infinite}
+.sn-c1{animation:snc1 6s linear infinite}
+.sn-c2{animation:snc2 6s linear infinite}
+@keyframes snch{0%{opacity:0;transform:translate(0,0)}6%{opacity:1}34%{opacity:1;transform:translate(280px,0)}38%,100%{opacity:0;transform:translate(280px,0)}}
+@keyframes snsel{0%,38%{opacity:0}44%,100%{opacity:1}}
+@keyframes sncert{0%,50%{opacity:0;transform:translate(0,0)}55%{opacity:1}86%{opacity:1;transform:translate(-300px,-53px)}90%,100%{opacity:0;transform:translate(-300px,-53px)}}
+@keyframes snc1{0%,40%{opacity:1}44%,100%{opacity:0}}
+@keyframes snc2{0%,42%{opacity:0}46%,100%{opacity:1}}
+</style>
+<text x="12" y="18" style="font-size:13px;font-weight:700;fill:#2c7be5">SNI: the ClientHello names the site, so the server picks the right cert</text>
+<!-- client -->
+<rect x="30" y="92" width="90" height="46" rx="8" fill="#eef5ff" stroke="#2c7be5" stroke-width="2"/><text class="sn-t" x="75" y="119" text-anchor="middle">Client</text>
+<!-- server holding many certs -->
+<rect x="400" y="40" width="300" height="170" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="2"/><text class="sn-t" x="550" y="60" text-anchor="middle" style="fill:#334155">One server IP : 443</text>
+<rect class="sn-card" x="420" y="72" width="260" height="34" rx="6"/><text class="sn-t" x="550" y="94" text-anchor="middle" style="fill:#8595a7">cert: a-shop.com</text>
+<rect class="sn-card" x="420" y="114" width="260" height="34" rx="6"/><text class="sn-t" x="550" y="136" text-anchor="middle" style="fill:#8595a7">cert: blog.net</text>
+<rect class="sn-card" x="420" y="156" width="260" height="34" rx="6"/><text class="sn-t" x="550" y="178" text-anchor="middle" style="fill:#8595a7">cert: google.com</text>
+<!-- selection highlight on google.com card -->
+<rect class="sn-sel" x="420" y="156" width="260" height="34" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/><text class="sn-sel sn-t" x="550" y="178" text-anchor="middle" style="fill:#166534">cert: google.com ✓ selected</text>
+<!-- ClientHello token -->
+<g class="sn-ch"><rect x="122" y="100" width="120" height="26" rx="5" fill="#2c7be5"/><text x="182" y="117" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">SNI: google.com</text></g>
+<!-- returning cert token -->
+<g class="sn-cert"><rect x="415" y="160" width="90" height="24" rx="5" fill="#16a34a"/><text x="460" y="177" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">google cert</text></g>
+<!-- captions -->
+<text class="sn-c1" x="360" y="222" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#2c7be5">① ClientHello announces the wanted host — in plaintext (the privacy leak ECH fixes)</text>
+<text class="sn-c2" x="360" y="222" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#166534">② server matches it and returns the google.com certificate ✓</text>
+</svg>
+<figcaption>Without SNI a multi-site server couldn't know which certificate to present. The tradeoff: classic SNI is <b>plaintext</b>, so observers learn which site you're visiting — which is exactly what <b>ECH</b> encrypts.</figcaption>
+</figure>
 
 **The catch — a privacy leak:** classic SNI is sent **in plaintext** (it has to be, to select
 the cert *before* keys exist). So anyone watching the wire — your ISP, a network censor — can
