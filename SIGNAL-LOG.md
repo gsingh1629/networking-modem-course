@@ -28,6 +28,7 @@
 | [Q05](#q05--headers-add-size--why-add-them) | 2026-07-25 | Module 01/11 | Adding headers grows the packet — why add them at all? |
 | [Q06](#q06--what-happens-when-we-hit-googlecom) | 2026-07-26 | Cross-cutting | What happens end-to-end when we hit google.com? |
 | [Q07](#q07--how-does-dns-work-at-scale-securely) | 2026-07-27 | Module 06 | How does DNS work, scale, stay resilient & secure — the hidden parts? |
+| [Q08](#q08--certificates-tls-handshake-chaining--sni) | 2026-07-27 | Module 06 | Certificates, root/child chaining, the TLS handshake, SNI — explain in depth |
 
 ---
 
@@ -271,6 +272,50 @@ Full write-up: **[🔎 Deep dive: How DNS works](deep-dive-dns.md)**. Answers to
 splits the work, delegation removes the central owner, and caching means the source is rarely
 asked. Security was bolted on later as two separate things: DNSSEC (is it real?) vs DoH/DoT
 (is it private?).
+
+---
+
+### Q08 — Certificates, TLS handshake, chaining & SNI
+**Asked:** 2026-07-27 · **Topic:** Module 06 (TLS/HTTPS) — full deep-dive
+
+**Question**
+> When we checked on this DNS part, something related to certificate is mentioned. This leads
+> to my next deep dive question on this certificates. What are these certificates? The root and
+> child certificates? What is this whole process of handshake which involved this certificates?
+> I have heard of SNI as well, so what is that? What is this chaining? Explain in depth about
+> all these and the other concepts which one should know.
+
+**Explanation**
+Full write-up: **[🔐 Deep dive: TLS, Certificates & the Chain of Trust](deep-dive-tls-certificates.md)**.
+Core points:
+
+- **Certificates prove identity, not secrecy.** Two separate guarantees: **confidentiality**
+  (encryption) vs **authentication** (certificates). Encryption alone is useless if you
+  encrypted to an impostor — certs stop MITM by proving you're really talking to google.com.
+- **What a cert is:** an **X.509** signed statement — "public key K belongs to google.com" —
+  signed by a **CA**. Contents: Subject, Public Key, **SAN** (valid hostnames), Issuer,
+  Validity, Serial, CA signature.
+- **Root vs child (chaining):** **Leaf** (google.com) is signed by an **Intermediate CA**,
+  signed by a **Root CA** (self-signed, pre-installed in your device's **trust store**). Verify
+  bottom-up; the server sends leaf + intermediate, you already have the root. Intermediates
+  exist so the root key stays **offline** (revoke an intermediate, never the root).
+- **The handshake (TLS 1.3, 1-RTT):** ClientHello (ciphers, ephemeral DH key share, SNI, ALPN)
+  → ServerHello (cipher + key share) + **Certificate** + **CertificateVerify** (server signs
+  the transcript with its private key = proof it holds the key = the real auth moment) +
+  Finished → client verifies chain + signature, derives keys → encrypted data. **(EC)DHE
+  ephemeral keys give forward secrecy.** 1.2 was 2-RTT with insecure RSA option.
+- **SNI:** the hostname placed in the (plaintext) ClientHello so a server hosting many sites
+  picks the right cert. Downside: it leaks *which site* you visit → **ECH (Encrypted Client
+  Hello)** fixes it using a key published via DNS.
+- **Also must-know:** validation = chain + hostname(SAN) + dates + **revocation** (CRL/OCSP/
+  **OCSP stapling**) + **Certificate Transparency** (public logs make mis-issuance detectable);
+  cert types DV/OV/EV + wildcard/SAN + self-signed; **ACME/Let's Encrypt** (free automated
+  issuance); **mTLS** (client also presents a cert); HSTS, pinning, PKI, root-store distrust.
+
+**Key takeaway:** a certificate is a CA vouching that a public key belongs to a domain, trusted
+via a chain up to a pre-installed root; the handshake authenticates (CertificateVerify proves
+private-key possession) then agrees an ephemeral symmetric key. Certificates = identity;
+encryption = secrecy — never conflate them.
 
 ---
 

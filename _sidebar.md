@@ -8,6 +8,7 @@
 - **🔬 Deep dives** (read anytime)
   - [🌐 Hitting google.com](deep-dive-loading-google.md)
   - [🔎 How DNS works](deep-dive-dns.md)
+  - [🔐 TLS, certificates & chain of trust](deep-dive-tls-certificates.md)
 
 - **Part I — Foundations**
   - [01 · The Layered Model](01-the-layered-model.md)

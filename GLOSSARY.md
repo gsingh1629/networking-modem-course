@@ -150,3 +150,44 @@ Kept plain-English on purpose.
   passing a client-location hint to authoritative servers.
 - **Registrar / Registry / ICANN / IANA** — the governance chain that makes domain names unique
   and delegable.
+
+## TLS & Certificates (deep-dive; formalized in Module 06)
+
+- **TLS** — Transport Layer Security; encrypts + authenticates connections (the "S" in HTTPS;
+  successor to SSL).
+- **Confidentiality vs authentication** — encryption (nobody can read it) vs identity proof
+  (you're talking to who you think). Certificates provide the latter.
+- **Symmetric encryption** — one shared key for encrypt+decrypt (AES, ChaCha20); fast, for bulk data.
+- **Asymmetric / public-key crypto** — a public/private key pair; encrypt-to-public,
+  sign-with-private. Used for auth + key agreement.
+- **Certificate (X.509)** — a CA-signed statement binding a public key to an identity (domain).
+- **CA (Certificate Authority)** — a trusted party that signs (vouches for) certificates.
+- **SAN (Subject Alternative Name)** — the hostnames a cert is valid for (replaces old Common Name).
+- **Chain of trust** — leaf → intermediate → root, each signed by the next; verified up to a
+  pre-trusted root.
+- **Root CA** — self-signed trust anchor pre-installed in the device trust store; key kept offline.
+- **Intermediate CA** — signed by the root; does day-to-day cert signing so the root stays offline.
+- **Leaf / end-entity cert** — the server's own certificate (e.g. google.com).
+- **Trust store** — the set of root CA certs your OS/browser trusts by default.
+- **Handshake** — the TLS negotiation that authenticates and establishes session keys.
+- **CertificateVerify** — server signs the handshake transcript with its private key, proving
+  it holds the key matching the cert.
+- **(EC)DHE** — (Elliptic-Curve) Diffie-Hellman Ephemeral; agrees a shared secret never sent on
+  the wire.
+- **Forward secrecy** — property (from ephemeral keys) that stealing the server key later can't
+  decrypt past sessions.
+- **Cipher suite** — the negotiated set of algorithms (e.g. TLS_AES_128_GCM_SHA256).
+- **ALPN** — Application-Layer Protocol Negotiation; picks HTTP/2 vs HTTP/1.1 etc. during the handshake.
+- **SNI (Server Name Indication)** — hostname in the ClientHello so a multi-site server selects
+  the right cert; plaintext (privacy leak).
+- **ECH (Encrypted Client Hello)** — encrypts the ClientHello (incl. SNI) using a DNS-published
+  key; successor to ESNI.
+- **Revocation** — invalidating a cert before expiry: **CRL** (lists), **OCSP** (live query),
+  **OCSP stapling** (server attaches a fresh proof, no extra round-trip).
+- **Certificate Transparency (CT) / SCT** — public append-only logs of issued certs; SCTs prove
+  logging, making mis-issuance detectable.
+- **DV / OV / EV** — Domain / Organization / Extended Validation levels (how hard the CA vetted you).
+- **ACME / Let's Encrypt** — protocol/CA for free, automated cert issuance & renewal.
+- **mTLS (mutual TLS)** — both client and server present certificates.
+- **Certificate pinning** — hard-coding which cert/CA an app accepts, to resist rogue CAs.
+- **PKI** — Public Key Infrastructure; the whole system of keys, certs, CAs, and policies.
