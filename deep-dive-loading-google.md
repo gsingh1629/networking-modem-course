@@ -40,6 +40,32 @@ sequenceDiagram
     U->>U: 10. Render: DOM → layout → paint
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 150" role="img" aria-label="Animation: the phases of a page load light up in sequence: DNS, ARP, TCP, TLS, HTTP, Render.">
+<style>
+.gp-box{fill:#eef5ff;stroke:#cbd5e1;stroke-width:1.5}
+.gp-l{font-size:13px;font-weight:700;fill:#1f4a7a}
+.gp-s{font-size:9.5px;fill:#8595a7}
+.gp-hi{fill:#2c7be5;opacity:.22;stroke:#2c7be5;stroke-width:2.5;animation:gpmove 7s linear infinite}
+@keyframes gpmove{
+0%,14%{transform:translateX(0)}17%,31%{transform:translateX(115px)}34%,48%{transform:translateX(230px)}
+51%,65%{transform:translateX(345px)}68%,82%{transform:translateX(460px)}85%,98%{transform:translateX(575px)}100%{transform:translateX(0)}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">One page load = six phases, in order →</text>
+<g>
+<rect class="gp-box" x="15" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="67" y="72" text-anchor="middle">DNS</text><text class="gp-s" x="67" y="90" text-anchor="middle">name → IP</text>
+<rect class="gp-box" x="130" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="182" y="72" text-anchor="middle">ARP</text><text class="gp-s" x="182" y="90" text-anchor="middle">find next hop</text>
+<rect class="gp-box" x="245" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="297" y="72" text-anchor="middle">TCP</text><text class="gp-s" x="297" y="90" text-anchor="middle">reliable pipe</text>
+<rect class="gp-box" x="360" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="412" y="72" text-anchor="middle">TLS</text><text class="gp-s" x="412" y="90" text-anchor="middle">encrypt + verify</text>
+<rect class="gp-box" x="475" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="527" y="72" text-anchor="middle">HTTP</text><text class="gp-s" x="527" y="90" text-anchor="middle">GET / → HTML</text>
+<rect class="gp-box" x="590" y="45" width="105" height="56" rx="9"/><text class="gp-l" x="642" y="72" text-anchor="middle">Render</text><text class="gp-s" x="642" y="90" text-anchor="middle">DOM → paint</text>
+</g>
+<rect class="gp-hi" x="15" y="45" width="105" height="56" rx="9"/>
+<text class="gp-s" x="360" y="128" text-anchor="middle">Each phase is a whole module — but they always run in this order (and several repeat for every sub-resource).</text>
+</svg>
+<figcaption>The moving highlight is "where you are" in a page load. Everything below zooms into one of these six phases.</figcaption>
+</figure>
+
 Now let's walk each step slowly.
 
 ---
@@ -251,6 +277,64 @@ Getting the HTML is just the start. The browser now:
 ## Putting the whole latency budget together
 
 For a **cold** load over TCP+TLS1.3 (RTT = one round-trip time):
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 340" role="img" aria-label="Animation: round-trips accumulate before the first byte — DNS, then TCP, then TLS, then HTTP — about 3 to 4 round-trips.">
+<style>
+.gr-line{stroke:#cbd5e1;stroke-width:2}
+.gr-h{font-size:13px;font-weight:700;fill:#1f2d3d}
+.gr-p{font-size:11px;font-weight:700}
+.gr-txt{font-size:10px;fill:#64748b}
+.gr-req{stroke:#2c7be5;stroke-width:2}
+.gr-res{stroke:#16a34a;stroke-width:2}
+.gr-dns{animation:grf 8s linear infinite}
+.gr-tcp{animation:grf2 8s linear infinite}
+.gr-tls{animation:grf3 8s linear infinite}
+.gr-http{animation:grf4 8s linear infinite}
+.gr-arr{animation:grf5 8s linear infinite}
+.gr-cnt{animation:grf6 8s linear infinite}
+@keyframes grf{0%,7%{opacity:0}12%,100%{opacity:1}}
+@keyframes grf2{0%,27%{opacity:0}32%,100%{opacity:1}}
+@keyframes grf3{0%,49%{opacity:0}54%,100%{opacity:1}}
+@keyframes grf4{0%,69%{opacity:0}74%,100%{opacity:1}}
+@keyframes grf5{0%,85%{opacity:0}89%,100%{opacity:1}}
+@keyframes grf6{0%,87%{opacity:0}92%,100%{opacity:1}}
+</style>
+<text x="12" y="20" class="gr-h" fill="#2c7be5">Round-trips pile up BEFORE the first byte of HTML</text>
+<text class="gr-h" x="150" y="44" text-anchor="middle">You</text>
+<text class="gr-h" x="580" y="44" text-anchor="middle">Google</text>
+<line class="gr-line" x1="150" y1="52" x2="150" y2="300"/>
+<line class="gr-line" x1="580" y1="52" x2="580" y2="300"/>
+<!-- DNS -->
+<g class="gr-dns">
+<text class="gr-p" x="20" y="76" fill="#2c7be5">DNS ~1 RTT</text>
+<line class="gr-req" x1="150" y1="72" x2="580" y2="72"/><polygon points="580,68 580,76 588,72" fill="#2c7be5"/>
+<line class="gr-res" x1="580" y1="90" x2="150" y2="90"/><polygon points="150,86 150,94 142,90" fill="#16a34a"/>
+</g>
+<!-- TCP -->
+<g class="gr-tcp">
+<text class="gr-p" x="20" y="122" fill="#2c7be5">TCP 1 RTT</text>
+<line class="gr-req" x1="150" y1="118" x2="580" y2="118"/><polygon points="580,114 580,122 588,118" fill="#2c7be5"/><text class="gr-txt" x="360" y="114" text-anchor="middle">SYN</text>
+<line class="gr-res" x1="580" y1="136" x2="150" y2="136"/><polygon points="150,132 150,140 142,136" fill="#16a34a"/><text class="gr-txt" x="360" y="132" text-anchor="middle">SYN-ACK</text>
+<line class="gr-req" x1="150" y1="154" x2="580" y2="154"/><polygon points="580,150 580,158 588,154" fill="#2c7be5"/><text class="gr-txt" x="360" y="150" text-anchor="middle">ACK</text>
+</g>
+<!-- TLS -->
+<g class="gr-tls">
+<text class="gr-p" x="20" y="192" fill="#7c3aed">TLS 1 RTT</text>
+<line class="gr-req" x1="150" y1="188" x2="580" y2="188"/><polygon points="580,184 580,192 588,188" fill="#2c7be5"/><text class="gr-txt" x="360" y="184" text-anchor="middle">ClientHello</text>
+<line class="gr-res" x1="580" y1="206" x2="150" y2="206"/><polygon points="150,202 150,210 142,206" fill="#16a34a"/><text class="gr-txt" x="360" y="202" text-anchor="middle">ServerHello + certificate</text>
+</g>
+<!-- HTTP -->
+<g class="gr-http">
+<text class="gr-p" x="20" y="244" fill="#16a34a">HTTP 1 RTT</text>
+<line class="gr-req" x1="150" y1="240" x2="580" y2="240"/><polygon points="580,236 580,244 588,240" fill="#2c7be5"/><text class="gr-txt" x="360" y="236" text-anchor="middle">GET /</text>
+<line class="gr-res" x1="580" y1="262" x2="150" y2="262"/><polygon points="150,258 150,266 142,262" fill="#16a34a"/><text class="gr-txt" x="360" y="258" text-anchor="middle">HTML (first byte!)</text>
+</g>
+<g class="gr-arr"><text x="360" y="290" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#16a34a">↑ first byte arrives here</text></g>
+<g class="gr-cnt"><rect x="150" y="308" width="430" height="26" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/><text x="365" y="326" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#b91c1c">≈ 3–4 round-trips before content — this is what HTTP/3 (QUIC) kills</text></g>
+</svg>
+<figcaption>Watch the cost stack up: DNS, then the TCP handshake, then TLS, then the HTTP request — each a round-trip on the wire, all <b>before</b> the first byte of HTML. Warm connections and HTTP/3 collapse this toward ~1 RTT.</figcaption>
+</figure>
 
 | Phase | Cost |
 |-------|------|
