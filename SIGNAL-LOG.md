@@ -33,6 +33,7 @@
 | [Q10](#q10--why-do-we-need-ips-why-cant-names-do-the-job) | 2026-07-27 | Module 04 | Why do we need IPs — why can't names do the job? |
 | [Q11](#q11--what-is-static--dynamic--rotating-ip) | 2026-07-27 | Module 04 | What is static / dynamic / rotating IP? |
 | [Q12](#q12--what-does-dns-follow-on-the-cap-theorem) | 2026-07-27 | Deep dive: DNS | On the CAP theorem, what does DNS follow (isn't it consistent)? |
+| [Q13](#q13--can-i-hardcode-an-aws-ip-instead-of-the-endpoint-name-to-save-dns-time) | 2026-07-27 | Practical | Can I pass an AWS IP directly instead of the endpoint name to save DNS time? |
 
 ---
 
@@ -457,6 +458,47 @@ Summary:
 **Key takeaway:** DNS = **AP / eventually consistent** (PA/EL in PACELC). It trades instant
 global consistency for always-on availability and low latency, and reaches correctness
 *eventually* via TTL expiry + async replication.
+
+---
+
+### Q13 — Can I hardcode an AWS IP instead of the endpoint name to save DNS time?
+**Asked:** 2026-07-27 · **Topic:** Practical (DNS latency, AWS)
+
+**Question**
+> When reading out the DNS's latency section, you mentioned that resolving the IP can take
+> time, so in my case where I am sure of the endpoint of the AWS, can I directly pass the IP
+> instead of the endpoint name? Will it save the time?
+
+**Explanation**
+**Technically yes it skips the lookup, but don't — the saving is negligible and it will
+break.** Reasons:
+
+1. **The saving is tiny.** DNS is cached (OS/resolver/app) + connection reuse. You'd save
+   ~one lookup at startup, then ~0 for every later request within the TTL. Inside a VPC the
+   Route 53 Resolver answers in sub-milliseconds anyway.
+2. **AWS IPs are intentionally ephemeral.** ELB/ALB/NLB, RDS, API Gateway, S3, CloudFront
+   resolve to IPs that change as they scale/fail over/replace nodes — AWS sets very low TTLs
+   (~60 s) precisely as a "don't pin me" signal. A hardcoded IP breaks, often within
+   hours/days.
+3. **You lose the DNS-enabled machinery** (ties to Q10): load balancing across AZs, failover
+   (RDS/Route 53 update DNS to fail over), autoscaling to new nodes, latency/GeoDNS routing.
+4. **TLS breaks** (ties to TLS deep-dive): the cert is for the hostname, not the IP; multi-
+   tenant endpoints (S3/CloudFront) need the Host header + SNI to route at all. Connecting by
+   raw IP fails hostname verification unless you still send the name — so you gain nothing.
+
+**Do this instead if DNS latency matters:** rely on **connection reuse / keep-alive** (resolve
+once, reuse TCP+TLS for many requests — the real win); cache DNS **respecting TTL** (note the
+JVM DNS-cache caveat — don't cache forever, or you'll get stale-ELB-IP bugs); use the fast
+local **VPC resolver**; warm the connection at startup.
+
+**If you genuinely need a stable IP,** use the sanctioned AWS options, not a pinned ELB IP:
+**Elastic IP** (EC2), **NLB with static/Elastic IPs**, or **Global Accelerator** (2 static
+anycast IPs that also *lower* latency by entering the AWS backbone early). **PrivateLink/VPC
+endpoints** cut network latency without touching DNS.
+
+**Key takeaway:** don't hardcode AWS IPs — the DNS cost is already ~0 via caching + connection
+reuse, and pinning an ephemeral IP sacrifices load balancing, failover, and TLS while saving
+almost nothing. Need a fixed IP → Elastic IP / NLB static IP / Global Accelerator.
 
 ---
 
