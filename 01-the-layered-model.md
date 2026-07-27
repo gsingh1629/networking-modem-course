@@ -162,6 +162,61 @@ On the receiving machine, the exact reverse happens — **decapsulation**. Each 
 >   Link <-- real physical link (1 hop) -->  Link
 > ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 320" role="img" aria-label="Animation: data travels physically down Host A's stack, across the wire, and up Host B's stack — while each layer behaves as if talking directly to its twin.">
+<style>
+.p1-h{font-size:13px;font-weight:700;fill:#1f2d3d}
+.p1-ll{font-size:12px;font-weight:600;fill:#fff}
+.p1-note{font-size:11px;fill:#8595a7}
+.p1-peer{stroke:#94a3b8;stroke-width:2;stroke-dasharray:7 6;fill:none;animation:p1ants 1s linear infinite}
+.p1-tok{animation:p1tok 6s ease-in-out infinite}
+@keyframes p1ants{to{stroke-dashoffset:-26}}
+@keyframes p1tok{
+0%{opacity:1;transform:translate(0px,0px)}
+6%{opacity:1;transform:translate(0px,0px)}
+30%{opacity:1;transform:translate(0px,180px)}
+55%{opacity:1;transform:translate(360px,180px)}
+80%{opacity:1;transform:translate(360px,0px)}
+90%{opacity:1;transform:translate(360px,0px)}
+95%,100%{opacity:0;transform:translate(360px,0px)}}
+</style>
+<text class="p1-h" x="130" y="20" text-anchor="middle">Host A</text>
+<text class="p1-h" x="630" y="20" text-anchor="middle">Host B</text>
+<!-- peer dashed lines (logical conversations) -->
+<line class="p1-peer" x1="200" y1="60" x2="560" y2="60"/>
+<line class="p1-peer" x1="200" y1="120" x2="560" y2="120"/>
+<line class="p1-peer" x1="200" y1="180" x2="560" y2="180"/>
+<text class="p1-note" x="380" y="52" text-anchor="middle">App ⇄ App  (logical peer conversation)</text>
+<text class="p1-note" x="380" y="112" text-anchor="middle">TCP ⇄ TCP</text>
+<text class="p1-note" x="380" y="172" text-anchor="middle">IP ⇄ IP</text>
+<!-- Stack A -->
+<g>
+<rect x="60" y="46" width="140" height="28" rx="5" fill="#7c3aed"/><text class="p1-ll" x="130" y="65" text-anchor="middle">App</text>
+<rect x="60" y="106" width="140" height="28" rx="5" fill="#2c7be5"/><text class="p1-ll" x="130" y="125" text-anchor="middle">TCP</text>
+<rect x="60" y="166" width="140" height="28" rx="5" fill="#16a34a"/><text class="p1-ll" x="130" y="185" text-anchor="middle">IP</text>
+<rect x="60" y="226" width="140" height="28" rx="5" fill="#f59e0b"/><text class="p1-ll" x="130" y="245" text-anchor="middle">Link</text>
+</g>
+<!-- Stack B -->
+<g>
+<rect x="560" y="46" width="140" height="28" rx="5" fill="#7c3aed"/><text class="p1-ll" x="630" y="65" text-anchor="middle">App</text>
+<rect x="560" y="106" width="140" height="28" rx="5" fill="#2c7be5"/><text class="p1-ll" x="630" y="125" text-anchor="middle">TCP</text>
+<rect x="560" y="166" width="140" height="28" rx="5" fill="#16a34a"/><text class="p1-ll" x="630" y="185" text-anchor="middle">IP</text>
+<rect x="560" y="226" width="140" height="28" rx="5" fill="#f59e0b"/><text class="p1-ll" x="630" y="245" text-anchor="middle">Link</text>
+</g>
+<!-- real physical link -->
+<line x1="130" y1="254" x2="130" y2="288" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="630" y1="254" x2="630" y2="288" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="130" y1="288" x2="630" y2="288" stroke="#0891b2" stroke-width="3"/>
+<text class="p1-note" x="380" y="308" text-anchor="middle">real physical link — the ONLY place bits actually cross (1 hop)</text>
+<!-- travelling token: starts at A.App (x=130,y=60) -->
+<g class="p1-tok">
+<circle cx="130" cy="60" r="9" fill="#ef4444"/>
+<circle cx="130" cy="60" r="9" fill="#ef4444" opacity="0.35"><animate attributeName="r" values="9;15;9" dur="1s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<figcaption>The data really travels <b>down</b> Host A, across the one physical link, and <b>up</b> Host B (red dot). But each layer <i>behaves</i> as if chatting straight across to its twin (dashed lines) — that useful illusion is why you can reason about one layer at a time.</figcaption>
+</figure>
+
 ### The same idea, as a diagram
 
 ```mermaid
@@ -183,6 +238,67 @@ flowchart TD
 
 *(This renders as a real diagram on the course site and on GitHub. Every module uses
 diagrams like this — see [Contributing](CONTRIBUTING.md) if you want to add more.)*
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 388" role="img" aria-label="Animation: as data moves down the stack, each layer prepends its own header and the packet grows, until it becomes bits on the wire.">
+<style>
+.e1-lbl{font-size:12.5px;font-weight:600}
+.e1-sub{font-size:10.5px;fill:#8595a7}
+.e1-hdr{font-size:12.5px;font-weight:700;fill:#fff}
+.e1-data{font-size:12px;font-weight:600;fill:#1f2d3d}
+.e1-bits{font-size:14px;font-weight:700;fill:#0891b2;letter-spacing:2px}
+.e1-r1{animation:e1r1 10s linear infinite}
+.e1-r2{animation:e1r2 10s linear infinite}
+.e1-r3{animation:e1r3 10s linear infinite}
+.e1-r4{animation:e1r4 10s linear infinite}
+.e1-r5{animation:e1r5 10s linear infinite}
+.e1-arrow{animation:e1arrow 10s ease-in-out infinite}
+.e1-shim{animation:e1shim 1.6s ease-in-out infinite}
+@keyframes e1r1{0%,4%{opacity:0;transform:translateY(-14px)}9%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes e1r2{0%,16%{opacity:0;transform:translateY(-14px)}21%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes e1r3{0%,28%{opacity:0;transform:translateY(-14px)}33%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes e1r4{0%,40%{opacity:0;transform:translateY(-14px)}45%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes e1r5{0%,52%{opacity:0;transform:translateY(-14px)}57%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes e1arrow{0%,4%{opacity:0;transform:translateY(0)}9%{opacity:1;transform:translateY(0)}52%{opacity:1;transform:translateY(248px)}90%{opacity:1;transform:translateY(248px)}96%,100%{opacity:0;transform:translateY(248px)}}
+@keyframes e1shim{0%,100%{opacity:.55}50%{opacity:1}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Encapsulation — the packet grows one header at a time, going DOWN ↓</text>
+<polygon class="e1-arrow" points="118,64 130,64 124,76" fill="#ef4444"/>
+<!-- Row 1: App -->
+<g class="e1-r1">
+<text class="e1-lbl" x="12" y="74" fill="#7c3aed">App</text><text class="e1-sub" x="12" y="88">message</text>
+<rect x="320" y="52" width="240" height="40" rx="5" fill="#94a3b8"/><text class="e1-data" x="440" y="77" text-anchor="middle">DATA  (GET /)</text>
+</g>
+<!-- Row 2: Transport -->
+<g class="e1-r2">
+<text class="e1-lbl" x="12" y="136" fill="#2c7be5">Transport</text><text class="e1-sub" x="12" y="150">segment</text>
+<rect x="260" y="114" width="60" height="40" rx="5" fill="#2c7be5"/><text class="e1-hdr" x="290" y="139" text-anchor="middle">TCP</text>
+<rect x="320" y="114" width="240" height="40" rx="5" fill="#94a3b8"/><text class="e1-data" x="440" y="139" text-anchor="middle">DATA</text>
+</g>
+<!-- Row 3: Network -->
+<g class="e1-r3">
+<text class="e1-lbl" x="12" y="198" fill="#16a34a">Network</text><text class="e1-sub" x="12" y="212">packet</text>
+<rect x="205" y="176" width="55" height="40" rx="5" fill="#16a34a"/><text class="e1-hdr" x="232" y="201" text-anchor="middle">IP</text>
+<rect x="260" y="176" width="60" height="40" rx="5" fill="#2c7be5"/><text class="e1-hdr" x="290" y="201" text-anchor="middle">TCP</text>
+<rect x="320" y="176" width="240" height="40" rx="5" fill="#94a3b8"/><text class="e1-data" x="440" y="201" text-anchor="middle">DATA</text>
+</g>
+<!-- Row 4: Link -->
+<g class="e1-r4">
+<text class="e1-lbl" x="12" y="260" fill="#f59e0b">Link</text><text class="e1-sub" x="12" y="274">frame</text>
+<rect x="135" y="238" width="70" height="40" rx="5" fill="#f59e0b"/><text class="e1-hdr" x="170" y="263" text-anchor="middle">ETH</text>
+<rect x="205" y="238" width="55" height="40" rx="5" fill="#16a34a"/><text class="e1-hdr" x="232" y="263" text-anchor="middle">IP</text>
+<rect x="260" y="238" width="60" height="40" rx="5" fill="#2c7be5"/><text class="e1-hdr" x="290" y="263" text-anchor="middle">TCP</text>
+<rect x="320" y="238" width="240" height="40" rx="5" fill="#94a3b8"/><text class="e1-data" x="440" y="263" text-anchor="middle">DATA</text>
+<rect x="560" y="238" width="45" height="40" rx="5" fill="#fbbf24"/><text class="e1-hdr" x="582" y="263" text-anchor="middle" style="fill:#7a5200">FCS</text>
+</g>
+<!-- Row 5: Physical -->
+<g class="e1-r5">
+<text class="e1-lbl" x="12" y="322" fill="#0891b2">Physical</text><text class="e1-sub" x="12" y="336">bits</text>
+<text class="e1-bits e1-shim" x="135" y="327">10110100 11010011 00101110 10011010 …</text>
+</g>
+</svg>
+<figcaption>Watch it build: <b>App</b> hands down its message, then <b>Transport</b> wraps a TCP header, <b>Network</b> an IP header, <b>Link</b> an Ethernet header + trailer (FCS) — and finally it's just <b>bits</b> on the wire. The receiver strips these back off in reverse (decapsulation).</figcaption>
+</figure>
 
 **Why headers cost you (foreshadowing latency):** every header is *overhead* — bytes that
 aren't your data. A tiny "hello" (5 bytes) rides inside ~54+ bytes of TCP/IP/Ethernet
@@ -227,6 +343,49 @@ questions** each answers. Later modules are entire deep-dives into each of these
 - **Key idea:** L2 is *local*; it has no concept of "the internet." It just hands off to
   the next hop. Every hop across the internet re-does L2 with new MAC addresses while the
   IP addresses stay the same. (Modules 03, 08, and — for radio — 10/11.)
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 240" role="img" aria-label="Animation: a packet crosses several routers. Its MAC address is rewritten at every hop, but its destination IP stays the same the whole way.">
+<style>
+.h1-node{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.h1-nl{font-size:12px;font-weight:700;fill:#1f4a7a}
+.h1-ip{font-size:14px;font-weight:700;fill:#16a34a}
+.h1-mac{font-size:14px;font-weight:700;fill:#f59e0b}
+.h1-cap{font-size:11px;fill:#8595a7}
+.h1-pkt{animation:h1pkt 6s linear infinite}
+.h1-m1{animation:h1m1 6s linear infinite}
+.h1-m2{animation:h1m2 6s linear infinite}
+.h1-m3{animation:h1m3 6s linear infinite}
+.h1-ipp{animation:h1ipp 3s ease-in-out infinite}
+@keyframes h1pkt{0%{transform:translateX(0)}100%{transform:translateX(620px)}}
+@keyframes h1m1{0%,2%{opacity:1}33%{opacity:1}35%,100%{opacity:0}}
+@keyframes h1m2{0%,33%{opacity:0}35%,66%{opacity:1}68%,100%{opacity:0}}
+@keyframes h1m3{0%,66%{opacity:0}68%{opacity:1}100%{opacity:1}}
+@keyframes h1ipp{0%,100%{opacity:.75}50%{opacity:1}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">One packet, four hops — MAC changes every hop, IP stays end-to-end</text>
+<!-- constant IP label -->
+<text class="h1-ip h1-ipp" x="380" y="46" text-anchor="middle">L3 destination IP: 142.250.190.78  — NEVER changes ✓</text>
+<!-- changing MAC label (3 overlapping, one visible per segment) -->
+<text class="h1-mac h1-m1" x="380" y="70" text-anchor="middle">L2 dst MAC: You → Router-1</text>
+<text class="h1-mac h1-m2" x="380" y="70" text-anchor="middle">L2 dst MAC: Router-1 → Router-2</text>
+<text class="h1-mac h1-m3" x="380" y="70" text-anchor="middle">L2 dst MAC: Router-2 → Server</text>
+<!-- link line -->
+<line x1="70" y1="150" x2="690" y2="150" stroke="#cbd5e1" stroke-width="3"/>
+<!-- nodes -->
+<g><rect class="h1-node" x="34" y="128" width="72" height="44" rx="8"/><text class="h1-nl" x="70" y="155" text-anchor="middle">You</text></g>
+<g><rect class="h1-node" x="244" y="128" width="72" height="44" rx="8"/><text class="h1-nl" x="280" y="151" text-anchor="middle">Router</text><text class="h1-nl" x="280" y="165" text-anchor="middle">1</text></g>
+<g><rect class="h1-node" x="454" y="128" width="72" height="44" rx="8"/><text class="h1-nl" x="490" y="151" text-anchor="middle">Router</text><text class="h1-nl" x="490" y="165" text-anchor="middle">2</text></g>
+<g><rect class="h1-node" x="654" y="128" width="72" height="44" rx="8"/><text class="h1-nl" x="690" y="155" text-anchor="middle">Server</text></g>
+<!-- travelling packet -->
+<g class="h1-pkt">
+<rect x="58" y="138" width="26" height="24" rx="5" fill="#ef4444"/>
+<text x="71" y="155" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">pkt</text>
+</g>
+<text class="h1-cap" x="380" y="212" text-anchor="middle">Think of it like a parcel: the courier (MAC) handing it off changes at every depot, but the address on the box (IP) is fixed.</text>
+</svg>
+<figcaption>The <b>MAC address</b> (amber) is rewritten at every hop — it only ever names the <i>next</i> device. The <b>destination IP</b> (green) is fixed the whole journey. That's the L2-local / L3-global split, made visible.</figcaption>
+</figure>
 
 ### L1/Physical — "Turn bits into signals and back"
 - **Job:** actually transmit 1s and 0s as voltage (copper), light (fiber), or radio

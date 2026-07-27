@@ -1,0 +1,49 @@
+/* Shared chrome for animated SVG figures across the course.
+   The animations themselves live inside each inline <svg> (self-contained,
+   namespaced). This file only styles the figure container + caption, and
+   provides a global accessibility guard for reduced motion. */
+
+.anim-fig {
+  margin: 1.6rem 0;
+  padding: 0.8rem 0.8rem 0.4rem;
+  border: 1px solid #dbe4ee;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f4f8fd 100%);
+  overflow-x: auto;
+}
+.anim-fig > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.anim-fig figcaption,
+.anim-fig .cap {
+  margin-top: 0.5rem;
+  font-size: 0.86rem;
+  color: #566677;
+  text-align: center;
+}
+.anim-fig .cap b { color: #2c7be5; }
+
+/* Base SVG text defaults so figures look consistent */
+.anim-fig svg text { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+
+@media (prefers-color-scheme: dark) {
+  .anim-fig {
+    background: linear-gradient(180deg, #0f1a26 0%, #0c151f 100%);
+    border-color: #24374a;
+  }
+  .anim-fig figcaption, .anim-fig .cap { color: #9fb3c8; }
+}
+
+/* Accessibility: honor users who prefer reduced motion — freeze all figure
+   animations so the final (fully-built) frame is shown statically. */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fig svg * {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    animation-fill-mode: forwards !important;
+  }
+}
