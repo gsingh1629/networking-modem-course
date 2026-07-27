@@ -30,6 +30,7 @@
 | [Q07](#q07--how-does-dns-work-at-scale-securely) | 2026-07-27 | Module 06 | How does DNS work, scale, stay resilient & secure — the hidden parts? |
 | [Q08](#q08--certificates-tls-handshake-chaining--sni) | 2026-07-27 | Module 06 | Certificates, root/child chaining, the TLS handshake, SNI — explain in depth |
 | [Q09](#q09--add-visualsanimations-to-everything) | 2026-07-27 | Meta | Add visuals / animated GIFs across all discussions so far |
+| [Q10](#q10--why-do-we-need-ips-why-cant-names-do-the-job) | 2026-07-27 | Module 04 | Why do we need IPs — why can't names do the job? |
 
 ---
 
@@ -348,6 +349,81 @@ that freezes animations), loaded in `index.html`. Each figure is a self-containe
 
 **Key takeaway:** the course is now visually animated end-to-end; contributors can add more
 using the same self-contained inline-SVG pattern.
+
+---
+
+### Q10 — Why do we need IPs — why can't names do the job?
+**Asked:** 2026-07-27 · **Topic:** Module 04 (Network layer)
+
+**Question**
+> Why do we need the IP's? Why can't the name do the job?
+
+**Explanation**
+Names and IPs solve **different problems**: a name is an **identifier** (*who/what* — for
+humans, stable, memorable); an IP is a **locator** (*where* — for routers, structured by
+network topology). You need both, and **DNS bridges them**. Why names can't replace IPs for
+routing:
+
+1. **Routing needs hierarchy + aggregation.** IPs are hierarchical (network prefix + host),
+   so a router keeps a *small* table — "everything in 142.250.0.0/16 goes this way" — instead
+   of knowing where each of billions of hosts is. Names are flat and location-meaningless
+   (`google.com` tells a router nothing about direction), so name-routing would need a global
+   table of every name with no way to summarize — it wouldn't scale.
+2. **Fixed length = hardware speed.** IPs are fixed-size (4 bytes v4 / 16 v6), trivial for
+   routers to parse at line rate for billions of packets/sec. Names are variable-length
+   strings — slow to match in silicon.
+3. **Decoupling = flexibility (the killer reason).** Because name and address are separate,
+   you can move a server to a new IP without changing its name, point one name at many IPs
+   (CDN/GeoDNS/load balancing), or host many names on one IP (SNI/virtual hosting). Fuse them
+   and you lose all of that.
+4. **Layering.** Names live at the human/application layer; IPs at the network layer (L3).
+   The indirection is deliberate separation of concerns (Module 01).
+
+Analogy: a person's **name** vs their **postal address**. The address is hierarchical
+(country→city→street→number) so mail is sortable at each level without any office knowing
+where everyone lives; the name gives zero routing hints. You can move house (new address)
+yet keep your name — and the phone book (DNS) maps one to the other.
+
+**Key takeaway:** name = *who* (for humans), IP = *where* (for routing); IP's hierarchy makes
+internet-scale routing possible, and keeping them separate is what enables CDNs, failover, and
+load balancing. DNS is the deliberate bridge between the two.
+
+---
+
+### Q11 — What is static / dynamic / rotating IP?
+**Asked:** 2026-07-27 · **Topic:** Module 04 (Network layer)
+
+**Question**
+> What is static and dynamic IP? Rotating IP?
+
+**Explanation**
+- **Static IP** — a fixed address that doesn't change; manually/reserved-assigned. Used for
+  things that must be *found* at a stable location: servers, mail servers, VPN endpoints. Pros:
+  reliable to reach, good for hosting/DNS A-records. Cons: costs more, manual admin, easier to
+  track/fingerprint, a standing attack target.
+- **Dynamic IP** — an address leased temporarily, typically via **DHCP** (Dynamic Host
+  Configuration Protocol). Your router/ISP hands one out from a pool with a **lease time**; on
+  expiry it renews (often the same one) or you may get a different one. This is what most
+  home/phone devices use. Pros: automatic, conserves scarce IPv4 addresses (ISPs reuse a pool
+  across many customers who aren't all online forever), cheaper. Cons: address can change, so
+  bad for hosting a service (mitigated by **Dynamic DNS** which auto-updates a name→current-IP
+  mapping).
+- **Rotating IP** — your outbound (public) IP is *deliberately* cycled across a pool over
+  time or per request, usually via a proxy service / proxy pool (datacenter, residential, or
+  mobile IPs). Purpose: distribute requests across many source IPs — legitimately for
+  privacy, geo-testing, resilient scraping, ad verification; abusively for evading rate limits
+  and bans. Related but distinct from **NAT** (many devices already *share* one public IP —
+  Module 04) and from a **VPN** (which replaces your public IP with the server's; some VPN/
+  proxy products rotate it — Module 15).
+
+Underlying detail: how you get an address at all is usually **DHCP** (dynamic) or manual
+config (static); NAT means your **private** LAN IP and your **public** IP are different things
+(covered next in Module 04).
+
+**Key takeaway:** static = fixed & findable (servers); dynamic = leased via DHCP & may change
+(most clients, saves IPv4); rotating = intentionally cycling your public IP across a pool
+(privacy/scale/evasion). All three are about *how an address is assigned/changed*, layered on
+top of why IPs exist at all (Q10).
 
 ---
 
