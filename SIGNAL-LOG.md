@@ -29,6 +29,7 @@
 | [Q06](#q06--what-happens-when-we-hit-googlecom) | 2026-07-26 | Cross-cutting | What happens end-to-end when we hit google.com? |
 | [Q07](#q07--how-does-dns-work-at-scale-securely) | 2026-07-27 | Module 06 | How does DNS work, scale, stay resilient & secure — the hidden parts? |
 | [Q08](#q08--certificates-tls-handshake-chaining--sni) | 2026-07-27 | Module 06 | Certificates, root/child chaining, the TLS handshake, SNI — explain in depth |
+| [Q09](#q09--add-visualsanimations-to-everything) | 2026-07-27 | Meta | Add visuals / animated GIFs across all discussions so far |
 
 ---
 
@@ -316,6 +317,37 @@ Core points:
 via a chain up to a pre-installed root; the handshake authenticates (CertificateVerify proves
 private-key possession) then agrees an ephemeral symmetric key. Certificates = identity;
 encryption = secrecy — never conflate them.
+
+---
+
+### Q09 — Add visuals/animations to everything
+**Asked:** 2026-07-27 · **Topic:** Meta / pedagogy
+
+**Question**
+> In all the discussion we had till now, can we add visuals? some gifs to get the concept in
+> depth? In all the discussion we had?
+
+**Explanation**
+Added **animated SVG** figures (chosen over literal GIFs — crisp, tiny, editable, and they
+animate on the live site; the tradeoff is they don't animate in GitHub's raw `.md` preview,
+only on the site). Rolled out **exhaustively, multiple per page**, across all six pages
+(18 animations total):
+
+- **Module 01:** encapsulation build-up · virtual peer conversation · MAC-changes-per-hop.
+- **Module 02:** ASK/FSK/PSK flowing signals · QPSK vs 16-QAM constellation · transmission
+  vs propagation delay · bandwidth-vs-latency highway.
+- **Module 03:** switch flooding + MAC learning · ARP broadcast/reply · CSMA/CD collision +
+  backoff.
+- **google.com deep-dive:** six-phase pipeline · round-trips accumulating before first byte.
+- **DNS deep-dive:** recursive resolution walk · cache miss vs hit · anycast nearest-server.
+- **TLS deep-dive:** chain-of-trust verification · TLS 1.3 handshake · SNI cert selection.
+
+Infra: `assets/anim.css` (figure chrome + a `prefers-reduced-motion` accessibility guard
+that freezes animations), loaded in `index.html`. Each figure is a self-contained inline
+`<svg>` with namespaced CSS keyframes; all 18 validated as well-formed XML.
+
+**Key takeaway:** the course is now visually animated end-to-end; contributors can add more
+using the same self-contained inline-SVG pattern.
 
 ---
 
