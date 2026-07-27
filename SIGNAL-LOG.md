@@ -31,6 +31,8 @@
 | [Q08](#q08--certificates-tls-handshake-chaining--sni) | 2026-07-27 | Module 06 | Certificates, root/child chaining, the TLS handshake, SNI — explain in depth |
 | [Q09](#q09--add-visualsanimations-to-everything) | 2026-07-27 | Meta | Add visuals / animated GIFs across all discussions so far |
 | [Q10](#q10--why-do-we-need-ips-why-cant-names-do-the-job) | 2026-07-27 | Module 04 | Why do we need IPs — why can't names do the job? |
+| [Q11](#q11--what-is-static--dynamic--rotating-ip) | 2026-07-27 | Module 04 | What is static / dynamic / rotating IP? |
+| [Q12](#q12--what-does-dns-follow-on-the-cap-theorem) | 2026-07-27 | Deep dive: DNS | On the CAP theorem, what does DNS follow (isn't it consistent)? |
 
 ---
 
@@ -424,6 +426,37 @@ config (static); NAT means your **private** LAN IP and your **public** IP are di
 (most clients, saves IPv4); rotating = intentionally cycling your public IP across a pool
 (privacy/scale/evasion). All three are about *how an address is assigned/changed*, layered on
 top of why IPs exist at all (Q10).
+
+---
+
+### Q12 — What does DNS follow on the CAP theorem?
+**Asked:** 2026-07-27 · **Topic:** Deep dive: DNS (systems design)
+
+**Question**
+> As in High scale systems we have CAP theorem, so what does DNS follow? Because it should be
+> consistent, should be updated and right? So what does this follow?
+
+**Explanation**
+Full write-up added as **§7½** in the [DNS deep-dive](deep-dive-dns.md#7½-where-dns-sits-on-the-cap-theorem-consistency-model).
+Summary:
+
+- **DNS is AP — Availability + Partition-tolerance — and *eventually consistent*, NOT strongly
+  consistent.** The whole design is caching with **TTLs**: after you change a record, resolvers
+  keep serving the **old** value until their TTL expires (seconds→days), so different users get
+  different answers during that window. That's deliberately not strong consistency.
+- **It's still "right," just *eventually*.** Once TTLs lapse and secondaries sync (async zone
+  transfers), everyone converges. The control knob is **TTL** — lower it before a migration for
+  fast propagation, raise it after to cut load. ("DNS changes take time to propagate" = this.)
+- **CAP is a simplification; PACELC says more:** even with no partition (Else), you trade
+  Latency vs Consistency — DNS picks **latency** (caching) there too. So DNS is **PA/EL**.
+- **Why it's the right trade:** a slightly stale answer is harmless; DNS being *down* is
+  catastrophic. For a read-heavy, write-rare, planet-scale lookup, availability + speed beat
+  instant consistency — which is why you don't use fast DNS updates for failover (use anycast /
+  a load balancer at a lower layer, keep the IP stable).
+
+**Key takeaway:** DNS = **AP / eventually consistent** (PA/EL in PACELC). It trades instant
+global consistency for always-on availability and low latency, and reaches correctness
+*eventually* via TTL expiry + async replication.
 
 ---
 

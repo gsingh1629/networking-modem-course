@@ -338,6 +338,44 @@ instantly, and not globally — because there is no single map to wipe.**
 
 ---
 
+## 7½. Where DNS sits on the CAP theorem (consistency model)
+
+A natural systems question: **CAP** says a distributed data store, *when a network partition
+happens*, must choose between **C**onsistency (everyone sees the latest value) and
+**A**vailability (every request still gets an answer). So which is DNS?
+
+**DNS is firmly AP — it chooses Availability, and is *eventually consistent*, not strongly
+consistent.** That surprises people who assume "it must always be right," so here's the honest
+picture:
+
+- **Why not strongly consistent:** the *entire design* is caching with **TTLs**. When you
+  change a record, resolvers worldwide keep serving the **old** value until their cached TTL
+  expires — seconds to days. During that window, different users legitimately get **different
+  answers**. That's the opposite of strong consistency, on purpose.
+- **Why AP:** DNS would rather **always answer (fast, from cache or any reachable server)**
+  than block to guarantee the newest value. Redundant authoritative servers sync
+  **asynchronously** (zone transfers); anycast serves from many instances; during a partition
+  resolvers keep answering from cache. Availability + low latency win.
+- **It's still "right" — eventually.** DNS isn't *inconsistent*; it's **eventually
+  consistent**: once TTLs lapse and secondaries sync, everyone converges to the correct value.
+  The knob you control is **TTL** — lower it (e.g. 60 s) before a planned migration so changes
+  propagate quickly, raise it afterward to cut load. (This is why "DNS changes take time to
+  propagate.")
+- **CAP is a simplification — PACELC says more.** Even with **no** partition (the "**E**lse"),
+  you still trade **L**atency vs **C**onsistency. DNS clearly picks **latency** (via caching)
+  in normal operation too. So in PACELC terms DNS is **PA/EL**: available under partition,
+  low-latency otherwise — consistency traded away in both cases.
+- **Scope matters:** a single authoritative server's own zone data *is* internally consistent;
+  it's the **global system** (caches + secondaries + resolvers) that is eventually consistent.
+
+> **Why this is the right trade for DNS.** A DNS answer that's a few minutes stale is almost
+> always harmless; DNS being **down** is catastrophic (nothing resolves). For a read-heavy,
+> write-rare, planet-scale lookup system, **availability + speed beat instant consistency** —
+> which is exactly why you *don't* rely on fast DNS updates for failover (use anycast or a
+> load balancer at a lower layer, and keep the IP stable).
+
+---
+
 ## 8. How is the map secured?
 
 DNS was designed in a trusting era, so security was bolted on later. There are **two
