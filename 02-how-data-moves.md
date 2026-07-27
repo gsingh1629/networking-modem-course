@@ -138,6 +138,44 @@ Each gives a modulation scheme:
  PSK:   /\/\/\   \/\/\/    /\/\/\     (phase flips)
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 270" role="img" aria-label="Animation: three modulated signals flowing along the wire — amplitude (ASK), frequency (FSK) and phase (PSK) modulation.">
+<style>
+.m2-lbl{font-size:12px;font-weight:700}
+.m2-sub{font-size:10px;fill:#8595a7}
+.m2-wave{fill:none;stroke-width:2.5}
+.m2-scroll{animation:m2scroll 4s linear infinite}
+@keyframes m2scroll{from{transform:translateX(0)}to{transform:translateX(-240px)}}
+</style>
+<defs>
+<path id="m2ask" d="M0,0 q10 -36 20 0 q10 36 20 0 q10 -36 20 0 q10 36 20 0 q10 -36 20 0 q10 36 20 0 q10 -8 20 0 q10 8 20 0 q10 -8 20 0 q10 8 20 0 q10 -8 20 0 q10 8 20 0"/>
+<path id="m2fsk" d="M0,0 q6 -28 12 0 q6 28 12 0 q6 -28 12 0 q6 28 12 0 q6 -28 12 0 q6 28 12 0 q6 -28 12 0 q6 28 12 0 q6 -28 12 0 q6 28 12 0 q15 -28 30 0 q15 28 30 0 q15 -28 30 0 q15 28 30 0"/>
+<path id="m2psk" d="M0,0 q10 -28 20 0 q10 28 20 0 q10 -28 20 0 q10 28 20 0 q10 -28 20 0 q10 28 20 0 q10 28 20 0 q10 -28 20 0 q10 28 20 0 q10 -28 20 0 q10 28 20 0 q10 -28 20 0"/>
+<clipPath id="m2clip"><rect x="70" y="40" width="560" height="210"/></clipPath>
+</defs>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">A modem imprints bits onto a carrier wave — the signal flows along the wire →</text>
+<!-- left labels -->
+<text class="m2-lbl" x="12" y="86" fill="#ef4444">ASK</text><text class="m2-sub" x="12" y="100">amplitude</text>
+<text class="m2-lbl" x="12" y="156" fill="#16a34a">FSK</text><text class="m2-sub" x="12" y="170">frequency</text>
+<text class="m2-lbl" x="12" y="226" fill="#7c3aed">PSK</text><text class="m2-sub" x="12" y="240">phase</text>
+<g clip-path="url(#m2clip)">
+<g class="m2-scroll">
+<g transform="translate(70,86)">
+<use href="#m2ask" x="0" class="m2-wave" stroke="#ef4444"/><use href="#m2ask" x="240" class="m2-wave" stroke="#ef4444"/><use href="#m2ask" x="480" class="m2-wave" stroke="#ef4444"/><use href="#m2ask" x="720" class="m2-wave" stroke="#ef4444"/>
+</g>
+<g transform="translate(70,156)">
+<use href="#m2fsk" x="0" class="m2-wave" stroke="#16a34a"/><use href="#m2fsk" x="240" class="m2-wave" stroke="#16a34a"/><use href="#m2fsk" x="480" class="m2-wave" stroke="#16a34a"/><use href="#m2fsk" x="720" class="m2-wave" stroke="#16a34a"/>
+</g>
+<g transform="translate(70,226)">
+<use href="#m2psk" x="0" class="m2-wave" stroke="#7c3aed"/><use href="#m2psk" x="240" class="m2-wave" stroke="#7c3aed"/><use href="#m2psk" x="480" class="m2-wave" stroke="#7c3aed"/><use href="#m2psk" x="720" class="m2-wave" stroke="#7c3aed"/>
+</g>
+</g>
+</g>
+<text class="m2-sub" x="350" y="264" text-anchor="middle">Same bits, three "knobs": ASK varies height, FSK varies how fast it wiggles, PSK flips where it is in its cycle.</text>
+</svg>
+<figcaption>This is literally what a <b>modem</b> (modulator-demodulator) does: vary one property of a carrier wave to carry bits. Combine <i>amplitude + phase</i> and you get <b>QAM</b> — many bits per symbol (next figure).</figcaption>
+</figure>
+
 **"Modulator–demodulator" = modem.** The transmitter's modulator imprints bits onto the
 carrier; the receiver's demodulator reads the carrier's amplitude/frequency/phase back out
 as bits. That's the literal definition of the word. Your DSL modem, cable modem, Wi-Fi
@@ -179,6 +217,57 @@ The number of bits per symbol grows with the number of points:
 
 So `1024-QAM` at the same baud rate as `QPSK` carries **5× the data** — same wave changes,
 more bits crammed into each. This is *the* trick behind ever-faster Wi-Fi and cellular.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 320" role="img" aria-label="Animation: constellation diagrams. QPSK has 4 symbols (2 bits each); 16-QAM has 16 symbols (4 bits each). Points light up in sequence.">
+<style>
+.c1-ax{stroke:#cbd5e1;stroke-width:1.5}
+.c1-t{font-size:12px;font-weight:700;fill:#1f2d3d}
+.c1-s{font-size:10.5px;fill:#8595a7}
+.c1-lab{font-size:9px;fill:#64748b}
+.c1-p{animation:c1pulse 3.2s ease-in-out infinite}
+.c1-q{animation:c1pulse 3.2s ease-in-out infinite}
+@keyframes c1pulse{0%,100%{r:5;fill:#94a3b8}45%,55%{r:9;fill:#2c7be5}}
+</style>
+<text x="12" y="20" class="c1-t" fill="#2c7be5">Constellation: each point is one symbol = several bits at once</text>
+<!-- QPSK panel -->
+<text class="c1-t" x="160" y="52" text-anchor="middle">QPSK — 4 symbols</text>
+<text class="c1-s" x="160" y="68" text-anchor="middle">2 bits / symbol</text>
+<line class="c1-ax" x1="160" y1="90" x2="160" y2="270"/>
+<line class="c1-ax" x1="70" y1="180" x2="250" y2="180"/>
+<g>
+<circle class="c1-q" cx="120" cy="140" r="5" style="animation-delay:0s"/><text class="c1-lab" x="120" y="128" text-anchor="middle">00</text>
+<circle class="c1-q" cx="200" cy="140" r="5" style="animation-delay:.8s"/><text class="c1-lab" x="200" y="128" text-anchor="middle">01</text>
+<circle class="c1-q" cx="120" cy="220" r="5" style="animation-delay:2.4s"/><text class="c1-lab" x="120" y="238" text-anchor="middle">10</text>
+<circle class="c1-q" cx="200" cy="220" r="5" style="animation-delay:1.6s"/><text class="c1-lab" x="200" y="238" text-anchor="middle">11</text>
+</g>
+<!-- 16-QAM panel -->
+<text class="c1-t" x="530" y="52" text-anchor="middle">16-QAM — 16 symbols</text>
+<text class="c1-s" x="530" y="68" text-anchor="middle">4 bits / symbol → 2× the data</text>
+<line class="c1-ax" x1="530" y1="90" x2="530" y2="270"/>
+<line class="c1-ax" x1="440" y1="180" x2="620" y2="180"/>
+<g>
+<circle class="c1-p" cx="476" cy="126" r="5" style="animation-delay:0s"/>
+<circle class="c1-p" cx="512" cy="126" r="5" style="animation-delay:.2s"/>
+<circle class="c1-p" cx="548" cy="126" r="5" style="animation-delay:.4s"/>
+<circle class="c1-p" cx="584" cy="126" r="5" style="animation-delay:.6s"/>
+<circle class="c1-p" cx="476" cy="162" r="5" style="animation-delay:.8s"/>
+<circle class="c1-p" cx="512" cy="162" r="5" style="animation-delay:1s"/>
+<circle class="c1-p" cx="548" cy="162" r="5" style="animation-delay:1.2s"/>
+<circle class="c1-p" cx="584" cy="162" r="5" style="animation-delay:1.4s"/>
+<circle class="c1-p" cx="476" cy="198" r="5" style="animation-delay:1.6s"/>
+<circle class="c1-p" cx="512" cy="198" r="5" style="animation-delay:1.8s"/>
+<circle class="c1-p" cx="548" cy="198" r="5" style="animation-delay:2s"/>
+<circle class="c1-p" cx="584" cy="198" r="5" style="animation-delay:2.2s"/>
+<circle class="c1-p" cx="476" cy="234" r="5" style="animation-delay:2.4s"/>
+<circle class="c1-p" cx="512" cy="234" r="5" style="animation-delay:2.6s"/>
+<circle class="c1-p" cx="548" cy="234" r="5" style="animation-delay:2.8s"/>
+<circle class="c1-p" cx="584" cy="234" r="5" style="animation-delay:3s"/>
+</g>
+<text class="c1-s" x="360" y="298" text-anchor="middle">More points = more bits per symbol = faster — but points sit closer, so noise smears them (Shannon's ceiling).</text>
+</svg>
+<figcaption>Each lit point is one transmitted <b>symbol</b>. QPSK packs 2 bits per symbol; 16-QAM packs 4. Cramming more points in is how speed grows — until they're so close that <b>noise</b> makes them indistinguishable.</figcaption>
+</figure>
 
 ### Why not just use a billion points per symbol?
 
@@ -281,6 +370,38 @@ have completely different causes:
 > exact framework (a budget of named, separable delays) is how you'll attribute every
 > millisecond in Module 13.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 210" role="img" aria-label="Animation: transmission delay is the time to push bits onto the wire; propagation delay is the time for them to travel the distance.">
+<style>
+.d1-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.d1-t{font-size:12px;font-weight:700;fill:#1f4a7a}
+.d1-l1{font-size:12px;font-weight:700;fill:#ef4444;animation:d1l1 6s linear infinite}
+.d1-l2{font-size:12px;font-weight:700;fill:#16a34a;animation:d1l2 6s linear infinite}
+.d1-pkt{animation:d1pkt 6s linear infinite}
+.d1-rx{animation:d1flash 6s linear infinite}
+@keyframes d1pkt{0%{width:0;transform:translateX(0);opacity:1}33%{width:80px;transform:translateX(0)}40%{width:80px;transform:translateX(0)}90%{width:80px;transform:translateX(410px)}94%{opacity:1}98%,100%{opacity:0;width:80px;transform:translateX(410px)}}
+@keyframes d1l1{0%,36%{opacity:1}42%,100%{opacity:0}}
+@keyframes d1l2{0%,40%{opacity:0}46%,92%{opacity:1}96%,100%{opacity:0}}
+@keyframes d1flash{0%,86%{fill:#eef5ff}90%{fill:#bbf7d0}96%,100%{fill:#eef5ff}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Two very different delays make up one trip</text>
+<!-- wire -->
+<line x1="110" y1="120" x2="610" y2="120" stroke="#cbd5e1" stroke-width="3"/>
+<!-- boxes -->
+<rect class="d1-box" x="20" y="98" width="90" height="46" rx="8"/><text class="d1-t" x="65" y="126" text-anchor="middle">Sender</text>
+<rect class="d1-rx" x="610" y="98" width="90" height="46" rx="8" stroke="#2c7be5" stroke-width="2"/><text class="d1-t" x="655" y="126" text-anchor="middle">Receiver</text>
+<!-- packet (grows, then travels) -->
+<rect class="d1-pkt" x="110" y="108" width="0" height="24" rx="4" fill="#ef4444"/>
+<!-- labels -->
+<text class="d1-l1" x="150" y="70" text-anchor="middle">① transmission delay = bits ÷ bandwidth</text>
+<text class="d1-l1" x="150" y="86" text-anchor="middle" style="font-size:10.5px;fill:#8595a7;font-weight:400">(time to push bits ONTO the wire — fatter pipe helps)</text>
+<text class="d1-l2" x="380" y="70" text-anchor="middle">② propagation delay = distance ÷ speed</text>
+<text class="d1-l2" x="380" y="86" text-anchor="middle" style="font-size:10.5px;fill:#8595a7;font-weight:400">(travel time across the distance — bandwidth CANNOT help)</text>
+<text x="360" y="190" text-anchor="middle" style="font-size:11px;fill:#8595a7">Plus processing (router think-time) + queuing (waiting in buffers) at each hop.</text>
+</svg>
+<figcaption>First the sender <b>serializes</b> the packet onto the wire (transmission delay — the only part bandwidth shrinks), then it <b>travels</b> the distance (propagation delay — set by the speed of light, the latency floor).</figcaption>
+</figure>
+
 ---
 
 ## 7. Three words people muddle: bandwidth vs latency vs throughput (vs jitter)
@@ -301,6 +422,44 @@ Now we can define these precisely, because you've seen where each comes from:
 > **Latency** = how long the road is. **Throughput** = how many cars actually arrive per
 > minute. **Jitter** = how unpredictable each car's arrival time is. Adding lanes
 > (bandwidth) does nothing to shorten the road (latency).
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: bandwidth is the number of lanes (throughput); latency is the length of the road. A car on a longer road arrives later regardless of lanes.">
+<style>
+.b1-t{font-size:12.5px;font-weight:700;fill:#1f2d3d}
+.b1-s{font-size:10.5px;fill:#8595a7}
+.b1-road{fill:#e2e8f0}
+.b1-dash{stroke:#fff;stroke-width:2;stroke-dasharray:14 12}
+.b1-car{fill:#2c7be5;animation:b1flow 2s linear infinite}
+.b1-short{fill:#16a34a;animation:b1short 2s linear infinite}
+.b1-long{fill:#ef4444;animation:b1long 4.8s linear infinite}
+@keyframes b1flow{from{transform:translateX(0)}to{transform:translateX(560px)}}
+@keyframes b1short{0%{transform:translateX(0);opacity:1}92%{opacity:1}100%{transform:translateX(200px);opacity:1}}
+@keyframes b1long{0%{transform:translateX(0);opacity:1}96%{opacity:1}100%{transform:translateX(480px);opacity:1}}
+</style>
+<!-- Panel A: bandwidth = lanes -->
+<text class="b1-t" x="12" y="20" fill="#2c7be5">Bandwidth = number of lanes  →  how many bits/sec fit (throughput)</text>
+<rect class="b1-road" x="60" y="34" width="600" height="70" rx="6"/>
+<line class="b1-dash" x1="60" y1="57" x2="660" y2="57"/>
+<line class="b1-dash" x1="60" y1="80" x2="660" y2="80"/>
+<g><circle class="b1-car" cx="70" cy="45" r="6" style="animation-delay:0s"/><circle class="b1-car" cx="70" cy="45" r="6" style="animation-delay:-.7s"/><circle class="b1-car" cx="70" cy="45" r="6" style="animation-delay:-1.4s"/></g>
+<g><circle class="b1-car" cx="70" cy="68" r="6" style="animation-delay:-.3s"/><circle class="b1-car" cx="70" cy="68" r="6" style="animation-delay:-1s"/><circle class="b1-car" cx="70" cy="68" r="6" style="animation-delay:-1.7s"/></g>
+<g><circle class="b1-car" cx="70" cy="91" r="6" style="animation-delay:-.5s"/><circle class="b1-car" cx="70" cy="91" r="6" style="animation-delay:-1.2s"/><circle class="b1-car" cx="70" cy="91" r="6" style="animation-delay:-1.9s"/></g>
+<text class="b1-s" x="360" y="126" text-anchor="middle">More lanes = more cars arrive per second. But it does NOT make any single car's trip shorter. ↓</text>
+<!-- Panel B: latency = length -->
+<text class="b1-t" x="12" y="158" fill="#ef4444">Latency = length of the road  →  how long one trip takes</text>
+<!-- short road -->
+<rect class="b1-road" x="60" y="176" width="200" height="26" rx="6"/>
+<circle class="b1-short" cx="72" cy="189" r="7"/>
+<text class="b1-s" x="278" y="194">short road → arrives soon ✓</text>
+<!-- long road -->
+<rect class="b1-road" x="60" y="230" width="480" height="26" rx="6"/>
+<circle class="b1-long" cx="72" cy="243" r="7"/>
+<text class="b1-s" x="556" y="248">long road → arrives later (same speed!)</text>
+<text class="b1-s" x="360" y="286" text-anchor="middle">Both cars move at the same speed — the one with farther to go simply takes longer. Adding lanes wouldn't change that.</text>
+</svg>
+<figcaption><b>Bandwidth</b> (lanes) sets how much arrives per second; <b>latency</b> (road length) sets how long a single trip takes. They're independent — which is why a fat pipe to a distant server still has high ping.</figcaption>
+</figure>
 
 ---
 
