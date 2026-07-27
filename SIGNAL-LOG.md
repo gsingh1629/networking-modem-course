@@ -27,6 +27,7 @@
 | [Q04](#q04--how-does-the-physical-signal-travel--how-do-bits-form) | 2026-07-25 | Module 02 | How does data become 0s/1s, and how does the signal travel across? |
 | [Q05](#q05--headers-add-size--why-add-them) | 2026-07-25 | Module 01/11 | Adding headers grows the packet — why add them at all? |
 | [Q06](#q06--what-happens-when-we-hit-googlecom) | 2026-07-26 | Cross-cutting | What happens end-to-end when we hit google.com? |
+| [Q07](#q07--how-does-dns-work-at-scale-securely) | 2026-07-27 | Module 06 | How does DNS work, scale, stay resilient & secure — the hidden parts? |
 
 ---
 
@@ -225,6 +226,51 @@ which is why Google puts servers physically near you.
 **Key takeaway:** "loading a page" is a relay race across every layer, run many times — and
 most of a cold load's delay is *setup round-trips*, which is exactly what HTTP/3/QUIC was
 built to eliminate.
+
+---
+
+### Q07 — How does DNS work at scale, securely?
+**Asked:** 2026-07-27 · **Topic:** Module 06 (DNS) — full deep-dive
+
+**Question**
+> How does DNS works? How is it able to handle these much request? These much url's? What I
+> believe is that DNS is not a single step thing? It must be some component divide thing which
+> helps for all this? How does it resolves and maps everything? is the map is wiped out does
+> everything goes null? how do this map is secured? what's the hidden things behind the scenes?
+
+**Explanation**
+Full write-up: **[🔎 Deep dive: How DNS works](deep-dive-dns.md)**. Answers to each part:
+
+- **Not a single step — correct.** DNS is a **distributed, hierarchical, cached** database.
+  Three superpowers: **hierarchy** (namespace tree root → TLD → domain → host, read right to
+  left), **delegation** (each level only points to the next; nobody holds everything), and
+  **caching** (most queries never reach the source).
+- **Components:** stub resolver (your OS) → recursive resolver (ISP/8.8.8.8, does the legwork
+  + caches) → root servers → TLD servers (e.g. Verisign for .com) → authoritative servers
+  (the domain owner's, hold the real records). Registrar/registry/ICANN govern how names
+  enter the system.
+- **How it resolves:** recursive query to the resolver, which does *iterative* queries root →
+  TLD → authoritative, using **glue records** to avoid chicken-and-egg, then caches by **TTL**.
+  Records are typed: A/AAAA/CNAME/MX/NS/SOA/TXT/PTR/SRV/CAA.
+- **How it scales:** caching (biggest lever, incl. negative/NXDOMAIN caching) + hierarchy +
+  **anycast** (one IP = thousands of servers, nearest wins; root = 13 identities × thousands
+  of instances) + redundancy (≥2 authoritative per zone) + tiny UDP/53 packets.
+- **"Map wiped → null?" No.** There's no central map. Caches survive outages until TTL;
+  redundant servers cover failures; a dead domain fails **only per-domain, only after TTL**
+  (e.g. Dyn 2016, Facebook 2021) — never global-instant.
+- **Security = 3 distinct guarantees:** **DNSSEC** = authenticity/integrity (signatures, chain
+  of trust from root — *not* encrypted); **DoH/DoT** = privacy (encrypt query to resolver);
+  **registry lock + 2FA** = anti-hijack. Plus query-ID/port randomization vs Kaminsky cache
+  poisoning.
+- **Hidden gems:** TTL tuning tradeoffs, anycast, and especially **GeoDNS / latency-based
+  routing** — authoritative servers return *different IPs by location*, which is how **CDNs
+  and global load balancing** actually work. Also EDNS Client Subnet, CNAME chains, root KSK
+  rollover, Happy Eyeballs.
+
+**Key takeaway:** DNS scales and survives because it's decentralized by design — hierarchy
+splits the work, delegation removes the central owner, and caching means the source is rarely
+asked. Security was bolted on later as two separate things: DNSSEC (is it real?) vs DoH/DoT
+(is it private?).
 
 ---
 

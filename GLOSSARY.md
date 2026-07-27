@@ -114,3 +114,39 @@ Kept plain-English on purpose.
 - **STP** — Spanning Tree Protocol; disables redundant links to prevent L2 loops/broadcast storms.
 - **RNTI** — Radio Network Temporary Identifier; the cellular analog of a MAC address (temporary,
   tower-assigned).
+
+## DNS (deep-dive; formalized in Module 06)
+
+- **DNS** — Domain Name System; the distributed, hierarchical, cached database mapping names
+  to IPs (and other records).
+- **Stub resolver** — the minimal DNS client in your OS that asks a recursive resolver.
+- **Recursive resolver** — server (ISP / 8.8.8.8 / 1.1.1.1) that does the full lookup on your
+  behalf and caches results.
+- **Authoritative name server** — the source of truth for a domain's records.
+- **Root servers** — top of the hierarchy; point to TLD servers. 13 identities (a–m), thousands
+  of anycast instances.
+- **TLD** — Top-Level Domain (`.com`, `.org`, `.uk`); its servers point to domains' authoritative
+  servers.
+- **Delegation** — each level of the DNS tree handing responsibility for the level below to
+  someone else.
+- **Recursive vs iterative query** — "get me the answer" vs "tell me who to ask next."
+- **Glue record** — a nameserver's IP shipped alongside its name to break the chicken-and-egg
+  lookup loop.
+- **Zone** — the portion of the namespace an authoritative server manages (its records).
+- **TTL** — Time-To-Live; how long a DNS answer may be cached.
+- **Record types** — A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail), NS (nameservers), SOA
+  (zone metadata), TXT, PTR (reverse), SRV, CAA.
+- **NXDOMAIN** — "name does not exist"; negatively cached to reduce load.
+- **Anycast** — announcing one IP from many locations so routing delivers to the nearest instance.
+- **Zone transfer (AXFR/IXFR)** — syncing zone data from a primary to secondary authoritative
+  servers.
+- **DNSSEC** — cryptographic signing of DNS records (RRSIG/DNSKEY/DS) for authenticity/integrity;
+  chain of trust from the root. Not encryption.
+- **DoT / DoH** — DNS over TLS (853) / DNS over HTTPS (443); encrypt queries for privacy.
+- **Cache poisoning / Kaminsky attack** — injecting forged answers into a resolver's cache.
+- **GeoDNS / latency-based routing** — returning different IPs by client location; the basis of
+  CDNs and global load balancing.
+- **EDNS(0) / EDNS Client Subnet** — extension mechanism enabling larger messages, DNSSEC, and
+  passing a client-location hint to authoritative servers.
+- **Registrar / Registry / ICANN / IANA** — the governance chain that makes domain names unique
+  and delegable.

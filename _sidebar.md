@@ -2,9 +2,12 @@
 
 - **Getting started**
   - [Home & roadmap](README.md)
-  - [🌐 Deep dive: hitting google.com](deep-dive-loading-google.md)
   - [Glossary](GLOSSARY.md)
   - [📡 Signal Log (Q&A)](SIGNAL-LOG.md)
+
+- **🔬 Deep dives** (read anytime)
+  - [🌐 Hitting google.com](deep-dive-loading-google.md)
+  - [🔎 How DNS works](deep-dive-dns.md)
 
 - **Part I — Foundations**
   - [01 · The Layered Model](01-the-layered-model.md)
