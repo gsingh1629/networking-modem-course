@@ -77,3 +77,40 @@ Kept plain-English on purpose.
 - **Processing delay** — router/switch time to inspect and forward a packet.
 - **Queuing delay** — time a packet waits in a buffer; the main congestion-driven latency.
 - **Jitter** — variation in latency between packets.
+
+## Module 03 — The Link Layer
+
+- **Frame** — the link-layer PDU; a bounded, addressed unit of bits.
+- **Framing** — marking where each frame begins and ends in the bitstream (preamble, SFD).
+- **Preamble / SFD** — sync pattern + Start Frame Delimiter marking a frame's start.
+- **LLC / MAC sublayers** — Logical Link Control (interfaces to L3) and Media Access Control
+  (hardware addressing + who-talks-when).
+- **MAC address** — 48-bit hardware address of a network interface (`aa:bb:cc:dd:ee:ff`);
+  flat and local.
+- **OUI** — Organizationally Unique Identifier; first 3 bytes of a MAC identifying the vendor.
+- **EtherType** — frame field naming the payload's L3 protocol (0x0800 IPv4, 0x0806 ARP).
+- **MTU** — Maximum Transmission Unit; largest payload a link carries (1500 bytes on Ethernet).
+- **FCS / CRC** — Frame Check Sequence; a checksum that *detects* (not corrects) corruption.
+- **Unicast / broadcast / multicast** — to one / all (`ff:ff:ff:ff:ff:ff`) / a group.
+- **Collision** — two devices transmitting on a shared medium at once, garbling both.
+- **CSMA/CD** — Carrier Sense Multiple Access with Collision Detection; the shared-Ethernet
+  access rulebook (listen, detect collisions, random backoff).
+- **CSMA/CA** — the collision-*avoidance* variant used on Wi-Fi (Module 08).
+- **Backoff** — random wait before retrying after a collision.
+- **Collision domain** — set of devices that can collide with each other (one per switch port).
+- **Broadcast domain** — set of devices that receive each other's broadcasts (bounded by a
+  router or VLAN).
+- **Hub** — dumb L1 repeater; floods all bits to all ports (one collision domain).
+- **Switch** — smart L2 device; learns MAC→port and forwards frames selectively.
+- **MAC address table (CAM table)** — a switch's learned map of MAC → port.
+- **Flooding** — a switch sending a frame out all ports when the destination is unknown/broadcast.
+- **Full / half duplex** — simultaneous two-way vs one-direction-at-a-time transmission.
+- **ARP** — Address Resolution Protocol; resolves an IPv4 address to a MAC on the local link.
+- **ARP cache** — stored IP↔MAC mappings (`arp -a` / `ip neigh`).
+- **NDP** — Neighbor Discovery Protocol; IPv6's replacement for ARP (over ICMPv6).
+- **ARP spoofing / MAC flooding** — L2 attacks exploiting ARP's lack of authentication.
+- **VLAN / 802.1Q** — virtual LANs segmenting one switch into isolated broadcast domains via
+  a frame tag.
+- **STP** — Spanning Tree Protocol; disables redundant links to prevent L2 loops/broadcast storms.
+- **RNTI** — Radio Network Temporary Identifier; the cellular analog of a MAC address (temporary,
+  tower-assigned).

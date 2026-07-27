@@ -105,7 +105,7 @@ correctly.
 
 - [x] 01 — The Layered Model
 - [x] 02 — How data physically moves
-- [ ] 03 — Link layer
+- [x] 03 — Link layer
 - [ ] 04 — Network layer
 - [ ] 05 — Transport layer
 - [ ] 06 — Application protocols

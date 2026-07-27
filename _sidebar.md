@@ -11,7 +11,7 @@
   - [02 · How data physically moves](02-how-data-moves.md)
 
 - **Part II — Core networking**
-  - 03 · Link layer *(soon)*
+  - [03 · Link layer](03-link-layer.md)
   - 04 · Network layer *(soon)*
   - 05 · Transport layer *(soon)*
   - 06 · Application protocols *(soon)*
