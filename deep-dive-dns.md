@@ -112,6 +112,63 @@ sequenceDiagram
     Note over R: caches every answer for its TTL
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: the resolver walks the DNS hierarchy — asking the root, then the .com TLD, then the authoritative server — then caches and returns the IP.">
+<style>
+.n1-box{stroke-width:2}
+.n1-t{font-size:11.5px;font-weight:700}
+.n1-out{stroke:#2c7be5;stroke-width:2;animation-timing-function:linear}
+.n1-in{stroke:#16a34a;stroke-width:2}
+.n1-q1{animation:n1f 9s linear infinite}
+.n1-ro{animation:n1f2 9s linear infinite}
+.n1-ri{animation:n1f3 9s linear infinite}
+.n1-to{animation:n1f4 9s linear infinite}
+.n1-ti{animation:n1f5 9s linear infinite}
+.n1-ao{animation:n1f6 9s linear infinite}
+.n1-ai{animation:n1f7 9s linear infinite}
+.n1-ans{animation:n1f8 9s linear infinite}
+@keyframes n1f{0%,3%{opacity:0}6%,100%{opacity:1}}
+@keyframes n1f2{0%,14%{opacity:0}17%,100%{opacity:1}}
+@keyframes n1f3{0%,21%{opacity:0}24%,100%{opacity:1}}
+@keyframes n1f4{0%,30%{opacity:0}33%,100%{opacity:1}}
+@keyframes n1f5{0%,37%{opacity:0}40%,100%{opacity:1}}
+@keyframes n1f6{0%,46%{opacity:0}49%,100%{opacity:1}}
+@keyframes n1f7{0%,53%{opacity:0}56%,100%{opacity:1}}
+@keyframes n1f8{0%,63%{opacity:0}66%,100%{opacity:1}}
+.n1-c1{animation:n1c1 9s linear infinite}
+.n1-c2{animation:n1c2 9s linear infinite}
+.n1-c3{animation:n1c3 9s linear infinite}
+.n1-c4{animation:n1c4 9s linear infinite}
+@keyframes n1c1{0%,15%{opacity:1}18%,100%{opacity:0}}
+@keyframes n1c2{0%,17%{opacity:0}20%,37%{opacity:1}40%,100%{opacity:0}}
+@keyframes n1c3{0%,39%{opacity:0}42%,60%{opacity:1}63%,100%{opacity:0}}
+@keyframes n1c4{0%,62%{opacity:0}66%,100%{opacity:1}}
+</style>
+<text x="12" y="18" style="font-size:13px;font-weight:700;fill:#2c7be5">The resolver walks the hierarchy — nobody holds the whole map</text>
+<!-- nodes -->
+<rect class="n1-box" x="30" y="130" width="90" height="46" rx="8" fill="#eef5ff" stroke="#2c7be5"/><text class="n1-t" x="75" y="152" text-anchor="middle" fill="#1f4a7a">You</text><text class="n1-t" x="75" y="167" text-anchor="middle" fill="#8595a7" style="font-size:9px">(stub)</text>
+<rect class="n1-box" x="190" y="130" width="110" height="46" rx="8" fill="#dbeafe" stroke="#2c7be5"/><text class="n1-t" x="245" y="152" text-anchor="middle" fill="#1f4a7a">Resolver</text><text class="n1-t" x="245" y="167" text-anchor="middle" fill="#8595a7" style="font-size:9px">caches answers</text>
+<rect class="n1-box" x="560" y="35" width="130" height="42" rx="8" fill="#fef9c3" stroke="#f59e0b"/><text class="n1-t" x="625" y="61" text-anchor="middle" fill="#a16207">Root (.)</text>
+<rect class="n1-box" x="560" y="132" width="130" height="42" rx="8" fill="#fef9c3" stroke="#f59e0b"/><text class="n1-t" x="625" y="158" text-anchor="middle" fill="#a16207">.com TLD</text>
+<rect class="n1-box" x="560" y="229" width="130" height="42" rx="8" fill="#dcfce7" stroke="#16a34a"/><text class="n1-t" x="625" y="250" text-anchor="middle" fill="#166534">Authoritative</text><text class="n1-t" x="625" y="264" text-anchor="middle" fill="#16a34a" style="font-size:9px">google.com</text>
+<!-- arrows -->
+<line class="n1-q1 n1-out" x1="120" y1="153" x2="188" y2="153"/><polygon class="n1-q1" points="188,149 188,157 196,153" fill="#2c7be5"/>
+<line class="n1-ro n1-out" x1="300" y1="146" x2="558" y2="62"/><polygon class="n1-ro" points="558,58 552,68 566,66" fill="#2c7be5"/>
+<line class="n1-ri n1-in" x1="558" y1="72" x2="300" y2="152"/><polygon class="n1-ri" points="300,148 306,150 302,160" fill="#16a34a"/>
+<line class="n1-to n1-out" x1="300" y1="153" x2="558" y2="153"/><polygon class="n1-to" points="558,149 558,157 566,153" fill="#2c7be5"/>
+<line class="n1-ti n1-in" x1="558" y1="160" x2="302" y2="160"/><polygon class="n1-ti" points="302,156 302,164 294,160" fill="#16a34a"/>
+<line class="n1-ao n1-out" x1="300" y1="160" x2="558" y2="248"/><polygon class="n1-ao" points="558,244 552,252 566,254" fill="#2c7be5"/>
+<line class="n1-ai n1-in" x1="558" y1="256" x2="300" y2="164"/><polygon class="n1-ai" points="300,160 306,170 292,168" fill="#16a34a"/>
+<line class="n1-ans n1-in" x1="188" y1="163" x2="122" y2="163"/><polygon class="n1-ans" points="122,159 122,167 114,163" fill="#16a34a"/>
+<!-- step captions -->
+<text class="n1-c1" x="360" y="292" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#2c7be5">You ask the resolver: "what's the IP of www.google.com?"</text>
+<text class="n1-c2" x="360" y="292" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#a16207">Resolver → Root: "who handles .com?"  →  "ask the .com servers"</text>
+<text class="n1-c3" x="360" y="292" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#a16207">Resolver → .com: "who handles google.com?"  →  "ask ns1.google (+glue)"</text>
+<text class="n1-c4" x="360" y="292" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#166534">Resolver → Authoritative → 142.250.190.78 → cached (TTL) → back to you ✓</text>
+</svg>
+<figcaption>Each server only knows the <b>next</b> step down — the root points to <b>.com</b>, which points to Google's servers, which hold the answer. The resolver stitches it together and <b>caches</b> every step (that's why the next lookup is instant).</figcaption>
+</figure>
+
 Two modes of asking, and the distinction matters:
 - **Recursive query** (stub → resolver): *"Give me the final answer; do whatever it takes."*
 - **Iterative queries** (resolver → root/TLD/auth): each server replies *"I don't have it,
@@ -164,6 +221,40 @@ until the TTL expires, at *multiple* layers:
 - **Negative caching too:** "this name doesn't exist" (**NXDOMAIN**) is cached (per the SOA's
   timer), so typos and dead names don't hammer the servers repeatedly.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 210" role="img" aria-label="Animation: a cold cache miss requires many hops through the hierarchy; a warm cache hit answers instantly.">
+<style>
+.n2-node{stroke-width:1.5}
+.n2-t{font-size:10.5px;font-weight:700;fill:#1f4a7a}
+.n2-h{font-size:12px;font-weight:700}
+.n2-cold{animation:n2cold 6s linear infinite}
+.n2-warm{animation:n2warm 6s linear infinite}
+.n2-lc{animation:n2lc 6s linear infinite}
+.n2-lw{animation:n2lw 6s linear infinite}
+@keyframes n2cold{0%{transform:translateX(0)}8%{transform:translateX(130px)}20%{transform:translateX(270px)}28%{transform:translateX(130px)}42%{transform:translateX(400px)}50%{transform:translateX(130px)}66%{transform:translateX(530px)}74%{transform:translateX(130px)}88%,100%{transform:translateX(0)}}
+@keyframes n2warm{0%{transform:translateX(0)}10%{transform:translateX(130px)}22%{transform:translateX(130px)}32%,100%{transform:translateX(0)}}
+@keyframes n2lc{0%,84%{opacity:0}88%,100%{opacity:1}}
+@keyframes n2lw{0%,30%{opacity:0}34%,100%{opacity:1}}
+</style>
+<text x="12" y="16" class="n2-h" fill="#ef4444">Cold — cache MISS: walk the whole hierarchy (several round-trips)</text>
+<line x1="72" y1="62" x2="608" y2="62" stroke="#e2e8f0" stroke-width="2"/>
+<rect class="n2-node" x="42" y="48" width="58" height="30" rx="6" fill="#eef5ff" stroke="#2c7be5"/><text class="n2-t" x="71" y="67" text-anchor="middle">You</text>
+<rect class="n2-node" x="172" y="48" width="66" height="30" rx="6" fill="#dbeafe" stroke="#2c7be5"/><text class="n2-t" x="205" y="67" text-anchor="middle">Resolver</text>
+<rect class="n2-node" x="312" y="48" width="56" height="30" rx="6" fill="#fef9c3" stroke="#f59e0b"/><text class="n2-t" x="340" y="67" text-anchor="middle">Root</text>
+<rect class="n2-node" x="442" y="48" width="56" height="30" rx="6" fill="#fef9c3" stroke="#f59e0b"/><text class="n2-t" x="470" y="67" text-anchor="middle">.com</text>
+<rect class="n2-node" x="572" y="48" width="66" height="30" rx="6" fill="#dcfce7" stroke="#16a34a"/><text class="n2-t" x="605" y="67" text-anchor="middle">Auth</text>
+<circle class="n2-cold" cx="71" cy="62" r="7" fill="#ef4444"/>
+<text class="n2-lc" x="360" y="98" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#ef4444">slow — many hops ✗</text>
+<text x="12" y="132" class="n2-h" fill="#16a34a">Warm — cache HIT: resolver already knows it (instant)</text>
+<line x1="72" y1="170" x2="240" y2="170" stroke="#e2e8f0" stroke-width="2"/>
+<rect class="n2-node" x="42" y="156" width="58" height="30" rx="6" fill="#eef5ff" stroke="#2c7be5"/><text class="n2-t" x="71" y="175" text-anchor="middle">You</text>
+<rect class="n2-node" x="172" y="156" width="66" height="30" rx="6" fill="#dcfce7" stroke="#16a34a"/><text class="n2-t" x="205" y="171" text-anchor="middle">Resolver</text><text class="n2-t" x="205" y="182" text-anchor="middle" style="font-size:8px;fill:#16a34a">✓ cached</text>
+<circle class="n2-warm" cx="71" cy="170" r="7" fill="#16a34a"/>
+<text class="n2-lw" x="360" y="176" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#16a34a">instant ✓ — never touches root/TLD/auth</text>
+</svg>
+<figcaption>The <b>first</b> lookup is a full hierarchy walk; every one after (until the TTL expires) is a <b>cache hit</b> answered in one hop. This is why caching, not raw server power, is what lets DNS serve the whole internet.</figcaption>
+</figure>
+
 ### b) Hierarchy + delegation — distributes the *work itself* (Section 2)
 No server is on the path for more than its slice.
 
@@ -173,6 +264,39 @@ The same IP address is **announced from many locations worldwide** (via BGP rout
 isn't one machine — it's thousands, all over the planet, sharing an address. Same for the
 root servers: 13 *identities* (a–m) but **well over a thousand physical instances** via
 anycast.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 230" role="img" aria-label="Animation: anycast. Three users in different regions all query the same IP 8.8.8.8, and each is routed to the nearest server instance.">
+<style>
+.k1-u{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.k1-s{fill:#dcfce7;stroke:#16a34a;stroke-width:2}
+.k1-t{font-size:11px;font-weight:700;fill:#1f4a7a}
+.k1-ip{font-size:10px;font-weight:700;fill:#166534}
+.k1-d1{animation:k1d 5s linear infinite}
+.k1-d2{animation:k1d 5s linear infinite;animation-delay:.5s}
+.k1-d3{animation:k1d 5s linear infinite;animation-delay:1s}
+@keyframes k1d{0%{opacity:0;transform:translateX(0)}8%{opacity:1}70%{opacity:1;transform:translateX(430px)}80%,100%{opacity:0;transform:translateX(430px)}}
+</style>
+<text x="12" y="18" style="font-size:13px;font-weight:700;fill:#2c7be5">Anycast: one IP (8.8.8.8), many servers — routing picks the nearest</text>
+<!-- users -->
+<rect class="k1-u" x="30" y="40" width="110" height="38" rx="8"/><text class="k1-t" x="85" y="58" text-anchor="middle">User · New York</text><text class="k1-t" x="85" y="72" text-anchor="middle" style="font-size:8.5px;fill:#8595a7">asks 8.8.8.8</text>
+<rect class="k1-u" x="30" y="96" width="110" height="38" rx="8"/><text class="k1-t" x="85" y="114" text-anchor="middle">User · London</text><text class="k1-t" x="85" y="128" text-anchor="middle" style="font-size:8.5px;fill:#8595a7">asks 8.8.8.8</text>
+<rect class="k1-u" x="30" y="152" width="110" height="38" rx="8"/><text class="k1-t" x="85" y="170" text-anchor="middle">User · Tokyo</text><text class="k1-t" x="85" y="184" text-anchor="middle" style="font-size:8.5px;fill:#8595a7">asks 8.8.8.8</text>
+<!-- servers -->
+<rect class="k1-s" x="580" y="40" width="120" height="38" rx="8"/><text class="k1-ip" x="640" y="58" text-anchor="middle">8.8.8.8</text><text class="k1-ip" x="640" y="72" text-anchor="middle" style="font-size:8.5px">NYC instance</text>
+<rect class="k1-s" x="580" y="96" width="120" height="38" rx="8"/><text class="k1-ip" x="640" y="114" text-anchor="middle">8.8.8.8</text><text class="k1-ip" x="640" y="128" text-anchor="middle" style="font-size:8.5px">London instance</text>
+<rect class="k1-s" x="580" y="152" width="120" height="38" rx="8"/><text class="k1-ip" x="640" y="170" text-anchor="middle">8.8.8.8</text><text class="k1-ip" x="640" y="184" text-anchor="middle" style="font-size:8.5px">Tokyo instance</text>
+<!-- nearest-hop lines -->
+<line x1="140" y1="59" x2="580" y2="59" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="140" y1="115" x2="580" y2="115" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="140" y1="171" x2="580" y2="171" stroke="#cbd5e1" stroke-width="2"/>
+<circle class="k1-d1" cx="150" cy="59" r="7" fill="#16a34a"/>
+<circle class="k1-d2" cx="150" cy="115" r="7" fill="#16a34a"/>
+<circle class="k1-d3" cx="150" cy="171" r="7" fill="#16a34a"/>
+<text x="360" y="216" text-anchor="middle" style="font-size:11px;fill:#8595a7">Same address everywhere — nobody is routed across the planet. This is also how CDNs put content near you.</text>
+</svg>
+<figcaption>All three users type the <b>same IP</b>, yet each reaches a <b>different, nearby</b> server — the network's routing delivers to the closest instance. It's how <code>8.8.8.8</code>, the root servers, and CDNs all scale and stay fast.</figcaption>
+</figure>
 
 ### d) Massive redundancy
 Every zone must have **at least two** authoritative nameservers (usually more, in different
