@@ -150,6 +150,47 @@ The set of devices that can collide with each other is a **collision domain**.
 > uses collision *avoidance*, CSMA/CA — Module 08 — and cellular avoids the free-for-all
 > entirely by having the tower **schedule** who talks when, Module 11).
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 210" role="img" aria-label="Animation: CSMA/CD. Two stations transmit at once, their signals collide, both back off a random time, then one transmits successfully.">
+<style>
+.d2-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.d2-t{font-size:12px;font-weight:700;fill:#1f4a7a}
+.d2-a{animation:d2a 6s linear infinite}
+.d2-b{animation:d2b 6s linear infinite}
+.d2-boom{animation:d2boom 6s linear infinite}
+.d2-back{animation:d2back 6s linear infinite}
+.d2-succ{animation:d2succ 6s linear infinite}
+.d2-ok{animation:d2ok 6s linear infinite}
+@keyframes d2a{0%{opacity:0;transform:translate(0,0)}4%{opacity:1}24%{opacity:1;transform:translate(255px,0)}26%,100%{opacity:0}}
+@keyframes d2b{0%{opacity:0;transform:translate(0,0)}4%{opacity:1}24%{opacity:1;transform:translate(-255px,0)}26%,100%{opacity:0}}
+@keyframes d2boom{0%,23%{opacity:0;transform:scale(.4)}27%{opacity:1;transform:scale(1)}34%{opacity:1}40%,100%{opacity:0}}
+@keyframes d2back{0%,34%{opacity:0}39%,54%{opacity:1}59%,100%{opacity:0}}
+@keyframes d2succ{0%,57%{opacity:0;transform:translate(0,0)}61%{opacity:1}92%{opacity:1;transform:translate(510px,0)}96%,100%{opacity:0}}
+@keyframes d2ok{0%,88%{opacity:0}93%,99%{opacity:1}100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">CSMA/CD: collide → back off a random time → retry</text>
+<!-- shared bus -->
+<line x1="95" y1="120" x2="625" y2="120" stroke="#94a3b8" stroke-width="3"/>
+<rect class="d2-box" x="20" y="98" width="75" height="44" rx="8"/><text class="d2-t" x="57" y="125" text-anchor="middle">A</text>
+<rect class="d2-box" x="625" y="98" width="75" height="44" rx="8"/><text class="d2-t" x="662" y="125" text-anchor="middle">B</text>
+<!-- signals -->
+<g class="d2-a"><circle cx="105" cy="120" r="8" fill="#2c7be5"/></g>
+<g class="d2-b"><circle cx="615" cy="120" r="8" fill="#16a34a"/></g>
+<!-- collision burst at center (~360) -->
+<g class="d2-boom" style="transform-origin:360px 120px"><polygon points="360,96 368,116 390,120 368,124 360,144 352,124 330,120 352,116" fill="#ef4444"/><text x="360" y="86" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#ef4444">💥 collision!</text></g>
+<!-- backoff -->
+<g class="d2-back">
+<text x="57" y="170" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#7c3aed">A waits (random) 3</text>
+<text x="662" y="170" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#7c3aed">B waits (random) 7</text>
+<text x="360" y="170" text-anchor="middle" style="font-size:10.5px;fill:#8595a7">random backoff avoids re-colliding</text>
+</g>
+<!-- success (A shorter backoff → transmits first) -->
+<g class="d2-succ"><rect x="97" y="111" width="22" height="18" rx="4" fill="#2c7be5"/></g>
+<text class="d2-ok" x="360" y="195" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#16a34a">✓ A had the shorter wait → transmits successfully</text>
+</svg>
+<figcaption>Both stations sense the medium idle and transmit — their signals <b>collide</b> in the middle. Each waits a <b>random backoff</b>, so they don't just collide again; whoever drew the shorter wait goes first. (Modern switches make this obsolete on wired links — but Wi-Fi still fights the same battle.)</figcaption>
+</figure>
+
 ---
 
 ## 7. Switches: how modern Ethernet eliminates collisions
@@ -173,6 +214,58 @@ flowchart TD
 2. **Forward:** if it knows the destination's port, it sends the frame *only* there.
 3. **Flood:** if the destination is unknown (or is broadcast), it sends to *all* other ports
    — and learns the answer when the reply comes back.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: a switch receives a frame for an unknown destination, floods it to all other ports, and learns the sender's port.">
+<style>
+.s1-sw{fill:#1f2d3d}
+.s1-swt{font-size:13px;font-weight:700;fill:#fff}
+.s1-host{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.s1-hl{font-size:12px;font-weight:700;fill:#1f4a7a}
+.s1-lbl{font-size:11.5px;font-weight:700}
+.s1-tab{font-size:11px;fill:#16a34a;font-weight:700}
+.s1-in{animation:s1in 5s linear infinite}
+.s1-fb{animation:s1fb 5s linear infinite}
+.s1-fc{animation:s1fc 5s linear infinite}
+.s1-fd{animation:s1fd 5s linear infinite}
+.s1-learn{animation:s1learn 5s linear infinite}
+.s1-match{animation:s1match 5s ease-in-out infinite}
+@keyframes s1in{0%{opacity:0;transform:translate(0,0)}5%{opacity:1}30%{opacity:1;transform:translate(175px,58px)}33%,100%{opacity:0;transform:translate(175px,58px)}}
+@keyframes s1fb{0%,33%{opacity:0;transform:translate(0,0)}37%{opacity:1}66%{opacity:1;transform:translate(180px,-52px)}70%,100%{opacity:0;transform:translate(180px,-52px)}}
+@keyframes s1fc{0%,33%{opacity:0;transform:translate(0,0)}37%{opacity:1}66%{opacity:1;transform:translate(-190px,58px)}70%,100%{opacity:0;transform:translate(-190px,58px)}}
+@keyframes s1fd{0%,33%{opacity:0;transform:translate(0,0)}37%{opacity:1}66%{opacity:1;transform:translate(180px,58px)}70%,100%{opacity:0;transform:translate(180px,58px)}}
+@keyframes s1learn{0%,28%{opacity:0}34%,100%{opacity:1}}
+@keyframes s1match{0%,58%{opacity:0}64%,80%{opacity:1}88%,100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Unknown destination → flood everywhere, and learn the sender</text>
+<!-- links -->
+<line x1="120" y1="80" x2="330" y2="140" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="600" y1="80" x2="390" y2="140" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="120" y1="240" x2="330" y2="170" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="600" y1="240" x2="390" y2="170" stroke="#cbd5e1" stroke-width="2"/>
+<!-- switch -->
+<rect class="s1-sw" x="300" y="128" width="120" height="54" rx="8"/><text class="s1-swt" x="360" y="160" text-anchor="middle">SWITCH</text>
+<!-- hosts -->
+<rect class="s1-host" x="60" y="58" width="70" height="40" rx="8"/><text class="s1-hl" x="95" y="83" text-anchor="middle">A</text>
+<rect class="s1-host" x="590" y="58" width="70" height="40" rx="8"/><text class="s1-hl" x="625" y="83" text-anchor="middle">B</text>
+<g class="s1-match"><rect x="56" y="216" width="78" height="48" rx="9" fill="none" stroke="#16a34a" stroke-width="3"/></g>
+<rect class="s1-host" x="60" y="220" width="70" height="40" rx="8"/><text class="s1-hl" x="95" y="245" text-anchor="middle">C</text>
+<rect class="s1-host" x="590" y="220" width="70" height="40" rx="8"/><text class="s1-hl" x="625" y="245" text-anchor="middle">D</text>
+<text class="s1-tab s1-match" x="95" y="280" text-anchor="middle">← real target</text>
+<!-- incoming frame A -> switch -->
+<g class="s1-in"><rect x="112" y="72" width="24" height="18" rx="4" fill="#ef4444"/><text x="124" y="86" text-anchor="middle" style="font-size:9px;fill:#fff;font-weight:700">A→C</text></g>
+<!-- flood tokens -->
+<g class="s1-fb"><rect x="406" y="132" width="20" height="16" rx="4" fill="#f59e0b"/></g>
+<g class="s1-fc"><rect x="300" y="150" width="20" height="16" rx="4" fill="#f59e0b"/></g>
+<g class="s1-fd"><rect x="406" y="150" width="20" height="16" rx="4" fill="#f59e0b"/></g>
+<!-- MAC table -->
+<g class="s1-learn"><rect x="470" y="120" width="230" height="70" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="482" y="140" style="font-size:11px;font-weight:700;fill:#166534">MAC table (learned)</text>
+<text class="s1-tab" x="482" y="160">A → port 1  ✓</text>
+<text x="482" y="178" style="font-size:10.5px;fill:#8595a7">(dst C unknown → had to flood)</text></g>
+</svg>
+<figcaption>A frame for an unknown MAC gets <b>flooded</b> to every other port (amber). Meanwhile the switch <b>learns</b> "A is on port 1" from the source — so next time a frame for A arrives, it's sent only to port 1 (unicast), no flooding.</figcaption>
+</figure>
 
 Consequences of switching:
 - **Each switch port is its own collision domain** → with modern **full-duplex** links
@@ -208,6 +301,51 @@ How it works:
      dest MAC = 34:98:b5:aa:bb:cc  (the gateway, next hop)
      dest IP  = 142.250.190.78     (Google, final target)
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 270" role="img" aria-label="Animation: ARP. A host broadcasts 'who has this IP' to everyone; only the owner replies with its MAC; the answer is cached.">
+<style>
+.a1-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.a1-gw{fill:#fef9c3;stroke:#f59e0b;stroke-width:2}
+.a1-t{font-size:11.5px;font-weight:700;fill:#1f4a7a}
+.a1-l1{font-size:12px;font-weight:700;fill:#ef4444;animation:a1l1 6s linear infinite}
+.a1-l2{font-size:12px;font-weight:700;fill:#16a34a;animation:a1l2 6s linear infinite}
+.a1-bcG{animation:a1bcG 6s linear infinite}
+.a1-bcX{animation:a1bcX 6s linear infinite}
+.a1-bcY{animation:a1bcY 6s linear infinite}
+.a1-rep{animation:a1rep 6s linear infinite}
+.a1-cache{animation:a1cache 6s linear infinite}
+@keyframes a1bcG{0%{opacity:0;transform:translate(0,0)}5%{opacity:1}38%{opacity:1;transform:translate(400px,-70px)}42%,100%{opacity:0;transform:translate(400px,-70px)}}
+@keyframes a1bcX{0%{opacity:0;transform:translate(0,0)}5%{opacity:1}38%{opacity:1;transform:translate(400px,0)}42%,100%{opacity:0;transform:translate(400px,0)}}
+@keyframes a1bcY{0%{opacity:0;transform:translate(0,0)}5%{opacity:1}38%{opacity:1;transform:translate(400px,70px)}42%,100%{opacity:0;transform:translate(400px,70px)}}
+@keyframes a1rep{0%,50%{opacity:0;transform:translate(0,0)}55%{opacity:1}88%{opacity:1;transform:translate(-400px,70px)}92%,100%{opacity:0;transform:translate(-400px,70px)}}
+@keyframes a1l1{0%,42%{opacity:1}48%,100%{opacity:0}}
+@keyframes a1l2{0%,50%{opacity:0}56%,90%{opacity:1}94%,100%{opacity:0}}
+@keyframes a1cache{0%,86%{opacity:0}92%,100%{opacity:1}}
+</style>
+<text x="12" y="18" style="font-size:13px;font-weight:700;fill:#2c7be5">ARP: broadcast the question, only the owner answers</text>
+<text class="a1-l1" x="360" y="40" text-anchor="middle">① broadcast (to ff:ff:ff:ff:ff:ff): "Who has 192.168.1.1?"</text>
+<text class="a1-l2" x="360" y="40" text-anchor="middle">② reply (unicast): "192.168.1.1 is at 34:98:b5:aa:bb:cc"</text>
+<!-- You -->
+<rect class="a1-box" x="40" y="108" width="90" height="46" rx="8"/><text class="a1-t" x="85" y="130" text-anchor="middle">You</text><text class="a1-t" x="85" y="146" text-anchor="middle" style="font-size:9px">a4:83:e7…</text>
+<!-- devices -->
+<rect class="a1-gw" x="560" y="55" width="120" height="42" rx="8"/><text class="a1-t" x="620" y="72" text-anchor="middle">Gateway .1</text><text class="a1-t" x="620" y="88" text-anchor="middle" style="font-size:9px;fill:#a16207">answers ✓</text>
+<rect class="a1-box" x="560" y="118" width="120" height="42" rx="8"/><text class="a1-t" x="620" y="135" text-anchor="middle">Host X .5</text><text class="a1-t" x="620" y="151" text-anchor="middle" style="font-size:9px;fill:#8595a7">ignores</text>
+<rect class="a1-box" x="560" y="181" width="120" height="42" rx="8"/><text class="a1-t" x="620" y="198" text-anchor="middle">Host Y .6</text><text class="a1-t" x="620" y="214" text-anchor="middle" style="font-size:9px;fill:#8595a7">ignores</text>
+<!-- broadcast tokens (from You ~130,131) -->
+<g class="a1-bcG"><circle cx="140" cy="131" r="8" fill="#ef4444"/></g>
+<g class="a1-bcX"><circle cx="140" cy="131" r="8" fill="#ef4444"/></g>
+<g class="a1-bcY"><circle cx="140" cy="131" r="8" fill="#ef4444"/></g>
+<!-- reply token (from gateway 560,76 -> You) -->
+<g class="a1-rep"><circle cx="556" cy="76" r="8" fill="#16a34a"/></g>
+<!-- cache -->
+<g class="a1-cache"><rect x="30" y="176" width="270" height="60" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="42" y="197" style="font-size:11px;font-weight:700;fill:#166534">ARP cache updated</text>
+<text x="42" y="216" style="font-size:11px;fill:#16a34a;font-weight:700">192.168.1.1 → 34:98:b5:aa:bb:cc</text>
+<text x="42" y="230" style="font-size:9.5px;fill:#8595a7">cached with a timeout — no re-ARP next time</text></g>
+</svg>
+<figcaption>The question goes to <b>everyone</b> (broadcast), but only the IP's owner <b>replies</b> (unicast) with its MAC; the rest ignore it. The mapping is then <b>cached</b> so the next packet skips ARP entirely.</figcaption>
+</figure>
 
 Key details:
 - The mapping is stored in the **ARP cache** (`arp -a`) with a timeout, so you don't ARP for
