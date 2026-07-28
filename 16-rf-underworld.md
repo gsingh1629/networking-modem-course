@@ -605,4 +605,4 @@ ONE LESSON: the airwaves authenticate NOTHING. Put cryptography on top.
 
 ---
 
-**Next up → Capstone Projects** — see the roadmap in the [course home](README.md) for hands-on build-along projects combining hardware + software.
+**Next up → [🛠️ Capstone Projects](capstone-projects.md)** — six hands-on build-along projects (packet dissector, latency probe, mini DNS resolver, tiny VPN, SDR receiver, cellular RRC logger) that tie the whole course together.

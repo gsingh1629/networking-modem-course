@@ -191,3 +191,341 @@ Kept plain-English on purpose.
 - **mTLS (mutual TLS)** — both client and server present certificates.
 - **Certificate pinning** — hard-coding which cert/CA an app accepts, to resist rogue CAs.
 - **PKI** — Public Key Infrastructure; the whole system of keys, certs, CAs, and policies.
+
+## Module 04 — The Network Layer
+
+- **Network layer (L3)** — moves packets host-to-host across many networks; best-effort.
+- **IPv4 address** — a 32-bit integer, written dotted-decimal, split into network + host.
+- **Octet** — one 8-bit byte of an IP address (`0–255`).
+- **Subnet mask** — 32-bit value marking which address bits are network (1s) vs host (0s).
+- **CIDR** (`/N`) — subnet notation; N = number of network bits.
+- **Network / broadcast address** — the all-host-bits-0 / all-host-bits-1 addresses of a subnet
+  (unusable as host addresses).
+- **RFC 1918 / private address** — reusable, non-internet-routable ranges (10/8, 172.16/12,
+  192.168/16).
+- **TTL (Time To Live, IP)** — IP header hop-counter, decremented each router; 0 = drop.
+  (Distinct from DNS caching TTL.)
+- **Fragmentation** — splitting an oversized packet to fit a smaller MTU; reassembled at the
+  destination.
+- **Routing table** — list of destination prefixes → next hop / interface.
+- **Default gateway** — the catch-all route (`0.0.0.0/0`) for unknown destinations.
+- **Next hop** — the immediate router a packet is handed to.
+- **Longest-prefix match** — most-specific route wins.
+- **Autonomous System (AS)** — a network under one administrative control, with an AS number.
+- **OSPF** — an interior routing protocol (within an AS).
+- **BGP** — the exterior routing protocol that glues the internet's ASes together.
+- **NAT / PAT** — rewriting private↔public addresses (and ports) at the edge.
+- **CGNAT** — carrier-grade NAT; many customers behind shared public IPs.
+- **DHCP / DORA** — automatic address leasing (Discover, Offer, Request, Ack).
+- **ICMP** — IP's control/error protocol (ping, traceroute, TTL-expired, unreachable).
+- **IPv6** — 128-bit addressing; SLAAC, NDP (replaces ARP), no header checksum, generally no NAT.
+- **SLAAC** — stateless IPv6 address auto-configuration.
+- **GTP** — the tunnel protocol carrying your IP packets across the cellular core.
+
+## Module 05 — The Transport Layer
+
+- **Socket** — the OS handle your program uses to send/receive; bound to an IP+port.
+- **4-tuple** — (src IP, src port, dst IP, dst port); uniquely identifies a connection and lets
+  the kernel demultiplex packets.
+- **Ephemeral port** — short-lived source port (49152–65535) the OS assigns to client connections.
+- **UDP** — connectionless best-effort transport: ports + checksum, nothing else (8-byte header).
+- **TCP** — reliable, ordered, byte-stream transport built on lossy IP.
+- **ISN** — Initial Sequence Number, randomized per connection.
+- **SYN / ACK / FIN / RST** — TCP flags: open, acknowledge, graceful close, abrupt reset.
+- **Sequence / Acknowledgement number** — byte-offset of data / next byte expected.
+- **RTO** — Retransmission Timeout; the timer-based loss detector.
+- **Fast retransmit** — resend on 3 duplicate ACKs, without waiting for RTO.
+- **SACK** — Selective Acknowledgement; report exact received ranges so only the true gap is resent.
+- **rwnd (receive window)** — receiver-advertised free buffer; the flow-control limit.
+- **cwnd (congestion window)** — sender's self-imposed network-safety limit.
+- **Slow start / congestion avoidance** — exponential then linear cwnd growth phases.
+- **AIMD** — Additive Increase, Multiplicative Decrease; the fairness-producing back-off rule.
+- **CUBIC / BBR** — modern congestion-control algorithms (loss-based / delay-and-bandwidth-based).
+- **Bufferbloat** — excessive latency from oversized buffers hiding loss from TCP.
+- **Nagle's algorithm / delayed ACK** — small-write coalescing / ACK batching; can stall
+  interactive traffic together.
+- **TIME_WAIT** — post-close waiting state (2×MSL) protecting against stray packets and lost
+  final ACKs.
+- **Head-of-line (HOL) blocking** — one lost segment stalls all data behind it in an ordered stream.
+- **QUIC** — modern transport over UDP: independent streams, integrated TLS 1.3, 0-RTT,
+  connection migration; the basis of HTTP/3.
+
+## Module 06 — Application Protocols
+
+- **L7 / application layer** — the layer that assigns *meaning* to the bytes for a specific
+  application (HTTP, DNS, SMTP, gRPC).
+- **HTTP method / status code** — the request verb (GET/POST/PUT/…) and the 3-digit response
+  category (2xx OK, 3xx redirect, 4xx client error, 5xx server error).
+- **Idempotent** — safe to repeat; N calls have the same effect as one (matters for retries).
+- **Persistent connection / keep-alive** — reusing one TCP connection for many requests.
+- **Multiplexing** — many independent streams interleaved over one connection (HTTP/2, HTTP/3).
+- **HPACK / QPACK** — header compression for HTTP/2 / HTTP/3 (a shared table of seen headers).
+- **Stateless** — the server keeps no memory of you between requests (HTTP's default); state is
+  added via **cookie / server session / JWT**.
+- **Cache-Control / ETag / 304** — HTTP's caching directives and conditional-revalidation.
+- **CDN / edge cache / PoP** — distributed caches serving content near the user (via anycast).
+- **Content negotiation** — agreeing on format/language/encoding via `Accept*` ↔ `Content-*`.
+- **REST / gRPC / WebSocket / SSE** — the four dominant API styles.
+
+## Module 07 — RF & Wireless Basics
+
+- **EM wave** — electromagnetic wave; radio and light are the same physics at different frequencies.
+- **Frequency / wavelength** — oscillations per second (Hz) / physical length of one cycle;
+  `λ = c/f`, shortcut `λ(m) ≈ 300/f(MHz)`.
+- **Band** — a named range of frequencies (VHF, UHF, SHF…); **sub-6 GHz** vs **mmWave**.
+- **dB** — logarithmic *ratio* of two powers (+3 dB = ×2, +10 dB = ×10).
+- **dBm** — *absolute* power referenced to 1 mW (0 dBm = 1 mW, 30 dBm = 1 W).
+- **dBi** — antenna gain relative to an ideal isotropic radiator.
+- **Path loss / FSPL** — power lost as the wave spreads with distance and frequency (~6 dB per
+  doubling of either).
+- **Noise floor** — the ambient noise power a receiver hears even with no signal.
+- **Receiver sensitivity** — minimum signal power a radio needs to decode a given modulation.
+- **Link budget** — the trip as dB arithmetic: TX power + gains − losses = RX power.
+- **Isotropic antenna** — theoretical antenna radiating equally in all directions; the gain reference.
+- **Beamforming** — steering an antenna array so waves add up toward one user, boosting SNR.
+- **Doppler shift** — frequency shift from relative motion of TX and RX.
+- **Licensed / unlicensed (ISM)** — carrier-owned exclusive spectrum vs open shared bands
+  (Wi-Fi, Bluetooth).
+- **FDD / TDD** — duplexing by separate frequencies (both directions at once) vs shared frequency
+  split in time.
+- **Frequency reuse / cell** — reusing spectrum in geographically separated cells because path
+  loss isolates them.
+
+## Module 08 — Wi-Fi (802.11)
+
+- **802.11 / Wi-Fi** — the IEEE standard family (and its marketing name) for wireless LAN; an
+  L1+L2 technology sharing Ethernet's MAC addressing.
+- **AP / STA / BSS** — access point (radio base station) / station (client) / the AP plus its
+  clients (one "neighborhood").
+- **SSID / BSSID** — network name (human-facing, non-unique) / an AP's MAC address (the real L2
+  identifier).
+- **DIFS / SIFS** — interframe spaces; the longer gap before a new transmission / the short gap
+  before high-priority follow-ups like ACKs.
+- **Backoff / contention window** — the random idle countdown a station waits before transmitting;
+  doubles on failure (exponential backoff).
+- **ACK (link-layer)** — Wi-Fi acknowledgement; its absence signals a lost frame and triggers L2
+  retransmission (unlike Ethernet, which leaves recovery to TCP).
+- **NAV** — Network Allocation Vector; virtual carrier sense — a countdown other stations honor
+  based on a frame's announced Duration.
+- **Hidden node / RTS/CTS** — two stations that can't hear each other but share an AP / the
+  handshake (Request/Clear to Send) that reserves the medium via NAV to protect them.
+- **Beacon / probe / association** — the AP's periodic advertisement / a station's active query /
+  the process of formally joining a BSS.
+- **DTIM / TIM / TWT** — beacon elements that let sleeping stations know when buffered traffic
+  awaits / the negotiated wake schedule in Wi-Fi 6.
+- **WEP / WPA2 / WPA3** — obsolete/broken / current-standard (AES-CCMP, 4-way handshake) /
+  best-practice (SAE "Dragonfly", forward secrecy) security.
+- **MIMO / MU-MIMO / spatial stream** — multiple antennas sending independent data streams / to
+  multiple clients at once / one such independent stream.
+- **OFDMA / resource unit** — subdividing a channel among several stations in one transmission
+  (borrowed from LTE) / the sub-channel each gets.
+- **802.11r / k / v** — fast roaming (pre-shared keys) / neighbor reports / network-suggested AP
+  steering.
+
+## Module 09 — Cellular Architecture
+
+- **3GPP** — the standards consortium that writes GSM/UMTS/LTE/5G specs, published as numbered
+  *Releases*.
+- **Carrier / operator** — the company that owns spectrum and runs the network.
+- **UE (User Equipment)** — 3GPP's term for the user's device (OS + baseband modem + SIM).
+- **SIM / USIM** — the smartcard (or eSIM) holding subscriber identity + secret key; USIM is the
+  LTE-era application on it.
+- **IMSI** — International Mobile Subscriber Identity; permanent *subscriber* identity, on the SIM.
+- **IMEI** — International Mobile Equipment Identity; permanent *hardware* identity, in the phone
+  (`*#06#`).
+- **GUTI / TMSI** — temporary identities the MME assigns so your permanent IMSI isn't broadcast
+  over the air (privacy).
+- **E-UTRAN** — LTE's radio access network (the eNodeBs).
+- **eNodeB (eNB)** — the LTE base station; terminates the air interface and *schedules* all radio
+  transmissions.
+- **gNB** — the 5G base station (NR).
+- **EPC (Evolved Packet Core)** — LTE's all-IP core network.
+- **MME (Mobility Management Entity)** — control-plane brain: attach, authentication, mobility
+  tracking, paging control. Never carries user data.
+- **S-GW (Serving Gateway)** — user-plane mobility anchor; forwards packets between eNodeB and P-GW.
+- **P-GW (PDN Gateway)** — user-plane exit to the internet; assigns the UE's IP and does NAT.
+- **HSS (Home Subscriber Server)** — master subscriber database (identity + key + entitlements).
+- **PCRF** — Policy & Charging Rules Function; sets QoS and billing rules.
+- **Uu / S1-MME / S1-U / X2 / S5-S8** — the named interfaces (air / control / user / inter-eNB /
+  core).
+- **Control plane vs user plane** — signaling (who decides) vs actual data traffic (who carries).
+- **EPS bearer** — a logical, QoS-tagged pipe from UE to P-GW. *Default* (best-effort, always-on)
+  vs *dedicated* (on-demand, e.g. VoLTE).
+- **QCI** — QoS Class Identifier; the integer selecting a bearer's priority/delay/loss profile.
+- **TEID** — Tunnel Endpoint Identifier; the label in a GTP header naming which bearer/UE a tunnel
+  belongs to.
+- **Tracking Area (TA)** — a group of cells; the granularity to which the network tracks an idle phone.
+- **Paging** — broadcasting to all cells in a Tracking Area to locate an idle UE for incoming data.
+- **VoLTE** — Voice over LTE; phone calls carried as IP packets on a dedicated bearer.
+- **5GC / AMF / SMF / UPF** — the 5G Core and its split functions (mobility control / session
+  control / user-plane forwarding).
+- **NSA vs SA** — Non-Standalone (5G radio on a 4G core) vs Standalone (full 5G radio + core).
+- **CUPS** — Control and User Plane Separation; architecting the two planes as independent,
+  separately-scalable functions.
+- **Network slicing** — carving one physical 5G network into multiple virtual networks with
+  distinct QoS.
+
+## Module 10 — The LTE Air Interface
+
+- **OFDM** — Orthogonal Frequency-Division Multiplexing: split a channel into many narrow,
+  non-interfering subcarriers carrying slow parallel symbol streams; defeats multipath.
+- **SC-FDMA** — the low-PAPR uplink variant of OFDM, chosen to save phone battery.
+- **Subcarrier** — one 15 kHz frequency slice of the OFDM grid.
+- **Cyclic prefix (CP)** — a copied guard interval prepended to each symbol to absorb echoes.
+- **Resource Element (RE)** — one subcarrier × one OFDM symbol; carries one modulation symbol.
+- **OFDM symbol** — one time-column of the grid (~71 µs); 7 per slot.
+- **Resource Block (RB) / PRB** — 12 subcarriers × one 0.5 ms slot (= 84 REs); the unit the
+  scheduler allocates.
+- **Slot / Subframe / Frame (time-domain)** — 0.5 ms (7 symbols) / 1 ms = 2 slots = one TTI /
+  10 ms.
+- **TTI (Transmission Time Interval)** — the 1 ms scheduling heartbeat.
+- **MCS (Modulation and Coding Scheme)** — index (0–28) bundling modulation order + code rate.
+- **Code rate** — fraction of transmitted bits that are actual data (rest is error-correction).
+- **CQI (Channel Quality Indicator)** — the phone's 0–15 report of the best MCS it can decode.
+- **RSRP / RSRQ / SINR** — measured signal power / quality / signal-to-interference-plus-noise.
+- **MIMO** — multiple antennas for spatial multiplexing (speed), diversity (robustness), or
+  beamforming (steering).
+- **PDSCH / PUSCH** — physical downlink/uplink *shared* channels: user data.
+- **PDCCH / PUCCH** — physical downlink/uplink *control* channels: grants, ACK/NACK, CQI.
+- **PBCH / PSS / SSS / Reference signals** — broadcast channel / sync signals a phone finds first /
+  known pilot symbols for channel estimation.
+- **HARQ** — Hybrid ARQ: PHY/MAC retransmission that *soft-combines* failed copies.
+- **EARFCN** — the number identifying an LTE carrier's frequency/channel.
+
+## Module 11 — The LTE Protocol Stack
+
+- **PDCP (Packet Data Convergence Protocol)** — top of the user-plane L2 — does ROHC header
+  compression, ciphering + integrity protection, reordering/in-order delivery, and duplication.
+- **RLC (Radio Link Control)** — L2 layer that does ARQ retransmission, plus segmentation and
+  reassembly of packets to fit radio grants. Runs in mode TM, UM, or AM.
+- **MAC (LTE Medium Access Control)** — L2 layer that schedules and multiplexes logical channels
+  onto transport channels, drives HARQ, runs random access, addresses via RNTI, and does
+  logical-channel prioritization.
+- **RRC (Radio Resource Control)** — control-plane "brain": broadcasts system information, sets
+  up/reconfigures/releases the radio connection and bearers, configures measurements, drives
+  handover, and controls RRC states.
+- **NAS (Non-Access Stratum)** — control signaling between the phone and the core (MME) —
+  registration, authentication, mobility & session management — carried transparently over RRC.
+- **ROHC (Robust Header Compression)** — PDCP scheme that compresses ~40B IP/UDP/RTP headers to
+  ~1–3B over the air by sending only what changed against an agreed context.
+- **ARQ (Automatic Repeat reQuest)** — retransmission based on ACK/NACK feedback; RLC's L2 form
+  (in AM mode) is what makes cellular differ from Ethernet's detect-and-drop.
+- **Logical channels** — streams defined by *what* traffic they carry (broadcast, paging,
+  dedicated control/traffic).
+- **Transport channels** — the *how*: the delivery mechanisms PHY offers; MAC maps logical onto
+  transport channels.
+- **RLC modes — TM / UM / AM** — Transparent (no header/retransmit, broadcast), Unacknowledged
+  (reorders, no retransmit — voice), Acknowledged (ARQ retransmit + in-order — data).
+- **Transport block** — the chunk of data PHY carries in one scheduling opportunity; bottom of the
+  encapsulation ladder.
+- **SDAP** — 5G-only layer above PDCP that maps IP/QoS flows to radio bearers (not in LTE).
+
+## Module 12 — Paging, RRC States & Handover
+
+- **RRC_IDLE** — no radio connection; network knows the UE only by tracking area; UE must be paged
+  and promoted before data flows. Best battery, worst first-packet latency.
+- **RRC_CONNECTED** — active radio connection with dedicated resources; network knows the exact
+  cell and can schedule immediately. Best latency, worst battery.
+- **RRC_INACTIVE** — 5G state that keeps the RRC + core-network context suspended, so the UE can
+  *resume* far faster than IDLE→CONNECTED while sleeping nearly as efficiently.
+- **RACH (Random Access Channel)** — the contention-based procedure (preamble → RAR → request →
+  contention resolution) by which a UE with no uplink grant gets the tower's attention.
+- **P-RNTI** — the shared Paging RNTI all idle UEs monitor on the PDCCH to detect paging (fixed
+  value `FFFE`).
+- **DRX (Discontinuous Reception)** — the agreed schedule of when the UE's receiver is awake;
+  idle-mode DRX aligns wake-ups with paging occasions, connected-mode DRX micro-sleeps between
+  data bursts.
+- **eDRX (extended DRX)** — DRX with very long cycles (minutes to hours) for IoT devices, trading
+  reachability for battery.
+- **TAU (Tracking Area Update)** — the signalling a UE sends when it leaves its registered tracking
+  area (or periodically), keeping the core's location record current so paging is targeted.
+- **Handover** — the network-controlled transfer of a CONNECTED UE from one cell to another as it
+  moves; may be X2/Xn-based (fast, direct) or S1-based (via the core).
+- **RLF (Radio Link Failure)** — the UE's declaration that the radio link is broken; triggers RRC
+  re-establishment, and if that fails, a drop to IDLE (a dropped call).
+- **Measurement events (A1–A5)** — the conditions on serving/neighbour signal strength that make
+  the UE send a measurement report; **A3** (neighbour > serving + offset) is the classic handover
+  trigger.
+
+## Module 13 — Latency, End to End
+
+- **TTFB (time to first byte)** — time from sending the request to the first byte of the response
+  arriving (≈ 1 RTT + server processing).
+- **Bandwidth-delay product (BDP)** — bandwidth × RTT; the data that fits "in flight" at once.
+  Your TCP window must be ≥ BDP to fill the pipe.
+- **Percentiles (p50/p95/p99)** — the latency distribution. p50 is typical; p99 is the tail that
+  dominates multi-request page loads.
+- **MEC (Multi-access Edge Computing)** — compute at the cell site, cutting backhaul + core
+  propagation.
+
+## Module 14 — Constrained & IoT Devices
+
+- **NB-IoT** — Narrowband IoT (LTE Cat-NB1/NB2). 180 kHz radio, deepest coverage (~164 dB MCL),
+  very low data rate, best for stationary meters/sensors. No voice, no in-motion handover.
+- **LTE-M** — LTE Cat-M1 / eMTC. 1.4 MHz, up to ~1 Mbps, supports mobility and voice; higher
+  capability, slightly less deep coverage than NB-IoT.
+- **PSM (Power Saving Mode)** — device stays registered but powers the radio fully off; unreachable
+  until it wakes for a TAU or to send data. Enables microamp sleep and years of battery — at the
+  cost of downlink reachability.
+- **LPWAN** — Low-Power Wide-Area Network. Umbrella term for long-range, low-power, low-data
+  technologies (NB-IoT, LTE-M, LoRaWAN, Sigfox).
+- **LoRaWAN** — open MAC/network protocol over the LoRa (Chirp Spread Spectrum) physical layer;
+  unlicensed ISM spectrum, star-of-stars topology, self-hostable gateways, tiny payloads.
+- **MQTT** — Message Queuing Telemetry Transport. Lightweight publish/subscribe protocol via a
+  central broker, tiny 2-byte header, over TCP. The IoT fleet workhorse.
+- **CoAP** — Constrained Application Protocol. RESTful (GET/PUT/POST/DELETE) like HTTP but with a
+  4-byte binary header, running over UDP (no handshake). RFC 7252.
+- **DTLS** — Datagram TLS. TLS adapted to run over UDP (tolerates loss/reordering); used to secure
+  CoAP (`coaps`). Often paired with pre-shared keys or Connection ID on tiny devices.
+- **RedCap** — Reduced Capability NR ("NR-Light", 3GPP Rel-17). New 5G radio for the mid-tier
+  between LPWA and full 5G — fewer antennas, less bandwidth, ~150 Mbps — for wearables, sensors,
+  mid-tier cameras.
+- **mMTC** — massive Machine-Type Communication. The 5G pillar for connecting ~1M devices/km²; in
+  practice delivered by NB-IoT and LTE-M.
+
+## Module 15 — VPNs & Tunneling
+
+- **Tunnel** — a path that carries one network's packets encapsulated inside another network's
+  packets, usually encrypted.
+- **Overlay / underlay** — overlay = the virtual private network you perceive; underlay = the real
+  physical network actually forwarding the outer packets.
+- **IPsec** — a suite securing IP at L3; the classic enterprise/site-to-site choice.
+- **ESP / AH** — ESP = Encapsulating Security Payload (encrypts + authenticates — the one used);
+  AH = Authentication Header (authenticates only; NAT-incompatible; rare).
+- **IKE** — Internet Key Exchange (IKEv2); IPsec's handshake that authenticates peers and derives
+  keys, analogous to the TLS handshake.
+- **SA (Security Association)** — the one-directional negotiated bundle of keys/algorithms/parameters
+  for a tunnel; a working IPsec tunnel needs a pair.
+- **WireGuard** — modern, tiny, UDP-only VPN using the Noise framework and public-key identity; the
+  current default.
+- **OpenVPN** — mature TLS/DTLS-based VPN; uses X.509 certs and the full TLS machinery over a single
+  UDP/TCP port.
+- **Split tunneling** — routing only some traffic through the VPN and the rest directly, trading
+  privacy for latency.
+- **NAT traversal** — techniques (inside-out initiation, NAT-T/UDP 4500, hole punching) that let
+  tunnels work through NAT.
+- **DNS leak** — DNS queries escaping the tunnel to the original resolver, exposing visited
+  hostnames despite encryption.
+
+## Module 16 — The RF Underworld (SDR, sniffing, jammers)
+
+- **SDR (Software-Defined Radio)** — a radio whose demodulation/decoding is done in software over
+  raw I/Q samples, making one piece of hardware handle many signal types.
+- **RTL-SDR** — a ~$30 **receive-only** USB dongle (repurposed DVB-T tuner); the standard learning
+  tool. Cannot transmit.
+- **HackRF / LimeSDR / USRP** — wider-range, **transmit-capable** SDRs for research/labs;
+  transmitting is heavily regulated.
+- **I/Q samples** — paired in-phase/quadrature values capturing a wave's amplitude *and* phase; the
+  raw data an SDR processes.
+- **Waterfall / spectrogram** — a scrolling plot of signal power vs frequency over time; how you
+  *see* the airwaves.
+- **IMSI catcher / stingray** — a rogue base station impersonating a real cell tower to identify and
+  track nearby phones, exploiting weak authentication (2G) and downgrade lures.
+- **Downgrade attack** — forcing a device onto an older, weaker protocol (e.g. 4G→2G) where security
+  is missing.
+- **Jamming** — flooding a band with noise/carrier to collapse SNR and deny service. **Illegal and
+  dangerous everywhere.**
+- **GPS spoofing** — transmitting counterfeit satellite signals to induce a false position/time in a
+  receiver.
+- **Replay attack** — capturing a valid transmission and re-sending it later to trigger an effect
+  (e.g. fixed-code remotes); beaten by rolling codes / freshness proofs.

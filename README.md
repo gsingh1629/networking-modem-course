@@ -72,8 +72,9 @@ advanced and "hidden" topics.
 - **16 — The RF underworld**: SDR, sniffing, IMSI catchers & jammers (theory + law + ethics).
 
 ### Part VI — Capstone projects
-- Build-along projects combining hardware + software (packet analyzer, SDR spectrum
-  viewer, a tiny VPN, latency probe across layers).
+- **[🛠️ Capstone projects](capstone-projects.md)** — six build-along projects combining
+  hardware + software (packet dissector, latency probe, mini DNS resolver, tiny VPN, SDR
+  spectrum/ADS-B receiver, cellular RRC logger).
 
 ---
 
@@ -119,6 +120,6 @@ correctly.
 - [x] 14 — Constrained & IoT devices
 - [x] 15 — VPNs & tunneling
 - [x] 16 — The RF underworld
-- [ ] Capstone projects
+- [x] Capstone projects
 
 *Check these off as we go. We're starting with Module 01.*

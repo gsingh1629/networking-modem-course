@@ -36,5 +36,8 @@
   - [15 · VPNs & tunneling](15-vpns.md)
   - [16 · The RF underworld](16-rf-underworld.md)
 
+- **Part VI — Capstone**
+  - [🛠️ Capstone projects](capstone-projects.md)
+
 - **Meta**
   - [Contributing](CONTRIBUTING.md)
