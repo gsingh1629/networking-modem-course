@@ -176,6 +176,73 @@ flowchart TD
     G -->|"No"| I["Double contention window<br/>(exponential backoff)"] --> B
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 250" role="img" aria-label="Animation: CSMA/CA. A station senses the channel busy, waits DIFS, counts down a random backoff, transmits to the access point, and receives an ACK — no collision.">
+<style>
+.m08a-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m08a-bt{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m08a-lbl{font-size:10px;font-weight:700;fill:#334155}
+.m08a-glow{fill:none;stroke:#0f172a;stroke-width:3;rx:5}
+.m08a-hi1{animation:m08ahi1 8s linear infinite}
+.m08a-hi2{animation:m08ahi2 8s linear infinite}
+.m08a-hi3{animation:m08ahi3 8s linear infinite}
+.m08a-hi4{animation:m08ahi4 8s linear infinite}
+.m08a-hi5{animation:m08ahi5 8s linear infinite}
+.m08a-c3{animation:m08ac 8s linear infinite}
+.m08a-c2{animation:m08ac2 8s linear infinite}
+.m08a-c1{animation:m08ac1 8s linear infinite}
+.m08a-c0{animation:m08ac0 8s linear infinite}
+.m08a-tx{animation:m08atx 8s linear infinite}
+.m08a-ack{animation:m08aack 8s linear infinite}
+.m08a-ok{animation:m08aok 8s linear infinite}
+@keyframes m08ahi1{0%{opacity:1}24%{opacity:1}26%,100%{opacity:0}}
+@keyframes m08ahi2{0%,24%{opacity:0}26%,33%{opacity:1}35%,100%{opacity:0}}
+@keyframes m08ahi3{0%,33%{opacity:0}35%,50%{opacity:1}52%,100%{opacity:0}}
+@keyframes m08ahi4{0%,50%{opacity:0}52%,78%{opacity:1}80%,100%{opacity:0}}
+@keyframes m08ahi5{0%,80%{opacity:0}82%,94%{opacity:1}96%,100%{opacity:0}}
+@keyframes m08ac{0%,35%{opacity:0}36%,38%{opacity:1}39%,100%{opacity:0}}
+@keyframes m08ac2{0%,39%{opacity:0}40%,42%{opacity:1}43%,100%{opacity:0}}
+@keyframes m08ac1{0%,43%{opacity:0}44%,46%{opacity:1}47%,100%{opacity:0}}
+@keyframes m08ac0{0%,47%{opacity:0}48%,50%{opacity:1}51%,100%{opacity:0}}
+@keyframes m08atx{0%,50%{opacity:0;transform:translate(0,0)}53%{opacity:1}76%{opacity:1;transform:translate(490px,0)}78%,100%{opacity:0;transform:translate(490px,0)}}
+@keyframes m08aack{0%,80%{opacity:0;transform:translate(0,0)}83%{opacity:1}92%{opacity:1;transform:translate(-490px,0)}94%,100%{opacity:0;transform:translate(-490px,0)}}
+@keyframes m08aok{0%,88%{opacity:0}92%,99%{opacity:1}100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">CSMA/CA: sense → wait DIFS → random backoff → transmit → ACK (avoid, don't detect)</text>
+<rect class="m08a-box" x="20" y="42" width="80" height="44" rx="8"/><text class="m08a-bt" x="60" y="69" text-anchor="middle">STA A</text>
+<rect class="m08a-box" x="620" y="42" width="80" height="44" rx="8"/><text class="m08a-bt" x="660" y="69" text-anchor="middle">AP</text>
+<line x1="100" y1="64" x2="620" y2="64" stroke="#cbd5e1" stroke-width="2"/>
+<g class="m08a-tx"><rect x="105" y="55" width="22" height="18" rx="4" fill="#2c7be5"/></g>
+<g class="m08a-ack"><rect x="593" y="55" width="22" height="18" rx="4" fill="#16a34a"/></g>
+<!-- channel timeline -->
+<rect x="60" y="140" width="140" height="30" rx="5" fill="#cbd5e1"/>
+<rect x="200" y="140" width="45" height="30" rx="5" fill="#f59e0b"/>
+<rect x="245" y="140" width="120" height="30" rx="5" fill="#7c3aed"/>
+<rect x="365" y="140" width="185" height="30" rx="5" fill="#2c7be5"/>
+<rect x="550" y="140" width="30" height="30" rx="5" fill="#64748b"/>
+<rect x="580" y="140" width="80" height="30" rx="5" fill="#16a34a"/>
+<text class="m08a-lbl" x="130" y="159" text-anchor="middle" fill="#475569">BUSY (others)</text>
+<text class="m08a-lbl" x="222" y="159" text-anchor="middle" fill="#fff">DIFS</text>
+<text class="m08a-lbl" x="305" y="159" text-anchor="middle" fill="#fff">backoff</text>
+<text class="m08a-lbl" x="457" y="159" text-anchor="middle" fill="#fff">A transmits</text>
+<text class="m08a-lbl" x="620" y="159" text-anchor="middle" fill="#fff">ACK</text>
+<text x="565" y="185" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#64748b">SIFS</text>
+<!-- phase highlights -->
+<rect class="m08a-glow m08a-hi1" x="60" y="140" width="140" height="30" rx="5"/>
+<rect class="m08a-glow m08a-hi2" x="200" y="140" width="45" height="30" rx="5"/>
+<rect class="m08a-glow m08a-hi3" x="245" y="140" width="120" height="30" rx="5"/>
+<rect class="m08a-glow m08a-hi4" x="365" y="140" width="185" height="30" rx="5"/>
+<rect class="m08a-glow m08a-hi5" x="580" y="140" width="80" height="30" rx="5"/>
+<!-- backoff countdown -->
+<text class="m08a-c3" x="305" y="205" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#7c3aed">3</text>
+<text class="m08a-c2" x="305" y="205" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#7c3aed">2</text>
+<text class="m08a-c1" x="305" y="205" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#7c3aed">1</text>
+<text class="m08a-c0" x="305" y="205" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#16a34a">0 → go</text>
+<text class="m08a-ok" x="360" y="235" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#16a34a">✓ ACK received — frame delivered, no collision</text>
+</svg>
+<figcaption>Unlike CSMA/CD (Module 03), nothing ever collides here. The station waits out the <b>busy</b> channel, holds for <b>DIFS</b>, counts down a <b>random backoff</b> while the channel stays idle, then <b>transmits</b> — and learns it worked only from the returning <b>ACK</b> (sent after the shorter SIFS so it jumps the queue). No ACK would mean "assume lost → double the window → retry."</figcaption>
+</figure>
+
 > **Contrast to hold onto — contention vs scheduling.** In CSMA/CA *nobody is in charge*. Every
 > station independently gambles on random backoff and hopes it doesn't collide. It's a polite
 > free-for-all. Cellular does the opposite: the tower (base station) **grants** each device an
@@ -214,6 +281,63 @@ RTS/CTS trades overhead (two extra tiny frames) for protection, so it's typicall
 for larger frames or in environments where hidden nodes are common. It's the same NAV mechanism
 from Section 4, deployed to solve the one problem physical carrier sense fundamentally can't.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: the hidden-node problem. Stations A and C cannot hear each other, so both transmit to access point B and collide. Then RTS/CTS fixes it: B's CTS is heard by everyone, so C sets its NAV and stays quiet while A transmits.">
+<style>
+.m08b-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m08b-ap{fill:#fef9c3;stroke:#f59e0b;stroke-width:2}
+.m08b-t{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m08b-A1{animation:m08bA1 10s linear infinite}
+.m08b-C1{animation:m08bC1 10s linear infinite}
+.m08b-boom{animation:m08bboom 10s linear infinite}
+.m08b-p1{animation:m08bp1 10s linear infinite}
+.m08b-p2{animation:m08bp2 10s linear infinite}
+.m08b-rts{animation:m08brts 10s linear infinite}
+.m08b-ctsA{animation:m08bctsA 10s linear infinite}
+.m08b-ctsC{animation:m08bctsC 10s linear infinite}
+.m08b-nav{animation:m08bnav 10s linear infinite}
+.m08b-data{animation:m08bdata 10s linear infinite}
+.m08b-ok{animation:m08bok 10s linear infinite}
+@keyframes m08bA1{0%{opacity:0;transform:translate(0,0)}3%{opacity:1}30%{opacity:1;transform:translate(220px,-45px)}33%,100%{opacity:0;transform:translate(220px,-45px)}}
+@keyframes m08bC1{0%{opacity:0;transform:translate(0,0)}3%{opacity:1}30%{opacity:1;transform:translate(-200px,-45px)}33%,100%{opacity:0;transform:translate(-200px,-45px)}}
+@keyframes m08bboom{0%,27%{opacity:0;transform:scale(.4)}31%{opacity:1;transform:scale(1)}42%{opacity:1}46%,100%{opacity:0}}
+@keyframes m08bp1{0%{opacity:1}44%{opacity:1}47%,100%{opacity:0}}
+@keyframes m08bp2{0%,47%{opacity:0}50%,99%{opacity:1}100%{opacity:0}}
+@keyframes m08brts{0%,50%{opacity:0;transform:translate(0,0)}54%{opacity:1}62%{opacity:1;transform:translate(220px,-45px)}64%,100%{opacity:0;transform:translate(220px,-45px)}}
+@keyframes m08bctsA{0%,64%{opacity:0;transform:translate(0,0)}66%{opacity:1}72%{opacity:1;transform:translate(-220px,45px)}74%,100%{opacity:0;transform:translate(-220px,45px)}}
+@keyframes m08bctsC{0%,64%{opacity:0;transform:translate(0,0)}66%{opacity:1}72%{opacity:1;transform:translate(200px,45px)}74%,100%{opacity:0;transform:translate(200px,45px)}}
+@keyframes m08bnav{0%,73%{opacity:0}77%,98%{opacity:1}100%{opacity:0}}
+@keyframes m08bdata{0%,76%{opacity:0;transform:translate(0,0)}80%{opacity:1}90%{opacity:1;transform:translate(220px,-45px)}92%,100%{opacity:0;transform:translate(220px,-45px)}}
+@keyframes m08bok{0%,89%{opacity:0}93%,99%{opacity:1}100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Hidden nodes: A and C can't hear each other — RTS/CTS makes them take turns</text>
+<!-- topology -->
+<line x1="110" y1="140" x2="330" y2="95" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="610" y1="140" x2="410" y2="95" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="110" y1="170" x2="610" y2="170" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="360" y="188" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#ef4444">A and C cannot hear each other (hidden nodes)</text>
+<rect class="m08b-box" x="20" y="120" width="90" height="46" rx="8"/><text class="m08b-t" x="65" y="148" text-anchor="middle">STA A</text>
+<rect class="m08b-ap" x="315" y="62" width="110" height="46" rx="8"/><text class="m08b-t" x="370" y="90" text-anchor="middle">AP B</text>
+<rect class="m08b-box" x="610" y="120" width="90" height="46" rx="8"/><text class="m08b-t" x="655" y="148" text-anchor="middle">STA C</text>
+<!-- phase 1: both transmit, collide at B -->
+<g class="m08b-A1"><rect x="102" y="132" width="20" height="16" rx="4" fill="#2c7be5"/></g>
+<g class="m08b-C1"><rect x="598" y="132" width="20" height="16" rx="4" fill="#16a34a"/></g>
+<g class="m08b-boom" style="transform-origin:370px 85px"><polygon points="370,63 379,81 400,85 379,89 370,107 361,89 340,85 361,81" fill="#ef4444"/></g>
+<text class="m08b-p1" x="360" y="230" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#ef4444">💥 Both sense idle, both transmit → collision at B</text>
+<!-- phase 2: RTS/CTS -->
+<g class="m08b-p2">
+<text x="360" y="212" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#7c3aed">RTS/CTS fix: A → RTS → B, then B → CTS → everyone</text>
+</g>
+<g class="m08b-rts"><rect x="102" y="132" width="24" height="16" rx="4" fill="#7c3aed"/><text x="114" y="145" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">RTS</text></g>
+<g class="m08b-ctsA"><rect x="326" y="88" width="24" height="16" rx="4" fill="#16a34a"/><text x="338" y="101" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">CTS</text></g>
+<g class="m08b-ctsC"><rect x="398" y="88" width="24" height="16" rx="4" fill="#16a34a"/><text x="410" y="101" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">CTS</text></g>
+<text class="m08b-nav" x="655" y="248" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:#7c3aed">C hears CTS → sets NAV • stays quiet</text>
+<g class="m08b-data"><rect x="102" y="132" width="24" height="16" rx="4" fill="#2c7be5"/><text x="114" y="145" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">data</text></g>
+<text class="m08b-ok" x="360" y="268" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:#16a34a">✓ A transmits collision-free while C waits its turn</text>
+</svg>
+<figcaption>Plain carrier sense fails: A and C each hear silence and transmit, <b>colliding at B</b>. The fix is <b>RTS/CTS</b> — A asks with a tiny <b>RTS</b>, B answers with a <b>CTS that everyone in range of B hears</b>, including hidden C. The CTS carries a Duration, so C sets its <b>NAV</b> and stays silent exactly long enough for A to finish. Virtual carrier sense solving what physical carrier sense can't.</figcaption>
+</figure>
+
 > ⚡ **Latency note.** RTS/CTS adds a fixed round-trip of overhead to every protected frame —
 > cheap insurance when hidden nodes would otherwise cause repeated collisions and retransmits
 > (each retransmit is a *far* bigger latency hit). It's a classic latency trade: pay a small,
@@ -249,6 +373,69 @@ sequenceDiagram
     Note over STA,AP: Now (if WPA2/3) the 4-way handshake / SAE runs — Section 8
     Note over STA,AP: Only THEN can data frames flow
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 350" role="img" aria-label="Animation: the Wi-Fi association sequence. The AP beacons, the station sends a probe request and gets a probe response, then authentication request and response, then association request and response — after which data frames can flow.">
+<style>
+.m08c-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m08c-bt{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m08c-life{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:4 4}
+.m08c-lb{font-size:10.5px;font-weight:700}
+.m08c-m1{animation:m08cm1 12s linear infinite}
+.m08c-m2{animation:m08cm2 12s linear infinite}
+.m08c-m3{animation:m08cm3 12s linear infinite}
+.m08c-m4{animation:m08cm4 12s linear infinite}
+.m08c-m5{animation:m08cm5 12s linear infinite}
+.m08c-m6{animation:m08cm6 12s linear infinite}
+.m08c-m7{animation:m08cm7 12s linear infinite}
+.m08c-l1{animation:m08cl1 12s linear infinite}
+.m08c-l2{animation:m08cl2 12s linear infinite}
+.m08c-l3{animation:m08cl3 12s linear infinite}
+.m08c-l4{animation:m08cl4 12s linear infinite}
+.m08c-l5{animation:m08cl5 12s linear infinite}
+.m08c-l6{animation:m08cl6 12s linear infinite}
+.m08c-l7{animation:m08cl7 12s linear infinite}
+.m08c-fin{animation:m08cfin 12s linear infinite}
+@keyframes m08cm1{0%,4%{opacity:0;transform:translate(0,0)}6%{opacity:1}11%{opacity:1;transform:translate(-480px,0)}13%,100%{opacity:0;transform:translate(-480px,0)}}
+@keyframes m08cm2{0%,15%{opacity:0;transform:translate(0,0)}17%{opacity:1}22%{opacity:1;transform:translate(480px,0)}24%,100%{opacity:0;transform:translate(480px,0)}}
+@keyframes m08cm3{0%,26%{opacity:0;transform:translate(0,0)}28%{opacity:1}33%{opacity:1;transform:translate(-480px,0)}35%,100%{opacity:0;transform:translate(-480px,0)}}
+@keyframes m08cm4{0%,37%{opacity:0;transform:translate(0,0)}39%{opacity:1}44%{opacity:1;transform:translate(480px,0)}46%,100%{opacity:0;transform:translate(480px,0)}}
+@keyframes m08cm5{0%,48%{opacity:0;transform:translate(0,0)}50%{opacity:1}55%{opacity:1;transform:translate(-480px,0)}57%,100%{opacity:0;transform:translate(-480px,0)}}
+@keyframes m08cm6{0%,59%{opacity:0;transform:translate(0,0)}61%{opacity:1}66%{opacity:1;transform:translate(480px,0)}68%,100%{opacity:0;transform:translate(480px,0)}}
+@keyframes m08cm7{0%,70%{opacity:0;transform:translate(0,0)}72%{opacity:1}77%{opacity:1;transform:translate(-480px,0)}79%,100%{opacity:0;transform:translate(-480px,0)}}
+@keyframes m08cl1{0%,4%{opacity:0}7%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl2{0%,15%{opacity:0}18%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl3{0%,26%{opacity:0}29%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl4{0%,37%{opacity:0}40%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl5{0%,48%{opacity:0}51%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl6{0%,59%{opacity:0}62%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cl7{0%,70%{opacity:0}73%,95%{opacity:1}98%,100%{opacity:0}}
+@keyframes m08cfin{0%,82%{opacity:0}86%,97%{opacity:1}100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Joining a network: beacon → probe → authenticate → associate</text>
+<rect class="m08c-box" x="60" y="30" width="100" height="36" rx="8"/><text class="m08c-bt" x="110" y="53" text-anchor="middle">STA</text>
+<rect class="m08c-box" x="560" y="30" width="100" height="36" rx="8"/><text class="m08c-bt" x="610" y="53" text-anchor="middle">AP</text>
+<line class="m08c-life" x1="110" y1="66" x2="110" y2="315"/>
+<line class="m08c-life" x1="610" y1="66" x2="610" y2="315"/>
+<!-- message rows: labels + moving tokens -->
+<text class="m08c-lb m08c-l1" x="360" y="90" text-anchor="middle" fill="#7c3aed">① Beacon — AP broadcasts SSID ✓ (passive scan)</text>
+<g class="m08c-m1"><rect x="590" y="96" width="22" height="14" rx="3" fill="#7c3aed"/></g>
+<text class="m08c-lb m08c-l2" x="360" y="125" text-anchor="middle" fill="#2c7be5">② Probe Request → "anyone here?" (active scan)</text>
+<g class="m08c-m2"><rect x="108" y="131" width="22" height="14" rx="3" fill="#2c7be5"/></g>
+<text class="m08c-lb m08c-l3" x="360" y="160" text-anchor="middle" fill="#7c3aed">③ Probe Response ← "I'm SSID X, here's how"</text>
+<g class="m08c-m3"><rect x="590" y="166" width="22" height="14" rx="3" fill="#7c3aed"/></g>
+<text class="m08c-lb m08c-l4" x="360" y="195" text-anchor="middle" fill="#2c7be5">④ Authentication Request →</text>
+<g class="m08c-m4"><rect x="108" y="201" width="22" height="14" rx="3" fill="#2c7be5"/></g>
+<text class="m08c-lb m08c-l5" x="360" y="230" text-anchor="middle" fill="#7c3aed">⑤ Authentication Response ← (Open System: "ok")</text>
+<g class="m08c-m5"><rect x="590" y="236" width="22" height="14" rx="3" fill="#7c3aed"/></g>
+<text class="m08c-lb m08c-l6" x="360" y="265" text-anchor="middle" fill="#2c7be5">⑥ Association Request → (my rates, capabilities)</text>
+<g class="m08c-m6"><rect x="108" y="271" width="22" height="14" rx="3" fill="#2c7be5"/></g>
+<text class="m08c-lb m08c-l7" x="360" y="300" text-anchor="middle" fill="#16a34a">⑦ Association Response ← (associated + your ID)</text>
+<g class="m08c-m7"><rect x="590" y="306" width="22" height="14" rx="3" fill="#16a34a"/></g>
+<text class="m08c-fin" x="360" y="335" text-anchor="middle" style="font-size:12px;font-weight:700;fill:#16a34a">✓ Associated → (after WPA2/3 key handshake) data frames flow</text>
+</svg>
+<figcaption>Four stages, top to bottom: <b>discovery</b> (the AP's beacon, plus the station's probe request/response), <b>authentication</b> (usually just Open System "ok" — real security comes later), and <b>association</b> (the station joins the BSS and gets an ID). Only after this (and, if secured, the WPA2/WPA3 key handshake, Section 8) can encrypted <b>data frames</b> flow — which is why the first connection always takes a noticeable moment.</figcaption>
+</figure>
 
 1. **Discovery — beacons and probes.** An AP broadcasts a **beacon** frame roughly ten times a
    second, announcing its SSID, supported rates, and capabilities. That's *passive* scanning.

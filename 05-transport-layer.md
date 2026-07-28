@@ -194,6 +194,55 @@ sequenceDiagram
     C->>S: ...data can now flow...
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 290" role="img" aria-label="Animation: the TCP three-way handshake — SYN from client to server, SYN-ACK back, then ACK, after which the connection is established.">
+<style>
+.m05a-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m05a-box{font-size:12px;font-weight:700;fill:#fff}
+.m05a-tok{font-size:11px;font-weight:700;fill:#fff}
+.m05a-life{stroke:#cbd5e1;stroke-width:2}
+.m05a-guide{stroke:#e2e8f0;stroke-width:1;stroke-dasharray:4 4}
+.m05a-conn{font-size:13px;font-weight:700;fill:#fff}
+.m05a-s1{animation:m05aS1 8s ease-in-out infinite}
+.m05a-s2{animation:m05aS2 8s ease-in-out infinite}
+.m05a-s3{animation:m05aS3 8s ease-in-out infinite}
+.m05a-cn{animation:m05aCN 8s ease-in-out infinite}
+@keyframes m05aS1{0%{opacity:0;transform:translateX(0)}3%{opacity:1;transform:translateX(0)}22%{opacity:1;transform:translateX(540px)}27%,100%{opacity:0;transform:translateX(540px)}}
+@keyframes m05aS2{0%,33%{opacity:0;transform:translateX(0)}36%{opacity:1;transform:translateX(0)}55%{opacity:1;transform:translateX(-540px)}60%,100%{opacity:0;transform:translateX(-540px)}}
+@keyframes m05aS3{0%,63%{opacity:0;transform:translateX(0)}66%{opacity:1;transform:translateX(0)}82%{opacity:1;transform:translateX(540px)}87%,100%{opacity:0;transform:translateX(540px)}}
+@keyframes m05aCN{0%,86%{opacity:0}91%,99%{opacity:1}100%{opacity:0}}
+</style>
+<text class="m05a-title" x="12" y="20">TCP 3-way handshake — one round-trip before any data flows</text>
+<rect x="60" y="34" width="100" height="30" rx="6" fill="#2c7be5"/><text class="m05a-box" x="110" y="54" text-anchor="middle">Client</text>
+<rect x="600" y="34" width="100" height="30" rx="6" fill="#16a34a"/><text class="m05a-box" x="650" y="54" text-anchor="middle">Server</text>
+<line class="m05a-life" x1="110" y1="64" x2="110" y2="252"/>
+<line class="m05a-life" x1="650" y1="64" x2="650" y2="252"/>
+<line class="m05a-guide" x1="110" y1="95" x2="650" y2="95"/>
+<line class="m05a-guide" x1="110" y1="150" x2="650" y2="150"/>
+<line class="m05a-guide" x1="110" y1="205" x2="650" y2="205"/>
+<g class="m05a-s1">
+<rect x="72" y="84" width="76" height="22" rx="6" fill="#2c7be5"/>
+<polygon points="148,89 148,101 160,95" fill="#2c7be5"/>
+<text class="m05a-tok" x="110" y="99" text-anchor="middle">SYN</text>
+</g>
+<g class="m05a-s2">
+<rect x="612" y="139" width="76" height="22" rx="6" fill="#7c3aed"/>
+<polygon points="612,144 612,156 600,150" fill="#7c3aed"/>
+<text class="m05a-tok" x="650" y="154" text-anchor="middle">SYN-ACK</text>
+</g>
+<g class="m05a-s3">
+<rect x="72" y="194" width="76" height="22" rx="6" fill="#16a34a"/>
+<polygon points="148,199 148,211 160,205" fill="#16a34a"/>
+<text class="m05a-tok" x="110" y="209" text-anchor="middle">ACK</text>
+</g>
+<g class="m05a-cn">
+<rect x="290" y="228" width="180" height="30" rx="6" fill="#16a34a"/>
+<text class="m05a-conn" x="380" y="248" text-anchor="middle">CONNECTED ✓</text>
+</g>
+</svg>
+<figcaption><b>The 3-way handshake.</b> <b>SYN</b> → (client's ISN), then <b>SYN-ACK</b> ← (server's ISN + acknowledgement), then <b>ACK</b> → confirms both directions work. Only after the final ACK — one full RTT later — can a byte of data flow.</figcaption>
+</figure>
+
 Why *three* messages and not one "hello"? Because both sides must accomplish two things each,
 and a connection is bidirectional:
 
@@ -294,6 +343,49 @@ window**: as ACKs come in, the window slides forward and more data may be sent.
                         (advances as ACKs arrive → window "slides" right)
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 235" role="img" aria-label="Animation: a sliding window frame advancing to the right over a row of segments as ACKs return, with acknowledged segments shaded behind it.">
+<style>
+.m05b-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m05b-seg{fill:#eef2f7;stroke:#64748b;stroke-width:1.5}
+.m05b-sl{font-size:11px;font-weight:700;fill:#1f2d3d}
+.m05b-win{fill:none;stroke:#2c7be5;stroke-width:3}
+.m05b-wl{font-size:10px;font-weight:700;fill:#2c7be5}
+.m05b-ack{fill:#16a34a;opacity:0.20}
+.m05b-lg{font-size:11px;fill:#64748b}
+.m05b-tok{font-size:11px;font-weight:700;fill:#16a34a}
+</style>
+<text class="m05b-title" x="12" y="20">Sliding window — the window advances right as ACKs return</text>
+<rect class="m05b-seg" x="50" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="78" y="107" text-anchor="middle">1</text>
+<rect class="m05b-seg" x="116" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="144" y="107" text-anchor="middle">2</text>
+<rect class="m05b-seg" x="182" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="210" y="107" text-anchor="middle">3</text>
+<rect class="m05b-seg" x="248" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="276" y="107" text-anchor="middle">4</text>
+<rect class="m05b-seg" x="314" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="342" y="107" text-anchor="middle">5</text>
+<rect class="m05b-seg" x="380" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="408" y="107" text-anchor="middle">6</text>
+<rect class="m05b-seg" x="446" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="474" y="107" text-anchor="middle">7</text>
+<rect class="m05b-seg" x="512" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="540" y="107" text-anchor="middle">8</text>
+<rect class="m05b-seg" x="578" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="606" y="107" text-anchor="middle">9</text>
+<rect class="m05b-seg" x="644" y="80" width="56" height="44" rx="4"/><text class="m05b-sl" x="672" y="107" text-anchor="middle">10</text>
+<rect class="m05b-ack" x="44" y="76" width="0" height="52">
+<animate attributeName="width" dur="9s" repeatCount="indefinite" values="0;0;132;132;264;264;396;396;0" keyTimes="0;0.08;0.22;0.33;0.47;0.58;0.72;0.92;1"/>
+</rect>
+<g>
+<rect class="m05b-win" x="44" y="72" width="254" height="60" rx="6"/>
+<text class="m05b-wl" x="171" y="146" text-anchor="middle">send now</text>
+<animateTransform attributeName="transform" type="translate" dur="9s" repeatCount="indefinite" values="0,0;0,0;132,0;132,0;264,0;264,0;396,0;396,0;0,0" keyTimes="0;0.08;0.22;0.33;0.47;0.58;0.72;0.92;1"/>
+</g>
+<g class="m05b-tok">
+<text x="90" y="172" text-anchor="middle">ACK ←</text>
+<animateTransform attributeName="transform" type="translate" dur="2.25s" repeatCount="indefinite" values="560,0;0,0"/>
+<animate attributeName="opacity" dur="2.25s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;0.15;0.8;1"/>
+</g>
+<rect x="60" y="196" width="14" height="14" rx="2" fill="#16a34a" opacity="0.35"/><text class="m05b-lg" x="80" y="207">ACKed (done)</text>
+<rect x="210" y="196" width="14" height="14" rx="2" fill="none" stroke="#2c7be5" stroke-width="2"/><text class="m05b-lg" x="230" y="207">window — may send (≤ rwnd)</text>
+<rect x="470" y="196" width="14" height="14" rx="2" class="m05b-seg"/><text class="m05b-lg" x="490" y="207">can't send yet</text>
+</svg>
+<figcaption><b>Flow control in motion.</b> The sender may have at most <i>rwnd</i> bytes in flight — the blue <b>window</b>. Each returning <b>ACK</b> frees buffer space, so the window <b>slides right</b> (green = acknowledged, gray = not yet allowed). A fast producer is paced to a slower consumer.</figcaption>
+</figure>
+
 **Zero window.** If the receiver's app stops reading, its buffer fills and it advertises
 `rwnd = 0` — "stop, I'm full." The sender halts and periodically sends a tiny **window probe**;
 when the app drains the buffer, the receiver advertises a non-zero window and flow resumes.
@@ -352,6 +444,42 @@ flowchart TD
 That pattern — grow slowly, cut hard on loss — is **AIMD (Additive Increase, Multiplicative
 Decrease)**. AIMD is what makes many independent TCP flows converge to *fairly* sharing a link;
 it's a beautifully simple distributed algorithm with no central coordinator.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: a chart of the TCP congestion window over time — exponential slow-start growth, then the additive-increase multiplicative-decrease sawtooth as losses occur.">
+<style>
+.m05c-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m05c-axis{stroke:#64748b;stroke-width:2}
+.m05c-al{font-size:11px;fill:#64748b}
+.m05c-ss{font-size:11px;font-weight:700;fill:#2c7be5}
+.m05c-ca{font-size:11px;font-weight:700;fill:#16a34a}
+.m05c-th{stroke:#f59e0b;stroke-width:1.5;stroke-dasharray:6 5}
+.m05c-thl{font-size:10px;font-weight:700;fill:#f59e0b}
+.m05c-x{font-size:14px;font-weight:700;fill:#ef4444}
+.m05c-line{fill:none;stroke:#2c7be5;stroke-width:3;stroke-linejoin:round;stroke-dasharray:1300;stroke-dashoffset:1300;animation:m05cDraw 7s ease-in-out infinite}
+.m05c-xg{animation:m05cX 7s ease-in-out infinite}
+@keyframes m05cDraw{0%{stroke-dashoffset:1300}70%{stroke-dashoffset:0}88%{stroke-dashoffset:0}100%{stroke-dashoffset:1300}}
+@keyframes m05cX{0%,40%{opacity:0}55%,88%{opacity:1}100%{opacity:0}}
+</style>
+<text class="m05c-title" x="12" y="20">Congestion window over time — slow start, then the AIMD sawtooth</text>
+<line class="m05c-axis" x1="55" y1="40" x2="55" y2="250"/>
+<line class="m05c-axis" x1="55" y1="250" x2="728" y2="250"/>
+<text class="m05c-al" x="20" y="150" transform="rotate(-90 20 150)" text-anchor="middle">cwnd</text>
+<text class="m05c-al" x="638" y="268" text-anchor="middle">time (RTTs) →</text>
+<line class="m05c-th" x1="55" y1="110" x2="728" y2="110"/>
+<text class="m05c-thl" x="62" y="105">ssthresh</text>
+<text class="m05c-ss" x="130" y="80">slow start (×2 / RTT)</text>
+<text class="m05c-ca" x="470" y="46" text-anchor="middle">congestion avoidance +1/RTT — halve on loss (AIMD)</text>
+<polyline class="m05c-line" points="56,248 88,244 120,236 152,220 184,188 210,128 300,92 300,180 410,120 410,192 520,132 520,196 630,140 630,200 720,155"/>
+<g class="m05c-xg">
+<text class="m05c-x" x="294" y="86" text-anchor="middle">✗</text>
+<text class="m05c-x" x="404" y="114" text-anchor="middle">✗</text>
+<text class="m05c-x" x="514" y="126" text-anchor="middle">✗</text>
+<text class="m05c-x" x="624" y="134" text-anchor="middle">✗</text>
+</g>
+</svg>
+<figcaption><b>Slow start then AIMD.</b> cwnd <b>doubles every RTT</b> (steep climb) until it nears <i>ssthresh</i>, then grows <b>+1 per RTT</b>. Each loss (✗) roughly <b>halves</b> cwnd — the additive-increase / multiplicative-decrease sawtooth that lets many flows share a link fairly.</figcaption>
+</figure>
 
 **Loss-based vs delay-based, and the algorithms by name:**
 

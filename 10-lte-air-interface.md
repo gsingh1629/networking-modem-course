@@ -103,6 +103,62 @@ complexity for battery life.
 
 ---
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: OFDMA splits one wideband LTE channel into many narrow orthogonal 15 kHz subcarriers, shared out to three users who each receive a different block of subcarriers.">
+<style>
+.m10a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m10a-sub{font-size:10px;fill:#64748b}
+.m10a-leg{font-size:11px;font-weight:700}
+.m10a-band{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m10a-sc{fill:none;stroke-width:2.6;animation:m10aglow 3.6s ease-in-out infinite}
+.m10a-dot{animation:m10adot 3.6s ease-in-out infinite}
+@keyframes m10aglow{0%,100%{stroke-opacity:.32}50%{stroke-opacity:1}}
+@keyframes m10adot{0%,100%{r:2.4;fill-opacity:.4}50%{r:4;fill-opacity:1}}
+</style>
+<text x="12" y="20" class="m10a-t">OFDMA: split one wide channel into many narrow orthogonal subcarriers, shared among users</text>
+<rect class="m10a-band" x="70" y="38" width="580" height="26" rx="5"/>
+<text class="m10a-sub" x="360" y="55" text-anchor="middle">one wide channel (e.g. 20 MHz)  ≈  1200 subcarriers @ 15 kHz</text>
+<polygon points="356,70 364,70 360,82" fill="#64748b"/>
+<text class="m10a-sub" x="374" y="80">split into many slow, narrow subcarriers ↓</text>
+<line x1="70" y1="230" x2="650" y2="230" stroke="#cbd5e1" stroke-width="1.5"/>
+<path class="m10a-sc" d="M66 230 Q100 152 134 230" stroke="#2c7be5" style="animation-delay:0.00s"/>
+<circle class="m10a-dot" cx="100" cy="152" r="3" fill="#2c7be5" style="animation-delay:0.00s"/>
+<path class="m10a-sc" d="M100 230 Q134 152 168 230" stroke="#2c7be5" style="animation-delay:0.18s"/>
+<circle class="m10a-dot" cx="134" cy="152" r="3" fill="#2c7be5" style="animation-delay:0.18s"/>
+<path class="m10a-sc" d="M134 230 Q168 152 202 230" stroke="#2c7be5" style="animation-delay:0.36s"/>
+<circle class="m10a-dot" cx="168" cy="152" r="3" fill="#2c7be5" style="animation-delay:0.36s"/>
+<path class="m10a-sc" d="M168 230 Q202 152 236 230" stroke="#2c7be5" style="animation-delay:0.54s"/>
+<circle class="m10a-dot" cx="202" cy="152" r="3" fill="#2c7be5" style="animation-delay:0.54s"/>
+<path class="m10a-sc" d="M202 230 Q236 152 270 230" stroke="#2c7be5" style="animation-delay:0.72s"/>
+<circle class="m10a-dot" cx="236" cy="152" r="3" fill="#2c7be5" style="animation-delay:0.72s"/>
+<path class="m10a-sc" d="M236 230 Q270 152 304 230" stroke="#16a34a" style="animation-delay:0.90s"/>
+<circle class="m10a-dot" cx="270" cy="152" r="3" fill="#16a34a" style="animation-delay:0.90s"/>
+<path class="m10a-sc" d="M270 230 Q304 152 338 230" stroke="#16a34a" style="animation-delay:1.08s"/>
+<circle class="m10a-dot" cx="304" cy="152" r="3" fill="#16a34a" style="animation-delay:1.08s"/>
+<path class="m10a-sc" d="M304 230 Q338 152 372 230" stroke="#16a34a" style="animation-delay:1.26s"/>
+<circle class="m10a-dot" cx="338" cy="152" r="3" fill="#16a34a" style="animation-delay:1.26s"/>
+<path class="m10a-sc" d="M338 230 Q372 152 406 230" stroke="#16a34a" style="animation-delay:1.44s"/>
+<circle class="m10a-dot" cx="372" cy="152" r="3" fill="#16a34a" style="animation-delay:1.44s"/>
+<path class="m10a-sc" d="M372 230 Q406 152 440 230" stroke="#16a34a" style="animation-delay:1.62s"/>
+<circle class="m10a-dot" cx="406" cy="152" r="3" fill="#16a34a" style="animation-delay:1.62s"/>
+<path class="m10a-sc" d="M406 230 Q440 152 474 230" stroke="#f59e0b" style="animation-delay:1.80s"/>
+<circle class="m10a-dot" cx="440" cy="152" r="3" fill="#f59e0b" style="animation-delay:1.80s"/>
+<path class="m10a-sc" d="M440 230 Q474 152 508 230" stroke="#f59e0b" style="animation-delay:1.98s"/>
+<circle class="m10a-dot" cx="474" cy="152" r="3" fill="#f59e0b" style="animation-delay:1.98s"/>
+<path class="m10a-sc" d="M474 230 Q508 152 542 230" stroke="#f59e0b" style="animation-delay:2.16s"/>
+<circle class="m10a-dot" cx="508" cy="152" r="3" fill="#f59e0b" style="animation-delay:2.16s"/>
+<path class="m10a-sc" d="M508 230 Q542 152 576 230" stroke="#f59e0b" style="animation-delay:2.34s"/>
+<circle class="m10a-dot" cx="542" cy="152" r="3" fill="#f59e0b" style="animation-delay:2.34s"/>
+<path class="m10a-sc" d="M542 230 Q576 152 610 230" stroke="#f59e0b" style="animation-delay:2.52s"/>
+<circle class="m10a-dot" cx="576" cy="152" r="3" fill="#f59e0b" style="animation-delay:2.52s"/>
+<rect x="120" y="250" width="14" height="10" rx="2" fill="#2c7be5"/><text class="m10a-leg" x="140" y="259" fill="#2c7be5">User A</text>
+<rect x="300" y="250" width="14" height="10" rx="2" fill="#16a34a"/><text class="m10a-leg" x="320" y="259" fill="#16a34a">User B</text>
+<rect x="480" y="250" width="14" height="10" rx="2" fill="#f59e0b"/><text class="m10a-leg" x="500" y="259" fill="#f59e0b">User C</text>
+<text class="m10a-sub" x="360" y="284" text-anchor="middle">Each subcarrier peaks exactly where every neighbour is zero (✓ orthogonal) — no wasted guard bands. The scheduler hands each user a different block.</text>
+</svg>
+<figcaption>This is <b>OFDMA</b>: the downlink is one wide channel diced into ~1200 narrow 15 kHz subcarriers. Because they are <i>orthogonal</i> (each peaks where the others cross zero) they overlap without interfering, and the eNodeB simply hands each user a different <b>block of subcarriers</b>.</figcaption>
+</figure>
+
 ## 4. The resource grid: the map of time and frequency
 
 This is the single most important picture in LTE. The air interface is a **2-D grid**: one
@@ -163,6 +219,142 @@ also be glued together — **carrier aggregation** — to exceed 20 MHz, e.g. 3 
 
 ---
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 340" role="img" aria-label="Animation: the LTE resource grid. Frequency (resource blocks) runs up the vertical axis and time (1 ms TTIs) along the horizontal axis; a sweeping cursor shows the eNodeB scheduler assigning different coloured blocks to different users every millisecond.">
+<style>
+.m10b-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m10b-ax{font-size:11px;font-weight:700;fill:#64748b}
+.m10b-leg{font-size:11px;font-weight:700}
+.m10b-col{animation:m10bcol 8s linear infinite}
+.m10b-sweep{animation:m10bsweep 8s steps(8,jump-none) infinite}
+@keyframes m10bcol{0%,9%{opacity:1}20%,100%{opacity:.22}}
+@keyframes m10bsweep{from{transform:translateX(0)}to{transform:translateX(462px)}}
+</style>
+<text x="12" y="20" class="m10b-t">The resource grid: the eNodeB scheduler re-assigns blocks to users every 1 ms TTI</text>
+<text class="m10b-ax" x="26" y="190" transform="rotate(-90 26 190)" text-anchor="middle">frequency (resource blocks) ↑</text>
+<g class="m10b-col" style="animation-delay:-8s">
+<rect x="150" y="70" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="182" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="150" y="108" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="182" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="150" y="146" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="182" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="150" y="184" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="182" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="150" y="222" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="182" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="150" y="260" width="64" height="36" rx="3" fill="#cbd5e1"/>
+</g>
+<g class="m10b-col" style="animation-delay:-7s">
+<rect x="216" y="70" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="248" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="216" y="108" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="248" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="216" y="146" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="248" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="216" y="184" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="248" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="216" y="222" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="248" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="216" y="260" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="248" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+</g>
+<g class="m10b-col" style="animation-delay:-6s">
+<rect x="282" y="70" width="64" height="36" rx="3" fill="#cbd5e1"/>
+<rect x="282" y="108" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="314" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="282" y="146" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="314" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="282" y="184" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="314" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="282" y="222" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="314" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="282" y="260" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="314" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+</g>
+<g class="m10b-col" style="animation-delay:-5s">
+<rect x="348" y="70" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="380" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="348" y="108" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="380" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="348" y="146" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="380" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="348" y="184" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="380" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="348" y="222" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="380" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="348" y="260" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="380" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+</g>
+<g class="m10b-col" style="animation-delay:-4s">
+<rect x="414" y="70" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="446" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="414" y="108" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="446" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="414" y="146" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="446" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="414" y="184" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="446" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="414" y="222" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="446" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="414" y="260" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="446" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+</g>
+<g class="m10b-col" style="animation-delay:-3s">
+<rect x="480" y="70" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="512" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="480" y="108" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="512" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="480" y="146" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="512" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="480" y="184" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="512" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="480" y="222" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="512" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="480" y="260" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="512" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+</g>
+<g class="m10b-col" style="animation-delay:-2s">
+<rect x="546" y="70" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="578" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="546" y="108" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="578" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="546" y="146" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="578" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="546" y="184" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="578" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="546" y="222" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="578" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+<rect x="546" y="260" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="578" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+</g>
+<g class="m10b-col" style="animation-delay:-1s">
+<rect x="612" y="70" width="64" height="36" rx="3" fill="#2c7be5"/>
+<text x="644" y="92" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">A</text>
+<rect x="612" y="108" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="644" y="130" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="612" y="146" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="644" y="168" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="612" y="184" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="644" y="206" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="612" y="222" width="64" height="36" rx="3" fill="#16a34a"/>
+<text x="644" y="244" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">B</text>
+<rect x="612" y="260" width="64" height="36" rx="3" fill="#f59e0b"/>
+<text x="644" y="282" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#fff">C</text>
+</g>
+<g class="m10b-sweep">
+<rect x="150" y="64" width="64" height="234" rx="4" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="2.5"/>
+<text x="182" y="58" text-anchor="middle" style="font-size:11px;font-weight:700;fill:#7c3aed">TTI</text>
+</g>
+<text class="m10b-ax" x="360" y="322" text-anchor="middle">time → (each column = one 1 ms TTI; the tower redraws the grid each column)</text>
+<rect x="150" y="330" width="14" height="10" rx="2" fill="#2c7be5"/><text class="m10b-leg" x="170" y="339" fill="#2c7be5">User A</text>
+<rect x="270" y="330" width="14" height="10" rx="2" fill="#16a34a"/><text class="m10b-leg" x="290" y="339" fill="#16a34a">User B</text>
+<rect x="390" y="330" width="14" height="10" rx="2" fill="#f59e0b"/><text class="m10b-leg" x="410" y="339" fill="#f59e0b">User C</text>
+<rect x="510" y="330" width="14" height="10" rx="2" fill="#cbd5e1"/><text class="m10b-leg" x="530" y="339" fill="#64748b">idle</text>
+</svg>
+<figcaption>The air interface is a 2-D grid of <b>time × frequency</b>. Each cell is a resource block; the purple <b>TTI</b> cursor is the scheduler stepping through time, and every millisecond it hands fresh blocks to different users (colours). Unlike Wi-Fi's free-for-all, <i>the tower decides</i> who gets what, every 1 ms.</figcaption>
+</figure>
+
 ## 5. Modulation, coding, and MCS: how many bits per RE
 
 Each RE carries one modulation symbol, and Module 02's rule applies directly — richer
@@ -206,6 +398,410 @@ throughput sags as you walk away from the tower: the radio is silently retreatin
 > channels (high speed, e.g. a train) suffer most.
 
 ---
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: adaptive modulation and coding. As the UE moves away from the eNodeB and its signal weakens, its modulation steps down from 256-QAM to 64-QAM to 16-QAM to QPSK, driven by the CQI it reports back to the tower.">
+<style>
+.m10c-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m10c-sub{font-size:10px;fill:#64748b}
+.m10c-panel{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}
+.m10c-s1{animation:m10cs1 12s linear infinite}
+.m10c-s2{animation:m10cs2 12s linear infinite}
+.m10c-s3{animation:m10cs3 12s linear infinite}
+.m10c-s4{animation:m10cs4 12s linear infinite}
+.m10c-ue{animation:m10cmove 12s steps(4,jump-none) infinite}
+.m10c-cqi{stroke:#7c3aed;stroke-width:2;fill:none;stroke-dasharray:7 6;animation:m10cants 1s linear infinite}
+@keyframes m10cmove{from{transform:translateX(0)}to{transform:translateX(450px)}}
+@keyframes m10cants{to{stroke-dashoffset:-26}}
+@keyframes m10cs1{0%,20%{opacity:1}25%,100%{opacity:0}}
+@keyframes m10cs2{0%,22%{opacity:0}27%,45%{opacity:1}50%,100%{opacity:0}}
+@keyframes m10cs3{0%,47%{opacity:0}52%,70%{opacity:1}75%,100%{opacity:0}}
+@keyframes m10cs4{0%,72%{opacity:0}77%,95%{opacity:1}100%{opacity:0}}
+</style>
+<text x="12" y="20" class="m10c-t">Adaptive Modulation and Coding: weaker signal → the tower drops to a simpler modulation</text>
+<!-- eNodeB tower -->
+<polygon points="44,215 66,215 61,168 49,168" fill="#64748b"/>
+<line x1="55" y1="168" x2="55" y2="150" stroke="#64748b" stroke-width="2"/>
+<path d="M62 150 q12 6 16 18" stroke="#2c7be5" stroke-width="2" fill="none"/>
+<path d="M48 150 q-12 6 -16 18" stroke="#2c7be5" stroke-width="2" fill="none"/>
+<text class="m10c-sub" x="55" y="232" text-anchor="middle">eNodeB</text>
+<!-- distance axis -->
+<line x1="110" y1="235" x2="648" y2="235" stroke="#cbd5e1" stroke-width="2"/>
+<polygon points="648,231 658,235 648,239" fill="#cbd5e1"/>
+<text class="m10c-sub" x="150" y="252" text-anchor="middle">strong signal</text>
+<text class="m10c-sub" x="590" y="252" text-anchor="middle">farther → weaker signal</text>
+<!-- moving UE -->
+<g class="m10c-ue">
+<rect x="140" y="204" width="22" height="34" rx="4" fill="#eef5ff" stroke="#2c7be5" stroke-width="2"/>
+<rect x="144" y="209" width="14" height="20" rx="1" fill="#2c7be5" fill-opacity="0.35"/>
+<text class="m10c-sub" x="151" y="200" text-anchor="middle" style="fill:#2c7be5;font-weight:700">UE</text>
+</g>
+<!-- constellation panel -->
+<rect class="m10c-panel" x="285" y="42" width="150" height="122" rx="6"/>
+<text class="m10c-sub" x="360" y="38" text-anchor="middle">modulation the tower selects (from CQI)</text>
+<g class="m10c-s1">
+<circle cx="300.9" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="57.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="63.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="70.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="76.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="83.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="89.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="96.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="102.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="109.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="115.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="122.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="128.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="135.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="141.8" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="148.2" r="1.8" fill="#ef4444"/>
+<circle cx="300.9" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="308.8" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="316.7" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="324.6" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="332.4" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="340.3" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="348.2" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="356.1" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="363.9" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="371.8" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="379.7" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="387.6" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="395.4" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="403.3" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="411.2" cy="154.8" r="1.8" fill="#ef4444"/>
+<circle cx="419.1" cy="154.8" r="1.8" fill="#ef4444"/>
+<text x="360" y="184" text-anchor="middle" style="font-size:14px;font-weight:700;fill:#ef4444">256-QAM</text>
+<text x="360" y="200" text-anchor="middle" style="font-size:11px;fill:#64748b">8 bits / RE  •  SNR: excellent</text>
+</g>
+<g class="m10c-s2">
+<circle cx="304.9" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="60.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="73.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="86.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="99.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="112.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="125.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="138.5" r="2.7" fill="#f59e0b"/>
+<circle cx="304.9" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="320.6" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="336.4" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="352.1" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="367.9" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="383.6" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="399.4" cy="151.5" r="2.7" fill="#f59e0b"/>
+<circle cx="415.1" cy="151.5" r="2.7" fill="#f59e0b"/>
+<text x="360" y="184" text-anchor="middle" style="font-size:14px;font-weight:700;fill:#f59e0b">64-QAM</text>
+<text x="360" y="200" text-anchor="middle" style="font-size:11px;fill:#64748b">6 bits / RE  •  SNR: good</text>
+</g>
+<g class="m10c-s3">
+<circle cx="312.8" cy="67.0" r="4.5" fill="#2c7be5"/>
+<circle cx="344.2" cy="67.0" r="4.5" fill="#2c7be5"/>
+<circle cx="375.8" cy="67.0" r="4.5" fill="#2c7be5"/>
+<circle cx="407.2" cy="67.0" r="4.5" fill="#2c7be5"/>
+<circle cx="312.8" cy="93.0" r="4.5" fill="#2c7be5"/>
+<circle cx="344.2" cy="93.0" r="4.5" fill="#2c7be5"/>
+<circle cx="375.8" cy="93.0" r="4.5" fill="#2c7be5"/>
+<circle cx="407.2" cy="93.0" r="4.5" fill="#2c7be5"/>
+<circle cx="312.8" cy="119.0" r="4.5" fill="#2c7be5"/>
+<circle cx="344.2" cy="119.0" r="4.5" fill="#2c7be5"/>
+<circle cx="375.8" cy="119.0" r="4.5" fill="#2c7be5"/>
+<circle cx="407.2" cy="119.0" r="4.5" fill="#2c7be5"/>
+<circle cx="312.8" cy="145.0" r="4.5" fill="#2c7be5"/>
+<circle cx="344.2" cy="145.0" r="4.5" fill="#2c7be5"/>
+<circle cx="375.8" cy="145.0" r="4.5" fill="#2c7be5"/>
+<circle cx="407.2" cy="145.0" r="4.5" fill="#2c7be5"/>
+<text x="360" y="184" text-anchor="middle" style="font-size:14px;font-weight:700;fill:#2c7be5">16-QAM</text>
+<text x="360" y="200" text-anchor="middle" style="font-size:11px;fill:#64748b">4 bits / RE  •  SNR: fair</text>
+</g>
+<g class="m10c-s4">
+<circle cx="328.5" cy="80.0" r="7" fill="#16a34a"/>
+<circle cx="391.5" cy="80.0" r="7" fill="#16a34a"/>
+<circle cx="328.5" cy="132.0" r="7" fill="#16a34a"/>
+<circle cx="391.5" cy="132.0" r="7" fill="#16a34a"/>
+<text x="360" y="184" text-anchor="middle" style="font-size:14px;font-weight:700;fill:#16a34a">QPSK</text>
+<text x="360" y="200" text-anchor="middle" style="font-size:11px;fill:#64748b">2 bits / RE  •  SNR: weak (robust)</text>
+</g>
+<!-- CQI feedback loop -->
+<path class="m10c-cqi" d="M520 262 Q300 292 78 250"/>
+<polygon points="78,250 90,246 88,258" fill="#7c3aed"/>
+<text class="m10c-sub" x="330" y="288" text-anchor="middle" style="fill:#7c3aed;font-weight:700">CQI feedback: UE reports link quality → eNodeB picks the MCS</text>
+</svg>
+<figcaption>As the phone walks away and its SNR falls, the tower <b>retreats down the modulation ladder</b> — 256-QAM → 64-QAM → 16-QAM → QPSK — trading bits-per-symbol for robustness. The loop is driven by the <b>CQI</b> the UE reports back: this is Shannon's ceiling acting in real time, and why throughput sags at the cell edge.</figcaption>
+</figure>
 
 ## 6. MIMO: using multiple antennas
 

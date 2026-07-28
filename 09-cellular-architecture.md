@@ -294,6 +294,43 @@ orchestra* (it tells the S-GW/P-GW what path to build) but never plays an instru
 never forwards a data packet). Separating "who decides" from "who carries" lets each scale
 independently — a theme 5G takes even further (CUPS, Section 8).
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: control-plane signalling travels UE to eNodeB to MME on a thin dashed path while user-plane data travels UE to eNodeB to S-GW to P-GW to the Internet on a thick path; the two planes split at the eNodeB.">
+<style>
+.m09b-lbl{font-size:12px;font-weight:700;fill:#fff}
+.m09b-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m09b-cp{font-size:11px;font-weight:700;fill:#7c3aed}
+.m09b-up{font-size:11px;font-weight:700;fill:#2c7be5}
+.m09b-note{font-size:10.5px;fill:#64748b}
+.m09b-wire{stroke:#cbd5e1;stroke-width:3;fill:none}
+.m09b-ctl{stroke:#7c3aed;stroke-width:2;stroke-dasharray:6 5;fill:none;animation:m09bants 1s linear infinite}
+.m09b-usr{stroke:#2c7be5;stroke-width:4;fill:none}
+@keyframes m09bants{to{stroke-dashoffset:-22}}
+</style>
+<text class="m09b-t" x="12" y="20">Control plane vs user plane — the split happens at the eNodeB</text>
+<line class="m09b-wire" x1="110" y1="150" x2="150" y2="150"/>
+<polyline class="m09b-ctl" points="250,150 290,150 290,62 330,62"/>
+<polyline class="m09b-usr" points="250,150 290,150 290,232 330,232"/>
+<line class="m09b-usr" x1="420" y1="232" x2="470" y2="232"/>
+<line class="m09b-usr" x1="570" y1="232" x2="626" y2="232"/>
+<text class="m09b-cp" x="335" y="34">CONTROL PLANE — signalling (NAS): sets up the path</text>
+<text class="m09b-up" x="335" y="200">USER PLANE — your IP packets</text>
+<rect x="20" y="128" width="90" height="44" rx="6" fill="#64748b"/><text class="m09b-lbl" x="65" y="155" text-anchor="middle">UE</text>
+<rect x="150" y="128" width="100" height="44" rx="6" fill="#16a34a"/><text class="m09b-lbl" x="200" y="155" text-anchor="middle">eNodeB</text>
+<rect x="330" y="40" width="140" height="44" rx="6" fill="#7c3aed"/><text class="m09b-lbl" x="400" y="67" text-anchor="middle">MME</text>
+<rect x="330" y="210" width="90" height="44" rx="6" fill="#2c7be5"/><text class="m09b-lbl" x="375" y="237" text-anchor="middle">S-GW</text>
+<rect x="470" y="210" width="100" height="44" rx="6" fill="#2c7be5"/><text class="m09b-lbl" x="520" y="237" text-anchor="middle">P-GW</text>
+<circle cx="660" cy="232" r="32" fill="#64748b"/><text class="m09b-lbl" x="660" y="236" text-anchor="middle">Internet</text>
+<circle r="4" fill="#7c3aed"><animateMotion path="M65,150 L290,150 L290,62 L400,62" dur="3.6s" begin="0s" repeatCount="indefinite"/></circle>
+<circle r="4" fill="#7c3aed"><animateMotion path="M65,150 L290,150 L290,62 L400,62" dur="3.6s" begin="1.8s" repeatCount="indefinite"/></circle>
+<circle r="5" fill="#2c7be5"><animateMotion path="M65,150 L290,150 L290,232 L626,232" dur="4.5s" begin="0s" repeatCount="indefinite"/></circle>
+<circle r="5" fill="#2c7be5"><animateMotion path="M65,150 L290,150 L290,232 L626,232" dur="4.5s" begin="1.5s" repeatCount="indefinite"/></circle>
+<circle r="5" fill="#2c7be5"><animateMotion path="M65,150 L290,150 L290,232 L626,232" dur="4.5s" begin="3s" repeatCount="indefinite"/></circle>
+<text class="m09b-note" x="380" y="288" text-anchor="middle">The MME conducts (decides the path) but never carries a data packet.</text>
+</svg>
+<figcaption><b>Two planes, one split.</b> Signalling (purple, thin dashed) runs UE ⇄ eNodeB ⇄ <b>MME</b> to set up your connection; your actual bytes (blue, thick) run UE ⇄ eNodeB ⇄ <b>S-GW</b> ⇄ <b>P-GW</b> ⇄ internet. The MME decides; the gateways carry.</figcaption>
+</figure>
+
 ### EPS bearers: a pipe with a promised quality
 
 Your data doesn't just flow as loose packets across the core — it flows through an **EPS
@@ -339,6 +376,53 @@ What GTP-U encapsulation looks like on the wire between eNodeB and S-GW:
    [ outer IP | UDP | GTP-U hdr (TEID) | [ IP(UE) | TCP | TLS | HTTP... ] ]
     └────────── core's own transport ─────────┘ └──── your packet, untouched ────┘
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 250" role="img" aria-label="Animation: an IP packet leaves the UE, gets a GTP wrapper added at the eNodeB, rides through the S-GW and P-GW inside the tunnel, and is unwrapped back to a plain IP packet as it exits the P-GW to the Internet.">
+<style>
+.m09a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m09a-lbl{font-size:12px;font-weight:700;fill:#fff}
+.m09a-note{font-size:10.5px;fill:#64748b}
+.m09a-tun{font-size:11px;font-weight:700;fill:#f59e0b}
+.m09a-ip{font-size:12px;font-weight:700;fill:#fff}
+.m09a-gtp{font-size:11px;font-weight:700;fill:#7a5200}
+.m09a-wire{stroke:#cbd5e1;stroke-width:3;fill:none}
+.m09a-pkt{animation:m09amove 8s ease-in-out infinite}
+.m09a-wrap{animation:m09awrap 8s ease-in-out infinite}
+@keyframes m09amove{
+0%,10%{transform:translateX(0)}
+25%{transform:translateX(140px)}
+50%{transform:translateX(300px)}
+72%{transform:translateX(450px)}
+88%,100%{transform:translateX(620px)}}
+@keyframes m09awrap{
+0%,24%{opacity:0}
+28%,70%{opacity:1}
+74%,100%{opacity:0}}
+</style>
+<text class="m09a-t" x="12" y="20">Your IP packet rides inside a GTP tunnel across the core</text>
+<line x1="200" y1="150" x2="510" y2="150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>
+<line x1="200" y1="145" x2="200" y2="155" stroke="#f59e0b" stroke-width="2"/>
+<line x1="510" y1="145" x2="510" y2="155" stroke="#f59e0b" stroke-width="2"/>
+<text class="m09a-tun" x="355" y="142" text-anchor="middle">GTP-U tunnel (S1-U, then S5)</text>
+<line class="m09a-wire" x1="95" y1="207" x2="648" y2="207"/>
+<rect x="25" y="185" width="70" height="44" rx="6" fill="#64748b"/><text class="m09a-lbl" x="60" y="212" text-anchor="middle">UE</text>
+<rect x="150" y="185" width="100" height="44" rx="6" fill="#16a34a"/><text class="m09a-lbl" x="200" y="212" text-anchor="middle">eNodeB</text>
+<rect x="320" y="185" width="80" height="44" rx="6" fill="#2c7be5"/><text class="m09a-lbl" x="360" y="212" text-anchor="middle">S-GW</text>
+<rect x="470" y="185" width="80" height="44" rx="6" fill="#2c7be5"/><text class="m09a-lbl" x="510" y="212" text-anchor="middle">P-GW</text>
+<circle cx="680" cy="207" r="32" fill="#64748b"/><text class="m09a-lbl" x="680" y="211" text-anchor="middle">Internet</text>
+<g class="m09a-pkt">
+<g class="m09a-wrap">
+<rect x="20" y="64" width="80" height="52" rx="6" fill="#f59e0b"/>
+<text class="m09a-gtp" x="60" y="76" text-anchor="middle">GTP</text>
+</g>
+<rect x="40" y="80" width="40" height="24" rx="4" fill="#2c7be5"/>
+<text class="m09a-ip" x="60" y="96" text-anchor="middle">IP</text>
+</g>
+<text class="m09a-note" x="380" y="245" text-anchor="middle">Wrapped at the eNodeB, carried by the core, unwrapped at the P-GW — your UE IP never changes.</text>
+</svg>
+<figcaption><b>Encapsulation for mobility.</b> Your plain <b>IP</b> packet gets a <b>GTP</b> wrapper (amber) added at the eNodeB, rides the tunnel through the S-GW and P-GW, then is unwrapped and released onto the internet at the P-GW. The tunnel lets the network reroute you without ever changing your IP.</figcaption>
+</figure>
 
 Read that against the encapsulation diagram in Module 01 — it's the **exact same nesting
 of envelopes**, one layer deeper. Key points:
@@ -461,6 +545,75 @@ Tying the map to a concrete flow (each step is detailed in Modules 10–12):
  7. Reply comes back to the P-GW's public IP → NAT maps it to your UE → back down the
     tunnels → eNodeB → over the air to your phone → up your normal IP stack to the app.
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 320" role="img" aria-label="Animation: the LTE attach procedure as a message sequence — UE to eNodeB to MME to HSS and back — ending with the UE attached and an IP address assigned.">
+<style>
+.m09c-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m09c-lbl{font-size:12px;font-weight:700;fill:#fff}
+.m09c-life{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:4 4}
+.m09c-msg{font-size:10.5px;font-weight:600;fill:#1f2d3d}
+.m09c-s1{animation:m09cs1 9s ease-in-out infinite}
+.m09c-s2{animation:m09cs2 9s ease-in-out infinite}
+.m09c-s3{animation:m09cs3 9s ease-in-out infinite}
+.m09c-s4{animation:m09cs4 9s ease-in-out infinite}
+.m09c-s5{animation:m09cs5 9s ease-in-out infinite}
+.m09c-s6{animation:m09cs6 9s ease-in-out infinite}
+.m09c-s7{animation:m09cs7 9s ease-in-out infinite}
+@keyframes m09cs1{0%,5%{opacity:0}9%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs2{0%,16%{opacity:0}20%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs3{0%,27%{opacity:0}31%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs4{0%,38%{opacity:0}42%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs5{0%,49%{opacity:0}53%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs6{0%,60%{opacity:0}64%,92%{opacity:1}97%,100%{opacity:0}}
+@keyframes m09cs7{0%,73%{opacity:0}77%,92%{opacity:1}97%,100%{opacity:0}}
+</style>
+<text class="m09c-t" x="12" y="20">Attach / registration — power-on message sequence</text>
+<line class="m09c-life" x1="90" y1="60" x2="90" y2="300"/>
+<line class="m09c-life" x1="280" y1="60" x2="280" y2="300"/>
+<line class="m09c-life" x1="470" y1="60" x2="470" y2="300"/>
+<line class="m09c-life" x1="660" y1="60" x2="660" y2="300"/>
+<rect x="50" y="32" width="80" height="26" rx="5" fill="#64748b"/><text class="m09c-lbl" x="90" y="50" text-anchor="middle">UE</text>
+<rect x="232" y="32" width="96" height="26" rx="5" fill="#16a34a"/><text class="m09c-lbl" x="280" y="50" text-anchor="middle">eNodeB</text>
+<rect x="430" y="32" width="80" height="26" rx="5" fill="#7c3aed"/><text class="m09c-lbl" x="470" y="50" text-anchor="middle">MME</text>
+<rect x="622" y="32" width="76" height="26" rx="5" fill="#f59e0b"/><text class="m09c-lbl" x="660" y="50" text-anchor="middle">HSS</text>
+<g class="m09c-s1">
+<text class="m09c-msg" x="185" y="86" text-anchor="middle">Attach Request (IMSI/GUTI)</text>
+<line x1="90" y1="92" x2="280" y2="92" stroke="#64748b" stroke-width="2"/>
+<polygon points="280,92 272,88 272,96" fill="#64748b"/>
+</g>
+<g class="m09c-s2">
+<text class="m09c-msg" x="375" y="116" text-anchor="middle">forward to MME</text>
+<line x1="280" y1="122" x2="470" y2="122" stroke="#16a34a" stroke-width="2"/>
+<polygon points="470,122 462,118 462,126" fill="#16a34a"/>
+</g>
+<g class="m09c-s3">
+<text class="m09c-msg" x="565" y="146" text-anchor="middle">auth info request</text>
+<line x1="470" y1="152" x2="660" y2="152" stroke="#7c3aed" stroke-width="2"/>
+<polygon points="660,152 652,148 652,156" fill="#7c3aed"/>
+</g>
+<g class="m09c-s4">
+<text class="m09c-msg" x="565" y="176" text-anchor="middle">auth vectors + profile</text>
+<line x1="660" y1="182" x2="470" y2="182" stroke="#f59e0b" stroke-width="2"/>
+<polygon points="470,182 478,178 478,186" fill="#f59e0b"/>
+</g>
+<g class="m09c-s5">
+<text class="m09c-msg" x="280" y="206" text-anchor="middle">authenticate + NAS security</text>
+<line x1="470" y1="212" x2="90" y2="212" stroke="#7c3aed" stroke-width="2"/>
+<polygon points="90,212 98,208 98,216" fill="#7c3aed"/>
+</g>
+<g class="m09c-s6">
+<text class="m09c-msg" x="280" y="236" text-anchor="middle">Attach Accept + IP address</text>
+<line x1="470" y1="242" x2="90" y2="242" stroke="#7c3aed" stroke-width="2"/>
+<polygon points="90,242 98,238 98,246" fill="#7c3aed"/>
+</g>
+<g class="m09c-s7">
+<rect x="230" y="266" width="300" height="32" rx="6" fill="#16a34a"/>
+<text class="m09c-lbl" x="380" y="287" text-anchor="middle">UE attached — IP address assigned ✓</text>
+</g>
+</svg>
+<figcaption><b>The attach handshake.</b> On power-on the UE registers: request up through the <b>eNodeB</b> to the <b>MME</b>, which pulls your credentials from the <b>HSS</b> and challenges your SIM. Once authenticated, the MME sends <b>Attach Accept</b> and a default bearer is set up — you now have an <b>IP address</b>.</figcaption>
+</figure>
 
 Steps 4, 6, 7 are *ordinary internet* (everything from Modules 01–06). Steps 1–3 and 5 are
 the *cellular-specific* wrapping around it. That's the whole point of this module: cellular

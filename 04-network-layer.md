@@ -118,6 +118,54 @@ The address alone doesn't tell you where the network/host boundary is. That's th
                           └────── network (24 ones) ─────┘└ host ┘
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 640 250" role="img" aria-label="Animation: a subnet mask splits a 32-bit IPv4 address into a network portion (the 1-bits) and a host portion (the 0-bits); the split for a slash 24 falls after the third octet.">
+<style>
+.m04ctitle{font-size:13px;font-weight:700;fill:#2c7be5}
+.m04coct{font-size:13px;font-weight:700;letter-spacing:2px;fill:#1f2d3d}
+.m04cdec{font-size:11px;fill:#64748b}
+.m04clbl{font-size:12px;font-weight:700}
+.m04ccap{font-size:11px;fill:#64748b}
+.m04cnetbox{fill:#16a34a;opacity:.14;stroke:#16a34a;stroke-width:1.5}
+.m04chostbox{fill:#f59e0b;opacity:.14;stroke:#f59e0b;stroke-width:1.5}
+.m04cdiv{stroke:#7c3aed;stroke-width:2.5;stroke-dasharray:5 4;animation:m04cpulse 1.6s ease-in-out infinite}
+@keyframes m04cpulse{0%,100%{opacity:.35}50%{opacity:1}}
+</style>
+<text class="m04ctitle" x="20" y="22">Subnet mask (/24): the 1-bits mark network, the 0-bits mark host</text>
+<!-- octet cells -->
+<rect x="40" y="52" width="120" height="34" rx="4" fill="#eef5ff" stroke="#cbd5e1"/>
+<rect x="180" y="52" width="120" height="34" rx="4" fill="#eef5ff" stroke="#cbd5e1"/>
+<rect x="320" y="52" width="120" height="34" rx="4" fill="#eef5ff" stroke="#cbd5e1"/>
+<rect x="460" y="52" width="120" height="34" rx="4" fill="#fffbeb" stroke="#cbd5e1"/>
+<text class="m04coct" x="100" y="75" text-anchor="middle">11111111</text>
+<text class="m04coct" x="240" y="75" text-anchor="middle">11111111</text>
+<text class="m04coct" x="380" y="75" text-anchor="middle">11111111</text>
+<text class="m04coct" x="520" y="75" text-anchor="middle">00000000</text>
+<text class="m04cdec" x="100" y="102" text-anchor="middle">255</text>
+<text class="m04cdec" x="240" y="102" text-anchor="middle">255</text>
+<text class="m04cdec" x="380" y="102" text-anchor="middle">255</text>
+<text class="m04cdec" x="520" y="102" text-anchor="middle">0</text>
+<!-- growing network highlight -->
+<rect class="m04cnetbox" x="40" y="48" height="42" rx="4">
+<animate attributeName="width" values="0;400;400;400;0" keyTimes="0;0.35;0.55;0.9;1" dur="6s" repeatCount="indefinite"/>
+</rect>
+<!-- growing host highlight -->
+<rect class="m04chostbox" x="460" y="48" height="42" rx="4">
+<animate attributeName="width" values="0;0;120;120;0" keyTimes="0;0.55;0.7;0.9;1" dur="6s" repeatCount="indefinite"/>
+</rect>
+<!-- pulsing boundary divider -->
+<line class="m04cdiv" x1="450" y1="44" x2="450" y2="150"/>
+<!-- portion labels -->
+<line x1="40" y1="128" x2="440" y2="128" stroke="#16a34a" stroke-width="2"/>
+<line x1="460" y1="128" x2="580" y2="128" stroke="#f59e0b" stroke-width="2"/>
+<text class="m04clbl" x="240" y="146" text-anchor="middle" fill="#16a34a">network portion — 24 bits</text>
+<text class="m04clbl" x="520" y="146" text-anchor="middle" fill="#f59e0b">host — 8 bits</text>
+<text class="m04ccap" x="320" y="184" text-anchor="middle">Same address, a different mask moves the purple boundary → a different network.</text>
+<text class="m04ccap" x="320" y="204" text-anchor="middle">CIDR /24 simply means "24 network bits" • usable hosts = 2⁸ − 2 = 254</text>
+</svg>
+<figcaption>The mask lays a stencil over the 32 bits: <b>1-bits fix the network portion, 0-bits leave the host portion free</b>. The purple divider is the /24 boundary — slide it (change the mask) and you carve the same address space into differently sized networks.</figcaption>
+</figure>
+
 Writing out `255.255.255.0` is tedious, so modern notation is **CIDR** (Classless
 Inter-Domain Routing): append `/N` where **N = number of network bits**. So
 `192.168.1.42/24` means "24 network bits, 8 host bits." The `/24` *is* the mask.
@@ -315,6 +363,56 @@ bits (the largest `/N`). `10.0.0.0/8` (8 bits) beats `0.0.0.0/0` (0 bits), so it
 > falls under. Routers use specialized structures (tries, TCAM hardware) to do this at line
 > rate, billions of times per second.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 260" role="img" aria-label="Animation: a packet destined for 10.5.5.5 hops from router to router; at each router a longest-prefix-match lookup chooses the next hop that gets it closer to the destination network.">
+<style>
+.m04atitle{font-size:13px;font-weight:700;fill:#2c7be5}
+.m04anode{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m04adnode{fill:#f0fdf4;stroke:#16a34a;stroke-width:2}
+.m04anl{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m04adl{font-size:12px;font-weight:700;fill:#15803d}
+.m04adst{font-size:12px;font-weight:700;fill:#16a34a}
+.m04acap{font-size:11px;fill:#64748b}
+.m04achosen{stroke:#16a34a;stroke-width:3;stroke-dasharray:9 6;fill:none;animation:m04aflow 1s linear infinite}
+.m04astub{stroke:#cbd5e1;stroke-width:2;fill:none;opacity:.6}
+.m04apkt{animation:m04ahop 8s ease-in-out infinite}
+@keyframes m04aflow{to{stroke-dashoffset:-30}}
+@keyframes m04ahop{
+0%{transform:translate(0px,0px)}
+5%{transform:translate(0px,0px)}
+20%{transform:translate(150px,0px)}
+25%{transform:translate(150px,0px)}
+40%{transform:translate(300px,0px)}
+45%{transform:translate(300px,0px)}
+60%{transform:translate(450px,0px)}
+65%{transform:translate(450px,0px)}
+82%{transform:translate(600px,0px)}
+100%{transform:translate(600px,0px)}}
+</style>
+<text class="m04atitle" x="20" y="22">Destination 10.5.5.5 — each router does one longest-prefix lookup → next hop</text>
+<text class="m04adst" x="360" y="44" text-anchor="middle">most specific match wins: 10.5.0.0/16 beats 10.0.0.0/8 beats 0.0.0.0/0 ✓</text>
+<!-- chosen path (animated flow) -->
+<line class="m04achosen" x1="60" y1="150" x2="660" y2="150"/>
+<!-- dim "roads not taken" stubs -->
+<line class="m04astub" x1="210" y1="172" x2="210" y2="212"/>
+<line class="m04astub" x1="360" y1="172" x2="360" y2="212"/>
+<line class="m04astub" x1="510" y1="172" x2="510" y2="212"/>
+<!-- nodes -->
+<rect class="m04anode" x="28" y="128" width="64" height="44" rx="8"/><text class="m04anl" x="60" y="155" text-anchor="middle">You</text>
+<rect class="m04anode" x="178" y="128" width="64" height="44" rx="8"/><text class="m04anl" x="210" y="149" text-anchor="middle">R1</text><text class="m04anl" x="210" y="164" text-anchor="middle">hop</text>
+<rect class="m04anode" x="328" y="128" width="64" height="44" rx="8"/><text class="m04anl" x="360" y="149" text-anchor="middle">R2</text><text class="m04anl" x="360" y="164" text-anchor="middle">hop</text>
+<rect class="m04anode" x="478" y="128" width="64" height="44" rx="8"/><text class="m04anl" x="510" y="149" text-anchor="middle">R3</text><text class="m04anl" x="510" y="164" text-anchor="middle">hop</text>
+<rect class="m04adnode" x="628" y="128" width="64" height="44" rx="8"/><text class="m04adl" x="660" y="149" text-anchor="middle">10.5</text><text class="m04adl" x="660" y="164" text-anchor="middle">.5.5</text>
+<!-- travelling packet -->
+<g class="m04apkt">
+<rect x="44" y="136" width="32" height="26" rx="5" fill="#ef4444"/>
+<text x="60" y="153" text-anchor="middle" style="font-size:9px;font-weight:700;fill:#fff">pkt</text>
+</g>
+<text class="m04acap" x="360" y="238" text-anchor="middle">No router knows the whole path — each only picks the direction toward the destination prefix, one hop at a time.</text>
+</svg>
+<figcaption>The packet hops <b>router → router</b>, and at every router a <b>longest-prefix match</b> picks the single next hop toward the destination network (green path) — the more specific <code>/16</code> route wins over the broader <code>/8</code> and the default. No device holds the end-to-end route.</figcaption>
+</figure>
+
 ### Forwarding, step by step
 
 Here's exactly what a router does with each packet:
@@ -430,6 +528,68 @@ sequenceDiagram
     Note over R: Look up mapping → rewrite back
     R->>L: src=142.250.190.78:443 dst=192.168.1.42:51000
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 300" role="img" aria-label="Animation: an outbound packet from a private address 192.168.1.42 port 51000 is rewritten by the router to its public address 203.0.113.7 port 62000 via a translation table; the reply is looked up in the table and mapped back to the private host.">
+<style>
+.m04btitle{font-size:13px;font-weight:700;fill:#2c7be5}
+.m04bnode{stroke-width:2}
+.m04bnl{font-size:12px;font-weight:700;fill:#1f2d3d}
+.m04bsub{font-size:10px;fill:#64748b}
+.m04bcap{font-size:11px;fill:#64748b}
+.m04btbl{font-size:11px;font-weight:700;fill:#7c3aed}
+.m04bpriv{font-size:10px;font-weight:700;fill:#fff}
+.m04bpub{font-size:10px;font-weight:700;fill:#fff}
+.m04ba1{animation:m04ba1 8s linear infinite}
+.m04ba2{animation:m04ba2 8s linear infinite}
+.m04bb1{animation:m04bb1 8s linear infinite}
+.m04bb2{animation:m04bb2 8s linear infinite}
+@keyframes m04ba1{0%,4%{opacity:0;transform:translateX(0)}7%{opacity:1;transform:translateX(0)}22%{opacity:1;transform:translateX(270px)}25%,100%{opacity:0;transform:translateX(270px)}}
+@keyframes m04ba2{0%,25%{opacity:0;transform:translateX(0)}28%{opacity:1;transform:translateX(0)}43%{opacity:1;transform:translateX(270px)}46%,100%{opacity:0;transform:translateX(270px)}}
+@keyframes m04bb1{0%,54%{opacity:0;transform:translateX(0)}57%{opacity:1;transform:translateX(0)}72%{opacity:1;transform:translateX(-270px)}75%,100%{opacity:0;transform:translateX(-270px)}}
+@keyframes m04bb2{0%,75%{opacity:0;transform:translateX(0)}78%{opacity:1;transform:translateX(0)}93%{opacity:1;transform:translateX(-270px)}96%,100%{opacity:0;transform:translateX(-270px)}}
+</style>
+<text class="m04btitle" x="20" y="22">PAT: private (IP:port) ⇄ public (IP:port), rewritten at the edge</text>
+<!-- nodes -->
+<rect class="m04bnode" x="30" y="128" width="120" height="48" rx="8" fill="#eef5ff" stroke="#2c7be5"/>
+<text class="m04bnl" x="90" y="150" text-anchor="middle">Laptop</text>
+<text class="m04bsub" x="90" y="166" text-anchor="middle">192.168.1.42</text>
+<rect class="m04bnode" x="300" y="128" width="120" height="48" rx="8" fill="#f3e8ff" stroke="#7c3aed"/>
+<text class="m04bnl" x="360" y="150" text-anchor="middle">Router (NAT)</text>
+<text class="m04bsub" x="360" y="166" text-anchor="middle">public 203.0.113.7</text>
+<rect class="m04bnode" x="570" y="128" width="120" height="48" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+<text class="m04bnl" x="630" y="150" text-anchor="middle">Server</text>
+<text class="m04bsub" x="630" y="166" text-anchor="middle">142.250.190.78:443</text>
+<!-- links -->
+<line x1="150" y1="152" x2="300" y2="152" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="420" y1="152" x2="570" y2="152" stroke="#cbd5e1" stroke-width="2"/>
+<!-- outbound leg 1: private src, laptop -> router -->
+<g class="m04ba1">
+<rect x="20" y="78" width="140" height="26" rx="5" fill="#f59e0b"/>
+<text class="m04bpriv" x="90" y="95" text-anchor="middle">src 192.168.1.42:51000 →</text>
+</g>
+<!-- outbound leg 2: public src, router -> server -->
+<g class="m04ba2">
+<rect x="290" y="78" width="140" height="26" rx="5" fill="#2c7be5"/>
+<text class="m04bpub" x="360" y="95" text-anchor="middle">src 203.0.113.7:62000 →</text>
+</g>
+<!-- inbound leg 1: reply to public, server -> router -->
+<g class="m04bb1">
+<rect x="560" y="196" width="140" height="26" rx="5" fill="#2c7be5"/>
+<text class="m04bpub" x="630" y="213" text-anchor="middle">← dst 203.0.113.7:62000</text>
+</g>
+<!-- inbound leg 2: reply mapped back, router -> laptop -->
+<g class="m04bb2">
+<rect x="290" y="196" width="140" height="26" rx="5" fill="#f59e0b"/>
+<text class="m04bpriv" x="360" y="213" text-anchor="middle">← dst 192.168.1.42:51000</text>
+</g>
+<!-- translation table -->
+<rect x="230" y="238" width="260" height="44" rx="6" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+<text class="m04btbl" x="360" y="256" text-anchor="middle">translation table</text>
+<text class="m04btbl" x="360" y="274" text-anchor="middle">192.168.1.42:51000 ⇄ 203.0.113.7:62000</text>
+</svg>
+<figcaption>On the way out, the router swaps the <b>private source (amber) for its public IP:port (blue)</b> and records the pair in a translation table; the reply arrives addressed to the public IP:port, and the table maps it <b>back</b> to the private host. Outbound creates the state — unsolicited inbound has no entry, so it's dropped.</figcaption>
+</figure>
 
 The server only ever sees the router's public IP and port; it has no idea (and doesn't need
 to) that a private network hides behind it.

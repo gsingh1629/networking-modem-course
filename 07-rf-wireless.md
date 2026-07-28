@@ -176,6 +176,52 @@ Two takeaways you should *feel*, not memorise:
 Real environments are worse than free space: walls, floors, foliage, and rain add extra
 **attenuation** on top of FSPL.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 250" role="img" aria-label="Animation: radio waves spread as expanding rings from a transmitter and fade with distance, so a receiver farther away hears a weaker signal.">
+<style>
+.m07a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m07a-lbl{font-size:11px;fill:#64748b}
+.m07a-nm{font-size:11px;font-weight:700;fill:#1f2d3d}
+.m07a-ring{fill:none;stroke:#2c7be5;stroke-width:3;animation:m07aring 3.3s ease-out infinite}
+.m07a-r2{animation-delay:1.1s}
+.m07a-r3{animation-delay:2.2s}
+.m07a-mast{stroke:#64748b;stroke-width:3}
+.m07a-b1{fill:#16a34a}
+.m07a-b2{fill:#f59e0b}
+.m07a-b3{fill:#ef4444}
+.m07a-pulse{animation:m07apulse 3.3s ease-in-out infinite}
+@keyframes m07aring{0%{r:8;opacity:.85;stroke-width:3.5}100%{r:470;opacity:0;stroke-width:.5}}
+@keyframes m07apulse{0%,100%{opacity:.45}50%{opacity:1}}
+</style>
+<defs><clipPath id="m07aclip"><rect x="30" y="40" width="660" height="160"/></clipPath></defs>
+<text class="m07a-t" x="12" y="20">Free-space path loss — energy spreads over an ever-bigger sphere, so it fades with distance</text>
+<line x1="30" y1="200" x2="690" y2="200" stroke="#cbd5e1" stroke-width="2"/>
+<g clip-path="url(#m07aclip)">
+<circle class="m07a-ring" cx="90" cy="150" r="8"/>
+<circle class="m07a-ring m07a-r2" cx="90" cy="150" r="8"/>
+<circle class="m07a-ring m07a-r3" cx="90" cy="150" r="8"/>
+</g>
+<line class="m07a-mast" x1="90" y1="150" x2="90" y2="200"/>
+<circle cx="90" cy="150" r="6" fill="#2c7be5"/>
+<text class="m07a-nm" x="90" y="220" text-anchor="middle">TX</text>
+<g class="m07a-pulse" style="animation-delay:.2s">
+<rect class="m07a-b1" x="272" y="140" width="14" height="60" rx="2"/>
+</g>
+<text class="m07a-lbl" x="279" y="132" text-anchor="middle">strong</text>
+<text class="m07a-lbl" x="279" y="220" text-anchor="middle">d</text>
+<g class="m07a-pulse" style="animation-delay:.9s">
+<rect class="m07a-b2" x="432" y="166" width="14" height="34" rx="2"/>
+</g>
+<text class="m07a-lbl" x="439" y="220" text-anchor="middle">2d  (−6 dB)</text>
+<g class="m07a-pulse" style="animation-delay:1.6s">
+<rect class="m07a-b3" x="592" y="182" width="14" height="18" rx="2"/>
+</g>
+<text class="m07a-lbl" x="599" y="220" text-anchor="middle">4d  (−12 dB)</text>
+<text class="m07a-lbl" x="360" y="242" text-anchor="middle">Every doubling of distance ≈ a quarter of the power (−6 dB). Range is expensive.</text>
+</svg>
+<figcaption>Radio radiates over an expanding sphere, so the same energy is smeared ever thinner: <b>each doubling of distance costs about 6 dB</b> (a 4× power drop). The receiver's bars shrink green → amber → red as the rings fade outward.</figcaption>
+</figure>
+
 ### The noise floor and SNR
 
 The receiver isn't listening to silence. There's always a **noise floor** — thermal noise
@@ -195,6 +241,43 @@ Low SNR → it must fall back to a sparse, robust constellation (QPSK, few bits/
 link. **Adaptive Modulation and Coding (AMC)** is the radio picking the richest modulation the
 current SNR can support, moment to moment. Wireless is Module 02's story, now driven by a
 constantly moving SNR.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 280" role="img" aria-label="Animation: as distance grows the received signal falls toward the noise floor, so the SNR gap shrinks until the signal nearly dips into the noise.">
+<style>
+.m07c-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m07c-lbl{font-size:11px;fill:#64748b}
+.m07c-ax{font-size:11px;font-weight:700;fill:#1f2d3d}
+.m07c-nf{stroke:#ef4444;stroke-width:2;stroke-dasharray:7 5}
+.m07c-sig{fill:none;stroke:#2c7be5;stroke-width:2.5}
+.m07c-bar{transform-origin:96px 200px;animation:m07cbar 5s ease-in-out infinite}
+.m07c-dot{animation:m07cdot 5s ease-in-out infinite}
+@keyframes m07cbar{
+0%{transform:translateX(0) scaleY(1);fill:#16a34a}
+60%{transform:translateX(360px) scaleY(.34);fill:#f59e0b}
+85%{transform:translateX(500px) scaleY(.16);fill:#ef4444}
+100%{transform:translateX(544px) scaleY(.06);fill:#ef4444}}
+@keyframes m07cdot{
+0%{transform:translate(0px,0px)}
+60%{transform:translate(360px,78px)}
+85%{transform:translate(500px,105px)}
+100%{transform:translate(544px,112px)}}
+</style>
+<text class="m07c-t" x="12" y="20">SNR vs the noise floor — the signal sinks toward the noise as you move away</text>
+<line x1="60" y1="40" x2="60" y2="200" stroke="#cbd5e1" stroke-width="2"/>
+<line x1="60" y1="200" x2="670" y2="200" stroke="#cbd5e1" stroke-width="2"/>
+<text class="m07c-ax" x="16" y="120" transform="rotate(-90 16 120)" text-anchor="middle">power (dBm)</text>
+<text class="m07c-lbl" x="365" y="234" text-anchor="middle">distance from transmitter →</text>
+<line class="m07c-nf" x1="60" y1="176" x2="670" y2="176"/>
+<text class="m07c-lbl" x="666" y="192" text-anchor="end" fill="#ef4444">noise floor</text>
+<polyline class="m07c-sig" points="90,60 250,96 410,128 560,160 640,172"/>
+<text class="m07c-lbl" x="120" y="52" fill="#2c7be5">received signal</text>
+<rect class="m07c-bar" x="88" y="60" width="16" height="140" rx="2"/>
+<circle class="m07c-dot" cx="96" cy="60" r="5" fill="#1f2d3d"/>
+<text class="m07c-lbl" x="365" y="258" text-anchor="middle">SNR = signal − noise floor. As it shrinks, the radio drops to a robuster modulation ≈ slower link.</text>
+</svg>
+<figcaption>The blue bar is the live <b>SNR</b> — the gap between the received signal and the red <b>noise floor</b>. As distance grows the signal sinks and that gap shrinks (green → amber → red); once it nears the noise floor the link must fall back to a sparser, slower constellation, or drop.</figcaption>
+</figure>
 
 ### Receiver sensitivity
 
@@ -315,6 +398,43 @@ When those copies overlap at the receiver they **interfere**: sometimes they add
 **fade**, signal drops sharply). This is **multipath fading**, and because you and the
 reflectors move, the pattern shifts constantly — the SNR you rely on for AMC is a *moving
 target*.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 312" role="img" aria-label="Animation: one transmitted signal reaches the receiver by a direct path plus two reflected paths, arriving at slightly different times so the copies add up or cancel — fading.">
+<style>
+.m07b-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m07b-lbl{font-size:11px;fill:#64748b}
+.m07b-nm{font-size:11px;font-weight:700;fill:#1f2d3d}
+.m07b-path{fill:none;stroke-width:2;stroke-dasharray:5 6}
+.m07b-d{stroke:#16a34a}
+.m07b-r1{stroke:#f59e0b}
+.m07b-r2{stroke:#7c3aed}
+.m07b-bldg{fill:#e2e8f0;stroke:#64748b;stroke-width:1.5}
+.m07b-fade{animation:m07bfade 3s ease-in-out infinite}
+@keyframes m07bfade{0%{height:70px;y:95px;fill:#16a34a}20%{height:22px;y:143px;fill:#ef4444}40%{height:58px;y:107px;fill:#f59e0b}60%{height:14px;y:151px;fill:#ef4444}80%{height:64px;y:101px;fill:#16a34a}100%{height:70px;y:95px;fill:#16a34a}}
+</style>
+<text class="m07b-t" x="12" y="20">Multipath — the same signal arrives several times, offset, and the copies add up or cancel</text>
+<rect class="m07b-bldg" x="330" y="40" width="70" height="46"/>
+<text class="m07b-lbl" x="365" y="34" text-anchor="middle">building</text>
+<line x1="60" y1="262" x2="660" y2="262" stroke="#cbd5e1" stroke-width="2"/>
+<text class="m07b-lbl" x="365" y="280" text-anchor="middle">ground</text>
+<path class="m07b-path m07b-d" d="M110,165 L610,165"/>
+<path class="m07b-path m07b-r1" d="M110,165 L365,90 L610,165"/>
+<path class="m07b-path m07b-r2" d="M110,165 L365,258 L610,165"/>
+<line x1="110" y1="165" x2="110" y2="262" stroke="#64748b" stroke-width="3"/>
+<circle cx="110" cy="165" r="7" fill="#2c7be5"/>
+<text class="m07b-nm" x="110" y="298" text-anchor="middle">TX</text>
+<line x1="610" y1="165" x2="610" y2="262" stroke="#64748b" stroke-width="3"/>
+<text class="m07b-nm" x="610" y="298" text-anchor="middle">RX</text>
+<circle r="6" fill="#16a34a"><animateMotion path="M110,165 L610,165" dur="2s" repeatCount="indefinite"/></circle>
+<circle r="6" fill="#f59e0b"><animateMotion path="M110,165 L365,90 L610,165" dur="2.7s" repeatCount="indefinite"/></circle>
+<circle r="6" fill="#7c3aed"><animateMotion path="M110,165 L365,258 L610,165" dur="3.2s" repeatCount="indefinite"/></circle>
+<rect class="m07b-fade" x="628" y="95" width="16" height="70" rx="2"/>
+<text class="m07b-lbl" x="636" y="185" text-anchor="middle">sum</text>
+<text class="m07b-lbl" x="360" y="304" text-anchor="middle">Direct (green) arrives first • reflected copies (amber, purple) lag • combined level swings = fading</text>
+</svg>
+<figcaption>One transmission reaches the receiver by a <b>direct</b> path plus copies <b>reflected</b> off a building and the ground. Because each copy travels a different distance it arrives slightly offset, so at the receiver they sometimes reinforce and sometimes cancel — the bar's swing is <b>multipath fading</b>.</figcaption>
+</figure>
 
 Multipath sounds purely bad, but modern systems *exploit* it: **MIMO** (Multiple-Input
 Multiple-Output, Module 10) uses multiple antennas to turn several independent paths into

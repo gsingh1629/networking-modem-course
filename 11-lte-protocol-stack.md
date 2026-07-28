@@ -222,6 +222,56 @@ Because radio loses *far* more than copper, and TCP's recovery loop is *far* too
 
 So cellular deliberately breaks the Ethernet rule: **L2 retransmits, so L4 rarely has to.**
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: RLC acknowledged mode sends numbered blocks over the air; block 2 is lost, the receiver sends a status NACK for block 2, and the sender re-sends block 2 at Layer 2 — unlike Ethernet, which drops the frame and leaves recovery to TCP.">
+<style>
+.m11b-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m11b-t{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m11b-cap{font-size:11px;fill:#64748b}
+.m11b-air{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:6 5}
+.m11b-num{font-size:12px;font-weight:700;fill:#fff}
+.m11b-lost{font-size:12px;font-weight:700;fill:#ef4444}
+.m11b-nl{font-size:11px;font-weight:700;fill:#fff}
+.m11b-ok{font-size:15px;font-weight:700;fill:#16a34a}
+.m11b-tok1{animation:m11btok1 9s linear infinite}
+.m11b-tok2{animation:m11btok2 9s linear infinite}
+.m11b-tok3{animation:m11btok3 9s linear infinite}
+.m11b-x{animation:m11bx 9s linear infinite}
+.m11b-nack{animation:m11bnack 9s linear infinite}
+.m11b-re{animation:m11bre 9s linear infinite}
+.m11b-okc{animation:m11bok 9s linear infinite}
+@keyframes m11btok1{0%{opacity:0;transform:translateX(0)}2%{opacity:1;transform:translateX(0)}14%{opacity:1;transform:translateX(460px)}17%{opacity:1;transform:translateX(460px)}19%{opacity:0;transform:translateX(460px)}100%{opacity:0;transform:translateX(460px)}}
+@keyframes m11btok2{0%,7%{opacity:0;transform:translateX(0)}9%{opacity:1;transform:translateX(0)}19%{opacity:1;transform:translateX(210px)}23%{opacity:0;transform:translateX(235px)}100%{opacity:0;transform:translateX(235px)}}
+@keyframes m11btok3{0%,19%{opacity:0;transform:translateX(0)}22%{opacity:1;transform:translateX(0)}34%{opacity:1;transform:translateX(460px)}37%{opacity:1;transform:translateX(460px)}39%{opacity:0;transform:translateX(460px)}100%{opacity:0;transform:translateX(460px)}}
+@keyframes m11bx{0%,20%{opacity:0}23%{opacity:1}33%{opacity:1}37%,100%{opacity:0}}
+@keyframes m11bnack{0%,40%{opacity:0;transform:translateX(0)}43%{opacity:1;transform:translateX(0)}55%{opacity:1;transform:translateX(-460px)}58%{opacity:1;transform:translateX(-460px)}60%{opacity:0;transform:translateX(-460px)}100%{opacity:0;transform:translateX(-460px)}}
+@keyframes m11bre{0%,60%{opacity:0;transform:translateX(0)}63%{opacity:1;transform:translateX(0)}76%{opacity:1;transform:translateX(460px)}82%{opacity:1;transform:translateX(460px)}86%{opacity:0;transform:translateX(460px)}100%{opacity:0;transform:translateX(460px)}}
+@keyframes m11bok{0%,80%{opacity:0}83%{opacity:1}92%{opacity:1}96%,100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">RLC ARQ — a lost block is re-sent at Layer 2 (not left for TCP)</text>
+<rect class="m11b-box" x="20" y="70" width="110" height="120" rx="8"/>
+<text class="m11b-t" x="75" y="122" text-anchor="middle">Sender</text>
+<text class="m11b-t" x="75" y="140" text-anchor="middle">RLC (AM)</text>
+<rect class="m11b-box" x="630" y="70" width="110" height="120" rx="8"/>
+<text class="m11b-t" x="685" y="122" text-anchor="middle">Receiver</text>
+<text class="m11b-t" x="685" y="140" text-anchor="middle">RLC (AM)</text>
+<line class="m11b-air" x1="130" y1="118" x2="630" y2="118"/>
+<line class="m11b-air" x1="130" y1="175" x2="630" y2="175"/>
+<text class="m11b-cap" x="380" y="92" text-anchor="middle">downlink  →</text>
+<text class="m11b-cap" x="380" y="200" text-anchor="middle">←  uplink status report</text>
+<text class="m11b-lost m11b-x" x="360" y="100" text-anchor="middle">✗ block 2 lost (fading)</text>
+<g class="m11b-tok1"><rect x="136" y="105" width="34" height="26" rx="5" fill="#2c7be5"/><text class="m11b-num" x="153" y="123" text-anchor="middle">1</text></g>
+<g class="m11b-tok2"><rect x="136" y="105" width="34" height="26" rx="5" fill="#2c7be5"/><text class="m11b-num" x="153" y="123" text-anchor="middle">2</text></g>
+<g class="m11b-tok3"><rect x="136" y="105" width="34" height="26" rx="5" fill="#2c7be5"/><text class="m11b-num" x="153" y="123" text-anchor="middle">3</text></g>
+<g class="m11b-re"><rect x="136" y="105" width="34" height="26" rx="5" fill="#16a34a"/><text class="m11b-num" x="153" y="123" text-anchor="middle">2</text></g>
+<g class="m11b-nack"><rect x="506" y="162" width="120" height="26" rx="5" fill="#ef4444"/><text class="m11b-nl" x="566" y="180" text-anchor="middle">STATUS: NACK 2</text></g>
+<text class="m11b-ok m11b-okc" x="612" y="127" text-anchor="middle">✓</text>
+<text class="m11b-cap" x="380" y="245" text-anchor="middle">Ethernet would detect the bad frame, drop it, and leave recovery to TCP (end-to-end, tens of ms).</text>
+<text class="m11b-cap" x="380" y="262" text-anchor="middle">RLC re-sends the missing block locally over one radio hop, in a few ms.</text>
+</svg>
+<figcaption>Blocks stream over the air; <b>block 2 is lost</b>. The receiver's RLC sends a <b>status report (NACK 2)</b> back, and the sender <b>re-sends block 2 at Layer 2</b> (green) — repairing loss locally instead of waiting for TCP, the way Ethernet's detect-and-drop would force.</figcaption>
+</figure>
+
 > ⚡ **Latency note — the layered retransmit hierarchy.** There are now *three* nested repair
 > loops: **HARQ** (PHY/MAC, sub-ms, per transport block) catches most errors; **RLC ARQ**
 > (L2, few ms, per radio hop) catches what HARQ misses; **TCP** (L4, tens–hundreds of ms,
@@ -294,6 +344,62 @@ tiny **context ID + the few bytes that actually changed** — squashing ~40 byte
  Without ROHC:  [ IP 20B ][ UDP 8B ][ RTP 12B ][ ~32B voice ]   → ~59% is header
  With ROHC:     [ 1–3B ][ ~32B voice ]                          → ~5–8% is header
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: PDCP ROHC compresses a ~40-byte IP/UDP/RTP header down to a 1 to 3 byte context id before it goes over the air, then the receiver expands it back to the full header using stored context.">
+<style>
+.m11c-t{font-size:12px;font-weight:700;fill:#1f2d3d}
+.m11c-hdr{font-size:11px;font-weight:700;fill:#fff}
+.m11c-data{font-size:11px;font-weight:600;fill:#1f2d3d}
+.m11c-lbl{font-size:11px;font-weight:700;fill:#7c3aed}
+.m11c-cap{font-size:11px;fill:#64748b}
+.m11c-air{stroke:#cbd5e1;stroke-width:2;stroke-dasharray:6 5}
+.m11c-ctx{fill:none;stroke:#64748b;stroke-width:1.5;stroke-dasharray:4 3}
+.m11c-sf{animation:m11csf 10s ease-in-out infinite}
+.m11c-rf{animation:m11crf 10s ease-in-out infinite}
+.m11c-tok{animation:m11ctok 10s linear infinite}
+.m11c-ca{animation:m11cca 10s ease-in-out infinite}
+.m11c-da{animation:m11cda 10s ease-in-out infinite}
+@keyframes m11csf{0%{opacity:0}3%{opacity:1}30%{opacity:1}36%,100%{opacity:0}}
+@keyframes m11crf{0%,70%{opacity:0}75%{opacity:1}95%{opacity:1}99%,100%{opacity:0}}
+@keyframes m11ctok{0%,26%{opacity:0;transform:translateX(0)}31%{opacity:1;transform:translateX(0)}64%{opacity:1;transform:translateX(360px)}68%{opacity:1;transform:translateX(360px)}72%,100%{opacity:0;transform:translateX(360px)}}
+@keyframes m11cca{0%,22%{opacity:0}26%{opacity:1}32%{opacity:1}36%,100%{opacity:0}}
+@keyframes m11cda{0%,64%{opacity:0}68%{opacity:1}74%{opacity:1}78%,100%{opacity:0}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">PDCP ROHC — a ~40B IP/UDP/RTP header shrinks to ~1–3B over the air, then expands back</text>
+<line class="m11c-air" x1="200" y1="166" x2="560" y2="166"/>
+<text class="m11c-cap" x="380" y="140" text-anchor="middle">over the air  →</text>
+<g class="m11c-sf">
+<text class="m11c-t" x="40" y="64">Sender (PDCP)</text>
+<rect x="40" y="70" width="40" height="34" rx="4" fill="#16a34a"/><text class="m11c-hdr" x="60" y="91" text-anchor="middle">IP</text>
+<rect x="80" y="70" width="38" height="34" rx="4" fill="#2c7be5"/><text class="m11c-hdr" x="99" y="91" text-anchor="middle">UDP</text>
+<rect x="118" y="70" width="38" height="34" rx="4" fill="#7c3aed"/><text class="m11c-hdr" x="137" y="91" text-anchor="middle">RTP</text>
+<rect x="156" y="70" width="90" height="34" rx="4" fill="#cbd5e1"/><text class="m11c-data" x="201" y="91" text-anchor="middle">voice 32B</text>
+<text class="m11c-cap" x="143" y="120" text-anchor="middle">IP+UDP+RTP ≈ 40B  •  ~59% overhead</text>
+</g>
+<text class="m11c-lbl m11c-ca" x="120" y="150" text-anchor="middle">ROHC compress ▼</text>
+<g class="m11c-tok">
+<rect x="70" y="152" width="30" height="30" rx="4" fill="#f59e0b"/><text class="m11c-hdr" x="85" y="172" text-anchor="middle">CID</text>
+<rect x="100" y="152" width="90" height="30" rx="4" fill="#cbd5e1"/><text class="m11c-data" x="145" y="172" text-anchor="middle">voice 32B</text>
+<text class="m11c-cap" x="115" y="147" text-anchor="middle">~1–3B</text>
+</g>
+<text class="m11c-lbl m11c-da" x="600" y="150" text-anchor="middle">ROHC expand ▲</text>
+<g class="m11c-rf">
+<text class="m11c-t" x="470" y="64">Receiver (PDCP)</text>
+<rect x="470" y="70" width="40" height="34" rx="4" fill="#16a34a"/><text class="m11c-hdr" x="490" y="91" text-anchor="middle">IP</text>
+<rect x="510" y="70" width="38" height="34" rx="4" fill="#2c7be5"/><text class="m11c-hdr" x="529" y="91" text-anchor="middle">UDP</text>
+<rect x="548" y="70" width="38" height="34" rx="4" fill="#7c3aed"/><text class="m11c-hdr" x="567" y="91" text-anchor="middle">RTP</text>
+<rect x="586" y="70" width="90" height="34" rx="4" fill="#cbd5e1"/><text class="m11c-data" x="631" y="91" text-anchor="middle">voice 32B</text>
+<text class="m11c-cap" x="573" y="120" text-anchor="middle">full header rebuilt from context</text>
+</g>
+<rect class="m11c-ctx" x="30" y="210" width="220" height="30" rx="5"/>
+<text class="m11c-cap" x="140" y="230" text-anchor="middle">context: full header stored once</text>
+<rect class="m11c-ctx" x="510" y="210" width="220" height="30" rx="5"/>
+<text class="m11c-cap" x="620" y="230" text-anchor="middle">context: full header stored once</text>
+<text class="m11c-cap" x="380" y="265" text-anchor="middle">Only a tiny context id + the few changed bytes cross the air; the rest is already known at both ends.</text>
+</svg>
+<figcaption>The bulky <b>IP/UDP/RTP header (~40B)</b> is squashed by <b>ROHC</b> to a <b>1–3B context id</b> before it crosses the air, then <b>rebuilt to the full header</b> at the receiver from the context both ends agreed on once. For 50 voice packets/second that is a large, permanent saving on scarce spectrum.</figcaption>
+</figure>
 
 For a call sending 50 packets/second, that's a massive, permanent saving on the scarcest
 resource in the whole system: radio spectrum. It's the Module 01 observation — "header
@@ -419,6 +525,66 @@ flowchart TB
   D --> E["PHY: channel-code + modulate into a TRANSPORT BLOCK<br/>symbols on resource blocks (Module 10)"]
   E --> F["🛰️ over the air → tower decapsulates in reverse"]
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 388" role="img" aria-label="Animation: an IP packet gains a PDCP header, then an RLC header, then a MAC header, and finally becomes a PHY transport block of symbols.">
+<style>
+.m11a-lbl{font-size:12.5px;font-weight:600}
+.m11a-sub{font-size:10.5px;fill:#64748b}
+.m11a-hdr{font-size:12.5px;font-weight:700;fill:#fff}
+.m11a-data{font-size:12px;font-weight:600;fill:#1f2d3d}
+.m11a-bits{font-size:14px;font-weight:700;fill:#2c7be5;letter-spacing:2px}
+.m11a-r1{animation:m11ar1 10s linear infinite}
+.m11a-r2{animation:m11ar2 10s linear infinite}
+.m11a-r3{animation:m11ar3 10s linear infinite}
+.m11a-r4{animation:m11ar4 10s linear infinite}
+.m11a-r5{animation:m11ar5 10s linear infinite}
+.m11a-arrow{animation:m11aarrow 10s ease-in-out infinite}
+.m11a-shim{animation:m11ashim 1.6s ease-in-out infinite}
+@keyframes m11ar1{0%,4%{opacity:0;transform:translateY(-14px)}9%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes m11ar2{0%,16%{opacity:0;transform:translateY(-14px)}21%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes m11ar3{0%,28%{opacity:0;transform:translateY(-14px)}33%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes m11ar4{0%,40%{opacity:0;transform:translateY(-14px)}45%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes m11ar5{0%,52%{opacity:0;transform:translateY(-14px)}57%,90%{opacity:1;transform:translateY(0)}96%,100%{opacity:0;transform:translateY(-14px)}}
+@keyframes m11aarrow{0%,4%{opacity:0;transform:translateY(0)}9%{opacity:1;transform:translateY(0)}52%{opacity:1;transform:translateY(248px)}90%{opacity:1;transform:translateY(248px)}96%,100%{opacity:0;transform:translateY(248px)}}
+@keyframes m11ashim{0%,100%{opacity:.55}50%{opacity:1}}
+</style>
+<text x="12" y="20" style="font-size:13px;font-weight:700;fill:#2c7be5">Encapsulation down the LTE stack — an IP packet becomes a transport block, going DOWN ↓</text>
+<polygon class="m11a-arrow" points="118,64 130,64 124,76" fill="#ef4444"/>
+<g class="m11a-r1">
+<text class="m11a-lbl" x="12" y="74" fill="#16a34a">IP</text><text class="m11a-sub" x="12" y="88">IP packet</text>
+<rect x="300" y="52" width="80" height="40" rx="5" fill="#16a34a"/><text class="m11a-hdr" x="340" y="77" text-anchor="middle">IP hdr</text>
+<rect x="380" y="52" width="160" height="40" rx="5" fill="#cbd5e1"/><text class="m11a-data" x="460" y="77" text-anchor="middle">payload</text>
+</g>
+<g class="m11a-r2">
+<text class="m11a-lbl" x="12" y="136" fill="#2c7be5">PDCP</text><text class="m11a-sub" x="12" y="150">PDCP PDU</text>
+<rect x="250" y="114" width="50" height="40" rx="5" fill="#2c7be5"/><text class="m11a-hdr" x="275" y="139" text-anchor="middle">PDCP</text>
+<rect x="300" y="114" width="80" height="40" rx="5" fill="#16a34a"/><text class="m11a-hdr" x="340" y="139" text-anchor="middle">IP hdr</text>
+<rect x="380" y="114" width="160" height="40" rx="5" fill="#cbd5e1"/><text class="m11a-data" x="460" y="139" text-anchor="middle">payload</text>
+</g>
+<g class="m11a-r3">
+<text class="m11a-lbl" x="12" y="198" fill="#f59e0b">RLC</text><text class="m11a-sub" x="12" y="212">RLC PDU</text>
+<rect x="205" y="176" width="45" height="40" rx="5" fill="#f59e0b"/><text class="m11a-hdr" x="227" y="201" text-anchor="middle">RLC</text>
+<rect x="250" y="176" width="50" height="40" rx="5" fill="#2c7be5"/><text class="m11a-hdr" x="275" y="201" text-anchor="middle">PDCP</text>
+<rect x="300" y="176" width="80" height="40" rx="5" fill="#16a34a"/><text class="m11a-hdr" x="340" y="201" text-anchor="middle">IP hdr</text>
+<rect x="380" y="176" width="160" height="40" rx="5" fill="#cbd5e1"/><text class="m11a-data" x="460" y="201" text-anchor="middle">payload</text>
+</g>
+<g class="m11a-r4">
+<text class="m11a-lbl" x="12" y="260" fill="#7c3aed">MAC</text><text class="m11a-sub" x="12" y="274">MAC PDU</text>
+<rect x="150" y="238" width="55" height="40" rx="5" fill="#7c3aed"/><text class="m11a-hdr" x="177" y="263" text-anchor="middle">MAC</text>
+<rect x="205" y="238" width="45" height="40" rx="5" fill="#f59e0b"/><text class="m11a-hdr" x="227" y="263" text-anchor="middle">RLC</text>
+<rect x="250" y="238" width="50" height="40" rx="5" fill="#2c7be5"/><text class="m11a-hdr" x="275" y="263" text-anchor="middle">PDCP</text>
+<rect x="300" y="238" width="80" height="40" rx="5" fill="#16a34a"/><text class="m11a-hdr" x="340" y="263" text-anchor="middle">IP hdr</text>
+<rect x="380" y="238" width="160" height="40" rx="5" fill="#cbd5e1"/><text class="m11a-data" x="460" y="263" text-anchor="middle">payload</text>
+</g>
+<g class="m11a-r5">
+<text class="m11a-lbl" x="12" y="322" fill="#64748b">PHY</text><text class="m11a-sub" x="12" y="336">transport block</text>
+<text class="m11a-bits m11a-shim" x="150" y="327">10110100 11010011 00101110 10011010 …</text>
+<text class="m11a-sub" x="150" y="352">→ one transport block of symbols, over the air (Module 10)</text>
+</g>
+</svg>
+<figcaption>Watch it build: an <b>IP packet</b> gains a <b>PDCP</b> header (ROHC + ciphering), then an <b>RLC</b> header (a sequence number for ARQ), then a <b>MAC</b> header (RNTI addressing + muxing) — and <b>PHY</b> codes it into one <b>transport block</b> of symbols. The tower strips these back off in reverse (decapsulation).</figcaption>
+</figure>
 
 Trace the transformations and notice each is a *named layer doing exactly one generic job*:
 

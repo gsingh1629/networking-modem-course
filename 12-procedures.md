@@ -70,6 +70,54 @@ stateDiagram-v2
     end note
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: the UE toggles between RRC_IDLE and RRC_CONNECTED. The idle-to-connected transition costs a 50 to 100 millisecond RACH and RRC setup delay, the mobile latency tax, while dropping back to idle is quick.">
+<style>
+.m12a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m12a-st{font-size:14px;font-weight:700;fill:#fff}
+.m12a-sub{font-size:10.5px;fill:#fff}
+.m12a-lbl{font-size:11px;font-weight:600;fill:#64748b}
+.m12a-tax{font-size:11px;font-weight:700;fill:#ef4444}
+.m12a-tok{animation:m12atok 8s ease-in-out infinite}
+.m12a-pulse{animation:m12apulse 1.1s ease-in-out infinite}
+.m12a-fill{animation:m12afill 8s ease-in-out infinite;transform-box:fill-box;transform-origin:left center}
+.m12a-zzz{animation:m12azzz 8s ease-in-out infinite}
+@keyframes m12atok{
+0%,10%{transform:translate(0px,0px)}
+40%{transform:translate(470px,0px)}
+70%{transform:translate(470px,0px)}
+85%,100%{transform:translate(0px,0px)}}
+@keyframes m12apulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes m12afill{0%,10%{transform:scaleX(0)}40%{transform:scaleX(1)}70%{transform:scaleX(1)}85%,100%{transform:scaleX(0)}}
+@keyframes m12azzz{0%,10%{opacity:1}20%,80%{opacity:0}90%,100%{opacity:1}}
+</style>
+<text class="m12a-t" x="12" y="22">RRC dial — idle to connected pays the setup tax; the drop back is free</text>
+<rect x="40" y="120" width="200" height="96" rx="10" fill="#16a34a"/>
+<text class="m12a-st" x="140" y="152" text-anchor="middle">RRC_IDLE</text>
+<text class="m12a-sub" x="140" y="172" text-anchor="middle">radio off • best battery</text>
+<text class="m12a-sub" x="140" y="188" text-anchor="middle">unreachable — must be paged</text>
+<text class="m12a-zzz" x="212" y="142" text-anchor="middle" style="font-size:16px">💤</text>
+<rect x="520" y="120" width="200" height="96" rx="10" fill="#2c7be5"/>
+<text class="m12a-st" x="620" y="152" text-anchor="middle">RRC_CONNECTED</text>
+<text class="m12a-sub" x="620" y="172" text-anchor="middle">radio on • instant data</text>
+<text class="m12a-sub" x="620" y="188" text-anchor="middle">battery drain</text>
+<line class="m12a-pulse" x1="248" y1="96" x2="512" y2="96" stroke="#f59e0b" stroke-width="3"/>
+<polygon class="m12a-pulse" points="512,96 500,90 500,102" fill="#f59e0b"/>
+<text class="m12a-tax" x="380" y="84" text-anchor="middle">RACH + RRC setup ≈ 50–100 ms  (the mobile latency tax)</text>
+<rect x="300" y="104" width="160" height="10" rx="5" fill="#fde3c4"/>
+<rect class="m12a-fill" x="300" y="104" width="160" height="10" rx="5" fill="#f59e0b"/>
+<text class="m12a-lbl" x="380" y="128" text-anchor="middle" style="fill:#f59e0b">first packet must wake the radio ↑</text>
+<line x1="512" y1="240" x2="248" y2="240" stroke="#64748b" stroke-width="2"/>
+<polygon points="248,240 260,234 260,246" fill="#64748b"/>
+<text class="m12a-lbl" x="380" y="258" text-anchor="middle">inactivity timer → RRC Release  (quick, free)</text>
+<g class="m12a-tok">
+<circle cx="140" cy="96" r="9" fill="#ef4444"/>
+<circle cx="140" cy="96" r="9" fill="#ef4444" opacity="0.35"><animate attributeName="r" values="9;15;9" dur="1.1s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<figcaption>The one costly arrow is <b>RRC_IDLE → RRC_CONNECTED</b> (red dot crossing slowly, amber bar filling): the ~50–100 ms of RACH + RRC setup that the very first packet pays to wake a sleeping radio. The return trip — the network dropping you to idle after silence — is instant and free. That asymmetry <i>is</i> the mobile latency tax.</figcaption>
+</figure>
+
 > ⚡ **Latency note.** Notice the arrow that costs the most: **RRC_IDLE → RRC_CONNECTED**.
 > Every other transition is cheap. This one arrow is *the* mobile latency tax, and Sections
 > 2–3 are entirely about it. The network deliberately drops you to IDLE after a few seconds
@@ -252,6 +300,59 @@ gantt
     Page sent — lands on next PO :crit, 620, 640
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 340" role="img" aria-label="Animation: a DRX timeline where the UE sleeps and wakes only at periodic paging occasions. A page arriving between wake-ups is caught at the next paging occasion, but a second page is missed because the UE is out of coverage at its occasion.">
+<style>
+.m12b-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m12b-lbl{font-size:11px;font-weight:600;fill:#64748b}
+.m12b-po{font-size:9.5px;font-weight:700;fill:#16a34a}
+.m12b-tag{font-size:11px;font-weight:700}
+.m12b-wave{fill:none;stroke:#64748b;stroke-width:2.5}
+.m12b-head{animation:m12bsweep 12s linear infinite}
+.m12b-p1{animation:m12bp1 12s ease-in-out infinite}
+.m12b-ok{animation:m12bok 12s ease-in-out infinite}
+.m12b-p2{animation:m12bp2 12s ease-in-out infinite}
+.m12b-miss{animation:m12bmiss 12s ease-in-out infinite}
+@keyframes m12bsweep{0%{transform:translateX(0px);opacity:1}90%{transform:translateX(640px);opacity:1}91%,100%{opacity:0}}
+@keyframes m12bp1{0%,13%{opacity:0}15%,94%{opacity:1}96%,100%{opacity:0}}
+@keyframes m12bok{0%,42%{opacity:0}44%,94%{opacity:1}96%,100%{opacity:0}}
+@keyframes m12bp2{0%,48%{opacity:0}50%,94%{opacity:1}96%,100%{opacity:0}}
+@keyframes m12bmiss{0%,76%{opacity:0}78%,94%{opacity:1}96%,100%{opacity:0}}
+</style>
+<text class="m12b-t" x="12" y="22">Idle DRX — the UE sleeps 💤 and wakes only at paging occasions (PO)</text>
+<text class="m12b-lbl" x="12" y="196" text-anchor="start">UE radio</text>
+<polyline class="m12b-wave" points="60,210 110,210 110,172 132,172 132,210 230,210 230,172 252,172 252,210 350,210 350,172 372,172 372,210 470,210 470,172 492,172 492,210 590,210 590,172 612,172 612,210 700,210"/>
+<circle cx="121" cy="172" r="5" fill="#16a34a"/><text class="m12b-po" x="121" y="162" text-anchor="middle">PO</text>
+<circle cx="241" cy="172" r="5" fill="#16a34a"/><text class="m12b-po" x="241" y="162" text-anchor="middle">PO</text>
+<circle cx="361" cy="172" r="5" fill="#16a34a"/><text class="m12b-po" x="361" y="162" text-anchor="middle">PO</text>
+<circle cx="481" cy="172" r="5" fill="#16a34a"/><text class="m12b-po" x="481" y="162" text-anchor="middle">PO</text>
+<circle cx="601" cy="172" r="5" fill="#64748b" opacity="0.4"/><text class="m12b-po" x="601" y="162" text-anchor="middle" style="fill:#64748b">PO</text>
+<text class="m12b-lbl" x="188" y="228" text-anchor="middle" style="fill:#94a3b8">sleep</text>
+<text class="m12b-lbl" x="428" y="228" text-anchor="middle" style="fill:#94a3b8">sleep</text>
+<g class="m12b-head"><line x1="60" y1="150" x2="60" y2="240" stroke="#f59e0b" stroke-width="2.5"/><text x="60" y="146" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#f59e0b">now</text></g>
+<g class="m12b-p1">
+<rect x="270" y="256" width="46" height="22" rx="4" fill="#2c7be5"/><text x="293" y="271" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">page</text>
+<line x1="300" y1="256" x2="356" y2="180" stroke="#2c7be5" stroke-width="2" stroke-dasharray="4 3"/>
+<polygon points="356,180 349,188 361,190" fill="#2c7be5"/>
+</g>
+<g class="m12b-ok">
+<circle cx="361" cy="172" r="11" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+<text class="m12b-tag" x="361" y="128" text-anchor="middle" style="fill:#16a34a">caught at next wake ✓ → connect</text>
+</g>
+<g class="m12b-p2">
+<rect x="500" y="256" width="46" height="22" rx="4" fill="#ef4444"/><text x="523" y="271" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">page</text>
+<line x1="546" y1="256" x2="596" y2="180" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 3"/>
+<polygon points="596,180 589,188 601,190" fill="#ef4444"/>
+</g>
+<g class="m12b-miss">
+<text x="601" y="172" text-anchor="middle" style="font-size:16px;font-weight:700;fill:#ef4444">✗</text>
+<text class="m12b-tag" x="601" y="128" text-anchor="middle" style="fill:#ef4444">UE asleep / out of coverage → page miss</text>
+</g>
+<text class="m12b-lbl" x="380" y="322" text-anchor="middle">Longer DRX cycle → more sleep → more battery, but a page waits a whole cycle (or is missed and retried).</text>
+</svg>
+<figcaption>The UE's receiver is off almost the whole time, snapping awake only at each <b>paging occasion</b>. A page that arrives mid-sleep simply <b>waits</b> for the next wake and is <b>caught ✓</b>. But if the UE is out of coverage (or in a long eDRX/PSM sleep) at its occasion, the page lands on deaf ears — a <b>page miss ✗</b> the network must retry. Paging and DRX are two halves of one mechanism.</figcaption>
+</figure>
+
 **eDRX (extended DRX)** stretches the idle cycle far longer for devices that tolerate delay —
 LTE-M up to ~**43.7 minutes**, NB-IoT up to ~**2.9 hours**. The device is *unreachable* for
 almost the entire cycle, waking briefly to check for pages. This is a battery miracle for a
@@ -348,6 +449,45 @@ sequenceDiagram
     MME->>T: data path now goes to target
     T->>S: Release resources
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 320" role="img" aria-label="Animation: a UE moves from cell A toward cell B. As it moves, cell A's signal falls and cell B's rises; when B beats A plus an offset the A3 event fires. The connection is then handed to B, with both links briefly active make-before-break, so the interruption is near zero.">
+<style>
+.m12c-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m12c-lbl{font-size:11px;font-weight:600;fill:#64748b}
+.m12c-tag{font-size:11px;font-weight:700}
+.m12c-la{animation:m12cla 9s ease-in-out infinite}
+.m12c-lb{animation:m12clb 9s ease-in-out infinite}
+.m12c-a3{animation:m12ca3 9s ease-in-out infinite}
+.m12c-mbb{animation:m12cmbb 9s ease-in-out infinite}
+.m12c-done{animation:m12cdone 9s ease-in-out infinite}
+@keyframes m12cla{0%,56%{opacity:1}66%,100%{opacity:0.12}}
+@keyframes m12clb{0%,43%{opacity:0}50%,100%{opacity:1}}
+@keyframes m12ca3{0%,42%{opacity:0}45%{opacity:1}100%{opacity:1}}
+@keyframes m12cmbb{0%,44%{opacity:0}47%,62%{opacity:1}66%,100%{opacity:0}}
+@keyframes m12cdone{0%,63%{opacity:0}66%,100%{opacity:1}}
+</style>
+<circle cx="120" cy="70" r="160" fill="#2c7be5" opacity="0.06"/>
+<circle cx="640" cy="70" r="160" fill="#16a34a" opacity="0.07"/>
+<text class="m12c-t" x="12" y="22">Handover — measure, A3 fires, then make-before-break to cell B</text>
+<polygon points="112,112 128,112 123,64 117,64" fill="#2c7be5"/><circle cx="120" cy="60" r="5" fill="#2c7be5"/>
+<text class="m12c-lbl" x="120" y="130" text-anchor="middle" style="fill:#2c7be5">Cell A (source)</text>
+<polygon points="632,112 648,112 643,64 637,64" fill="#16a34a"/><circle cx="640" cy="60" r="5" fill="#16a34a"/>
+<text class="m12c-lbl" x="640" y="130" text-anchor="middle" style="fill:#16a34a">Cell B (target)</text>
+<rect x="330" y="70" width="18" height="80" rx="2" fill="#2c7be5"><animate attributeName="height" values="80;14;14" keyTimes="0;0.45;1" dur="9s" repeatCount="indefinite"/><animate attributeName="y" values="70;136;136" keyTimes="0;0.45;1" dur="9s" repeatCount="indefinite"/></rect>
+<rect x="382" y="132" width="18" height="18" rx="2" fill="#16a34a"><animate attributeName="height" values="18;80;80" keyTimes="0;0.45;1" dur="9s" repeatCount="indefinite"/><animate attributeName="y" values="132;70;70" keyTimes="0;0.45;1" dur="9s" repeatCount="indefinite"/></rect>
+<text class="m12c-lbl" x="365" y="164" text-anchor="middle">RSRP: A falling • B rising</text>
+<g class="m12c-a3"><text class="m12c-tag" x="365" y="52" text-anchor="middle" style="fill:#f59e0b">A3 fires — B stronger than A + offset → measurement report</text></g>
+<line x1="60" y1="258" x2="700" y2="258" stroke="#cbd5e1" stroke-width="3"/>
+<line class="m12c-la" x1="120" y1="80" x2="90" y2="248" stroke="#2c7be5" stroke-width="2.5"><animate attributeName="x2" values="90;660;660" keyTimes="0;0.85;1" dur="9s" repeatCount="indefinite"/></line>
+<line class="m12c-lb" x1="640" y1="80" x2="90" y2="248" stroke="#16a34a" stroke-width="2.5"><animate attributeName="x2" values="90;660;660" keyTimes="0;0.85;1" dur="9s" repeatCount="indefinite"/></line>
+<g><circle cx="90" cy="252" r="12" fill="#7c3aed"/><text x="90" y="256" text-anchor="middle" style="font-size:10px;font-weight:700;fill:#fff">UE</text><animate attributeName="transform" type="translate" values="0,0;570,0;570,0" keyTimes="0;0.85;1" dur="9s" repeatCount="indefinite"/></g>
+<text class="m12c-lbl" x="380" y="286" text-anchor="middle">UE moving A → B</text>
+<g class="m12c-mbb"><text class="m12c-tag" x="380" y="306" text-anchor="middle" style="fill:#7c3aed">make-before-break: both links live for an instant</text></g>
+<g class="m12c-done"><text class="m12c-tag" x="380" y="306" text-anchor="middle" style="fill:#16a34a">handed to B • interruption ≈ 0 ms ✓</text></g>
+</svg>
+<figcaption>As the UE drives from A toward B, cell A's <b>RSRP</b> falls and B's rises. When B beats A by the configured offset the <b>A3</b> event fires and the UE reports it. The network then switches the connection to B — and with make-before-break (DAPS) the <b>old and new links overlap</b> for an instant, driving the interruption toward <b>0 ms</b>. If the radio fails faster than this can finish, you get RLF instead.</figcaption>
+</figure>
 
 **Handover types:**
 

@@ -84,6 +84,61 @@ attenuation (in decibels) the link can survive and still work. Plain LTE tops ou
 in received power you can tolerate. That's the difference between "works outdoors" and "works
 in a concrete basement three floors down."
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 350" role="img" aria-label="Animation: NB-IoT concentrates power to punch a signal deep into a basement but at a low data rate and only when stationary, while LTE-M reaches less deep but delivers a much higher data rate and supports mobility.">
+<style>
+.m14b-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m14b-nb{font-size:13px;font-weight:700;fill:#2c7be5}
+.m14b-lm{font-size:13px;font-weight:700;fill:#7c3aed}
+.m14b-note{font-size:11px;fill:#64748b}
+.m14b-flr{font-size:10px;font-weight:700;fill:#64748b}
+.m14b-nbtx{font-size:11px;font-weight:700;fill:#2c7be5}
+.m14b-lmtx{font-size:11px;font-weight:700;fill:#7c3aed}
+.m14b-beamn{stroke:#2c7be5;stroke-width:2;stroke-dasharray:5 4;fill:none}
+.m14b-beaml{stroke:#7c3aed;stroke-width:2;stroke-dasharray:5 4;fill:none}
+.m14b-pn{animation:m14bpn 3.4s ease-in infinite}
+.m14b-pl{animation:m14bpl 1.5s ease-in infinite}
+.m14b-car{animation:m14bcar 3s ease-in-out infinite}
+@keyframes m14bpn{0%{opacity:0;transform:translate(0px,0px)}10%{opacity:1;transform:translate(0px,0px)}85%{opacity:1;transform:translate(240px,138px)}100%{opacity:0;transform:translate(240px,138px)}}
+@keyframes m14bpl{0%{opacity:0;transform:translate(0px,0px)}12%{opacity:1;transform:translate(0px,0px)}82%{opacity:1;transform:translate(-240px,60px)}100%{opacity:0;transform:translate(-240px,60px)}}
+@keyframes m14bcar{0%,100%{transform:translate(0px,0px)}50%{transform:translate(70px,0px)}}
+</style>
+<text class="m14b-title" x="12" y="18">NB-IoT vs LTE-M — coverage depth traded against data rate and mobility</text>
+<text class="m14b-nb" x="90" y="42" text-anchor="middle">NB-IoT</text>
+<text class="m14b-note" x="90" y="57" text-anchor="middle">180 kHz · deep · slow · still</text>
+<text class="m14b-lm" x="670" y="42" text-anchor="middle">LTE-M</text>
+<text class="m14b-note" x="670" y="57" text-anchor="middle">1.4 MHz · fast · mobile</text>
+<line x1="20" y1="110" x2="740" y2="110" stroke="#64748b" stroke-width="2"/>
+<polygon points="82,110 90,68 98,110" fill="#64748b"/>
+<polygon points="662,110 670,68 678,110" fill="#64748b"/>
+<rect x="300" y="92" width="160" height="140" rx="3" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<line x1="300" y1="150" x2="460" y2="150" stroke="#cbd5e1" stroke-width="1.5"/>
+<line x1="300" y1="190" x2="460" y2="190" stroke="#cbd5e1" stroke-width="1.5"/>
+<text class="m14b-flr" x="308" y="128">B1</text>
+<text class="m14b-flr" x="308" y="168">B2</text>
+<text class="m14b-flr" x="308" y="208">B3</text>
+<line class="m14b-beamn" x1="90" y1="72" x2="330" y2="210"/>
+<line class="m14b-beaml" x1="670" y1="72" x2="430" y2="132"/>
+<text x="352" y="215" style="font-size:15px">📟</text>
+<text class="m14b-nbtx" x="360" y="228" text-anchor="middle">deep sensor</text>
+<text x="416" y="140" style="font-size:15px">📟</text>
+<g class="m14b-car"><text x="560" y="106" style="font-size:15px">🚗</text></g>
+<g class="m14b-pn"><circle cx="90" cy="72" r="6" fill="#2c7be5"/></g>
+<g class="m14b-pl"><circle cx="670" cy="72" r="6" fill="#7c3aed"/></g>
+<text class="m14b-nbtx" x="70" y="262">data rate</text>
+<rect x="70" y="270" width="170" height="14" rx="3" fill="#e2e8f0"/>
+<rect x="70" y="270" width="0" height="14" rx="3" fill="#2c7be5"><animate attributeName="width" values="0;44;44;0" keyTimes="0;0.45;0.82;1" dur="4s" repeatCount="indefinite"/></rect>
+<text class="m14b-nbtx" x="70" y="300">≈127 kbps</text>
+<text class="m14b-lmtx" x="520" y="262">data rate</text>
+<rect x="520" y="270" width="170" height="14" rx="3" fill="#e2e8f0"/>
+<rect x="520" y="270" width="0" height="14" rx="3" fill="#7c3aed"><animate attributeName="width" values="0;170;170;0" keyTimes="0;0.45;0.82;1" dur="4s" repeatCount="indefinite"/></rect>
+<text class="m14b-lmtx" x="520" y="300">≈1 Mbps</text>
+<text class="m14b-nbtx" x="150" y="326" text-anchor="middle">MCL ~164 dB · deepest ✓ · stationary</text>
+<text class="m14b-lmtx" x="605" y="326" text-anchor="middle">MCL ~156 dB · handover ✓ · mobile</text>
+</svg>
+<figcaption><b>Two points on the battery-vs-capability curve.</b> <b>NB-IoT</b> concentrates power into 180 kHz to punch deep into a basement (highest MCL) — but slowly, and best when stationary. <b>LTE-M</b> reaches less deep yet moves with the device and carries far more data. Same towers, opposite trade-offs.</figcaption>
+</figure>
+
 ### How they buy that coverage: repetition
 
 There's no free lunch — that extra 20 dB is *bought*, and the currency is (again) throughput,
@@ -155,6 +210,58 @@ The tradeoff in one table:
 | **Idle DRX** (Mod 12) | Every ~1–2.5 s | Yes, ~instantly | mA range | sub-second |
 | **eDRX** | Every few min–hours | Yes, at next PTW | tens of µA | up to one eDRX cycle |
 | **PSM** | Only at TAU / when it sends | **No** — dark until it wakes | few µA | up to the TAU period (days) |
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: a device in PSM sleeps with its radio fully off for long stretches, waking only briefly. Its battery lasts for years, but a downlink command that arrives during sleep must wait, queued, until the device next wakes.">
+<style>
+.m14a-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m14a-ax{stroke:#cbd5e1;stroke-width:2}
+.m14a-note{font-size:11px;fill:#64748b}
+.m14a-wk{fill:#16a34a}
+.m14a-ring{fill:none;stroke:#16a34a;stroke-width:2}
+.m14a-env{fill:#ef4444}
+.m14a-envtx{font-size:11px;font-weight:700;fill:#fff}
+.m14a-wait{font-size:11px;font-weight:700;fill:#ef4444}
+.m14a-ok{font-size:11px;font-weight:700;fill:#16a34a}
+.m14a-batt{font-size:11px;font-weight:700;fill:#16a34a}
+.m14a-cmd{animation:m14acmd 9s ease-in-out infinite}
+.m14a-waita{animation:m14await 9s ease-in-out infinite}
+.m14a-chk{animation:m14achk 9s ease-in-out infinite}
+.m14a-pulse{animation:m14apulse 2.2s ease-in-out infinite}
+@keyframes m14apulse{0%,100%{opacity:.15}50%{opacity:.65}}
+@keyframes m14acmd{0%,10%{opacity:0;transform:translate(0px,0px)}16%,52%{opacity:1;transform:translate(0px,0px)}64%,88%{opacity:1;transform:translate(105px,57px)}95%,100%{opacity:0;transform:translate(105px,57px)}}
+@keyframes m14await{0%,14%{opacity:0}18%,50%{opacity:1}58%,100%{opacity:0}}
+@keyframes m14achk{0%,62%{opacity:0}68%,88%{opacity:1}95%,100%{opacity:0}}
+</style>
+<text class="m14a-title" x="12" y="20">PSM: radio off for long stretches — a downlink command must WAIT for the next wake</text>
+<rect class="m14a-wk" x="90" y="150" width="16" height="45" rx="2"/>
+<rect class="m14a-wk" x="270" y="150" width="16" height="45" rx="2"/>
+<rect class="m14a-wk" x="450" y="150" width="16" height="45" rx="2"/>
+<circle class="m14a-ring m14a-pulse" cx="98" cy="138" r="11"/>
+<circle class="m14a-ring m14a-pulse" cx="278" cy="138" r="11"/>
+<circle class="m14a-ring m14a-pulse" cx="458" cy="138" r="11"/>
+<text x="185" y="182" text-anchor="middle" style="font-size:15px">💤</text>
+<text x="365" y="182" text-anchor="middle" style="font-size:15px">💤</text>
+<text x="545" y="182" text-anchor="middle" style="font-size:15px">💤</text>
+<line class="m14a-ax" x1="50" y1="195" x2="620" y2="195"/>
+<text class="m14a-note" x="50" y="215">time →  not to scale: sleep = hours to days · each wake = brief · green = radio on, listening</text>
+<rect x="560" y="238" width="150" height="28" rx="4" fill="#eafbef" stroke="#16a34a" stroke-width="2"/>
+<rect x="710" y="245" width="6" height="14" rx="2" fill="#16a34a"/>
+<rect x="564" y="242" width="142" height="20" rx="2" fill="#16a34a"/>
+<text class="m14a-batt" x="635" y="284" text-anchor="middle">🔋 battery lasts years · a few µA while asleep</text>
+<g class="m14a-cmd">
+<rect class="m14a-env" x="300" y="72" width="92" height="26" rx="4"/>
+<text class="m14a-envtx" x="346" y="90" text-anchor="middle">downlink cmd</text>
+</g>
+<g class="m14a-waita">
+<text class="m14a-wait" x="346" y="116" text-anchor="middle">queued — device is dark, unreachable</text>
+</g>
+<g class="m14a-chk">
+<text class="m14a-ok" x="470" y="128" text-anchor="middle">delivered at next wake ✓</text>
+</g>
+</svg>
+<figcaption><b>The reachability-vs-battery trade, made visible.</b> The radio is off (💤) for long stretches and wakes only briefly (green). That buys <b>years</b> on a coin cell — but a command that arrives mid-sleep can't be received; it waits, queued, until the device next wakes on its own.</figcaption>
+</figure>
 
 > ⚡ **Latency note — the reachability delay.** This is *the* gotcha of constrained IoT. A
 > device in PSM literally cannot be reached — send it a command and it queues until the device
@@ -292,6 +399,62 @@ fleets that are asleep at unpredictable times.
 - **Last Will and Testament (LWT):** the broker announces a device's death if it drops off —
   great for flaky devices.
 - Persistent sessions let a sleeping device catch up on missed messages when it reconnects.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 320" role="img" aria-label="Animation: sensors publish messages to a central MQTT broker, which fans each message out to every subscriber interested in that topic.">
+<style>
+.m14c-title{font-size:13px;font-weight:700;fill:#2c7be5}
+.m14c-cap{font-size:11px;fill:#64748b}
+.m14c-pub{fill:#fff7ed;stroke:#f59e0b;stroke-width:2}
+.m14c-pubtx{font-size:11px;font-weight:700;fill:#b45309}
+.m14c-pubsub{font-size:9.5px;fill:#b45309}
+.m14c-brk{fill:#eaf1fd;stroke:#2c7be5;stroke-width:2}
+.m14c-brktx{font-size:12px;font-weight:700;fill:#2c7be5}
+.m14c-brksub{font-size:10px;fill:#2c7be5}
+.m14c-sub{fill:#f5f0ff;stroke:#7c3aed;stroke-width:2}
+.m14c-subtx{font-size:11px;font-weight:700;fill:#6d28d9}
+.m14c-wire{stroke:#cbd5e1;stroke-width:2}
+.m14c-pubtok{animation:m14cpub 4.5s ease-in-out infinite}
+.m14c-f1{animation:m14cf1 4.5s ease-in-out infinite}
+.m14c-f2{animation:m14cf2 4.5s ease-in-out infinite}
+.m14c-f3{animation:m14cf3 4.5s ease-in-out infinite}
+@keyframes m14cpub{0%{opacity:0;transform:translate(0px,0px)}6%{opacity:1;transform:translate(0px,0px)}34%{opacity:1;transform:translate(150px,53px)}42%,100%{opacity:0;transform:translate(150px,53px)}}
+@keyframes m14cf1{0%,40%{opacity:0;transform:translate(0px,0px)}48%{opacity:1;transform:translate(0px,0px)}80%{opacity:1;transform:translate(150px,-75px)}88%,100%{opacity:0;transform:translate(150px,-75px)}}
+@keyframes m14cf2{0%,40%{opacity:0;transform:translate(0px,0px)}48%{opacity:1;transform:translate(0px,0px)}80%{opacity:1;transform:translate(150px,0px)}88%,100%{opacity:0;transform:translate(150px,0px)}}
+@keyframes m14cf3{0%,40%{opacity:0;transform:translate(0px,0px)}48%{opacity:1;transform:translate(0px,0px)}80%{opacity:1;transform:translate(150px,75px)}88%,100%{opacity:0;transform:translate(150px,75px)}}
+</style>
+<text class="m14c-title" x="12" y="20">MQTT publish/subscribe — sensors publish to a broker, which fans out to every subscriber</text>
+<line class="m14c-wire" x1="170" y1="102" x2="320" y2="155"/>
+<line class="m14c-wire" x1="170" y1="222" x2="320" y2="155"/>
+<line class="m14c-wire" x1="450" y1="155" x2="600" y2="80"/>
+<line class="m14c-wire" x1="450" y1="155" x2="600" y2="155"/>
+<line class="m14c-wire" x1="450" y1="155" x2="600" y2="230"/>
+<text class="m14c-cap" x="115" y="60" text-anchor="middle">Publishers</text>
+<rect class="m14c-pub" x="60" y="80" width="110" height="44" rx="6"/>
+<text class="m14c-pubtx" x="115" y="100" text-anchor="middle">🌡 sensor</text>
+<text class="m14c-pubsub" x="115" y="115" text-anchor="middle">field7/moisture</text>
+<rect class="m14c-pub" x="60" y="200" width="110" height="44" rx="6"/>
+<text class="m14c-pubtx" x="115" y="220" text-anchor="middle">🔋 meter</text>
+<text class="m14c-pubsub" x="115" y="235" text-anchor="middle">gas/basement</text>
+<rect class="m14c-brk" x="320" y="120" width="130" height="70" rx="8"/>
+<text class="m14c-brktx" x="385" y="150" text-anchor="middle">MQTT broker</text>
+<text class="m14c-brksub" x="385" y="170" text-anchor="middle">routes by topic</text>
+<text class="m14c-cap" x="660" y="48" text-anchor="middle">Subscribers</text>
+<rect class="m14c-sub" x="600" y="60" width="130" height="40" rx="6"/>
+<text class="m14c-subtx" x="665" y="85" text-anchor="middle">📊 dashboard</text>
+<rect class="m14c-sub" x="600" y="135" width="130" height="40" rx="6"/>
+<text class="m14c-subtx" x="665" y="160" text-anchor="middle">📱 phone app</text>
+<rect class="m14c-sub" x="600" y="210" width="130" height="40" rx="6"/>
+<text class="m14c-subtx" x="665" y="235" text-anchor="middle">🗄 database</text>
+<g class="m14c-pubtok"><rect x="160" y="94" width="16" height="16" rx="3" fill="#f59e0b"/></g>
+<g class="m14c-f1"><rect x="444" y="147" width="16" height="16" rx="3" fill="#7c3aed"/></g>
+<g class="m14c-f2"><rect x="444" y="147" width="16" height="16" rx="3" fill="#7c3aed"/></g>
+<g class="m14c-f3"><rect x="444" y="147" width="16" height="16" rx="3" fill="#7c3aed"/></g>
+<text class="m14c-cap" x="245" y="300" text-anchor="middle">1 publish →</text>
+<text class="m14c-cap" x="520" y="300" text-anchor="middle">→ delivered to all subscribers of the topic</text>
+</svg>
+<figcaption><b>Decoupled by a broker.</b> A sensor <b>publishes</b> a message to a named topic; the broker <b>fans it out</b> to every subscriber of that topic. Publishers and subscribers never address each other — perfect for fleets that are asleep at unpredictable times.</figcaption>
+</figure>
 
 ### CoAP — RESTful, over UDP
 

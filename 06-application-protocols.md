@@ -174,6 +174,54 @@ workaround in one move: 100 assets fetch concurrently over **one** connection. H
 *at the HTTP layer* is gone — a slow response no longer blocks others, because their frames
 just interleave around it.
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation comparing HTTP/1.1, which sends one request at a time and finishes late, with HTTP/2, which interleaves many streams over one connection and finishes early.">
+<style>
+.m06a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m06a-lbl{font-size:12.5px;font-weight:700;fill:#1f2d3d}
+.m06a-sub{font-size:10.5px;fill:#64748b}
+.m06a-pt{font-size:11px;font-weight:700;fill:#fff}
+.m06a-done{font-size:11.5px;font-weight:700;fill:#16a34a}
+.m06a-warn{font-size:10.5px;fill:#ef4444}
+.m06a-a{animation:m06aA 6s linear infinite}
+.m06a-b{animation:m06aB 6s linear infinite}
+.m06a-c{animation:m06aC 6s linear infinite}
+.m06a-s{animation:m06aS 6s linear infinite}
+.m06a-d1{animation:m06aD1 6s linear infinite}
+.m06a-d2{animation:m06aD2 6s linear infinite}
+@keyframes m06aA{0%{opacity:0;transform:translateX(0)}2%{opacity:1}30%{opacity:1;transform:translateX(500px)}32%,100%{opacity:0;transform:translateX(500px)}}
+@keyframes m06aB{0%,33%{opacity:0;transform:translateX(0)}35%{opacity:1}63%{opacity:1;transform:translateX(500px)}65%,100%{opacity:0;transform:translateX(500px)}}
+@keyframes m06aC{0%,66%{opacity:0;transform:translateX(0)}68%{opacity:1}96%{opacity:1;transform:translateX(500px)}98%,100%{opacity:0;transform:translateX(500px)}}
+@keyframes m06aS{0%{opacity:0;transform:translateX(0)}3%{opacity:1}28%{opacity:1;transform:translateX(460px)}31%,100%{opacity:0;transform:translateX(460px)}}
+@keyframes m06aD1{0%,95%{opacity:0}97%,100%{opacity:1}}
+@keyframes m06aD2{0%,31%{opacity:0}33%,100%{opacity:1}}
+</style>
+<text class="m06a-t" x="12" y="20">One connection, two strategies — watch which finishes first</text>
+<text class="m06a-lbl" x="12" y="74">HTTP/1.1</text>
+<text class="m06a-sub" x="12" y="90">one at a time</text>
+<line x1="120" y1="110" x2="700" y2="110" stroke="#cbd5e1" stroke-width="3"/>
+<g class="m06a-a"><rect x="120" y="82" width="46" height="28" rx="5" fill="#2c7be5"/><text class="m06a-pt" x="143" y="100" text-anchor="middle">req A</text></g>
+<g class="m06a-b"><rect x="120" y="82" width="46" height="28" rx="5" fill="#16a34a"/><text class="m06a-pt" x="143" y="100" text-anchor="middle">req B</text></g>
+<g class="m06a-c"><rect x="120" y="82" width="46" height="28" rx="5" fill="#f59e0b"/><text class="m06a-pt" x="143" y="100" text-anchor="middle">req C</text></g>
+<text class="m06a-warn" x="120" y="130">each request waits for the one before it (head-of-line)</text>
+<g class="m06a-d1"><text class="m06a-done" x="690" y="100" text-anchor="end">✓ all done (late)</text></g>
+<text class="m06a-lbl" x="12" y="204">HTTP/2</text>
+<text class="m06a-sub" x="12" y="220">streams</text>
+<text class="m06a-sub" x="12" y="232">interleaved</text>
+<line x1="120" y1="250" x2="700" y2="250" stroke="#cbd5e1" stroke-width="3"/>
+<g class="m06a-s">
+<rect x="120" y="236" width="26" height="26" rx="4" fill="#2c7be5"/><text class="m06a-pt" x="133" y="253" text-anchor="middle">A</text>
+<rect x="150" y="236" width="26" height="26" rx="4" fill="#16a34a"/><text class="m06a-pt" x="163" y="253" text-anchor="middle">B</text>
+<rect x="180" y="236" width="26" height="26" rx="4" fill="#f59e0b"/><text class="m06a-pt" x="193" y="253" text-anchor="middle">C</text>
+<rect x="210" y="236" width="26" height="26" rx="4" fill="#2c7be5"/><text class="m06a-pt" x="223" y="253" text-anchor="middle">A</text>
+<rect x="240" y="236" width="26" height="26" rx="4" fill="#16a34a"/><text class="m06a-pt" x="253" y="253" text-anchor="middle">B</text>
+<rect x="270" y="236" width="26" height="26" rx="4" fill="#f59e0b"/><text class="m06a-pt" x="283" y="253" text-anchor="middle">C</text>
+</g>
+<g class="m06a-d2"><text class="m06a-done" x="690" y="232" text-anchor="end">✓ all done (early)</text></g>
+</svg>
+<figcaption><b>HTTP/1.1 vs HTTP/2.</b> HTTP/1.1 serializes requests — B waits for A, C waits for B (head-of-line blocking). HTTP/2 splits every message into <b>frames</b> tagged by stream ID and <b>interleaves them over one connection</b>, so A, B and C travel together and finish far sooner.</figcaption>
+</figure>
+
 **3. HPACK header compression.** Since headers repeat almost verbatim on every request
 (§2's latency note), HTTP/2 compresses them with **HPACK**: a shared, incrementally-built
 **table of previously-seen header fields** on both ends. After the first request, "send my
@@ -212,6 +260,63 @@ that implements its own reliability, ordering, and congestion control — but cr
 affecting stream A only stalls **stream A**; streams B and C keep flowing. That eliminates
 the **TCP-level head-of-line blocking** that HTTP/2 couldn't escape — the final round of the
 HOL fight.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation of HTTP/3 over QUIC: three independent streams flow over one connection, and a lost packet stalls only its own stream while the others keep flowing.">
+<style>
+.m06c-t{font-size:13px;font-weight:700;fill:#7c3aed}
+.m06c-lbl{font-size:11.5px;font-weight:700}
+.m06c-ok{font-size:10.5px;font-weight:700;fill:#16a34a}
+.m06c-bad{font-size:10.5px;font-weight:700;fill:#ef4444}
+.m06c-flow{animation:m06cFlow 3s linear infinite}
+.m06c-stall{animation:m06cStall 6s ease-in-out infinite}
+.m06c-x{animation:m06cX 6s ease-in-out infinite}
+@keyframes m06cFlow{0%{transform:translateX(0)}100%{transform:translateX(100px)}}
+@keyframes m06cStall{0%{transform:translateX(0)}25%{transform:translateX(45px)}30%{transform:translateX(45px)}60%{transform:translateX(45px)}100%{transform:translateX(100px)}}
+@keyframes m06cX{0%,24%{opacity:0}30%{opacity:1}58%{opacity:1}64%,100%{opacity:0}}
+</style>
+<text class="m06c-t" x="12" y="20">HTTP/3 over QUIC — a lost packet stalls only its own stream</text>
+<clipPath id="m06cClip"><rect x="150" y="36" width="558" height="244"/></clipPath>
+<text class="m06c-lbl" x="12" y="86" fill="#2c7be5">Stream A</text>
+<text class="m06c-ok" x="12" y="100">✓ flowing</text>
+<line x1="150" y1="82" x2="708" y2="82" stroke="#cbd5e1" stroke-width="2"/>
+<g clip-path="url(#m06cClip)"><g class="m06c-flow">
+<rect x="50" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="150" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="250" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="350" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="450" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="550" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+<rect x="650" y="70" width="24" height="24" rx="4" fill="#2c7be5"/>
+</g></g>
+<text class="m06c-lbl" x="12" y="164" fill="#16a34a">Stream B</text>
+<text class="m06c-bad" x="12" y="178">✗ lost pkt</text>
+<line x1="150" y1="160" x2="708" y2="160" stroke="#cbd5e1" stroke-width="2"/>
+<g clip-path="url(#m06cClip)"><g class="m06c-stall">
+<rect x="50" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+<rect x="150" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+<rect x="250" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+<rect x="350" y="148" width="24" height="24" rx="4" fill="#ef4444"/>
+<rect x="450" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+<rect x="550" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+<rect x="650" y="148" width="24" height="24" rx="4" fill="#16a34a"/>
+</g></g>
+<g class="m06c-x"><text class="m06c-bad" x="430" y="140" text-anchor="middle">✗ lost — only B waits (retransmit)</text></g>
+<text class="m06c-lbl" x="12" y="242" fill="#f59e0b">Stream C</text>
+<text class="m06c-ok" x="12" y="256">✓ flowing</text>
+<line x1="150" y1="238" x2="708" y2="238" stroke="#cbd5e1" stroke-width="2"/>
+<g clip-path="url(#m06cClip)"><g class="m06c-flow">
+<rect x="50" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="150" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="250" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="350" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="450" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="550" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+<rect x="650" y="226" width="24" height="24" rx="4" fill="#f59e0b"/>
+</g></g>
+</svg>
+<figcaption>QUIC tracks each <b>stream</b> independently, so a lost packet on <b>stream B</b> stalls only B while <b>A</b> and <b>C</b> keep flowing. Under HTTP/2's single TCP byte-stream that same loss would have frozen <i>all three</i> — this per-stream recovery is the whole reason HTTP/3 moved to QUIC.</figcaption>
+</figure>
 
 QUIC brings more:
 
@@ -318,6 +423,47 @@ sequenceDiagram
         S-->>B: 200 OK + new bytes + new ETag "b7c2"
     end
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation of conditional-request caching: a cache hit returns a tiny 304 Not Modified almost instantly, while a cache miss returns the full response body and takes much longer.">
+<style>
+.m06b-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m06b-box{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m06b-bl{font-size:11px;font-weight:700;fill:#1f4a7a}
+.m06b-pt{font-size:10px;font-weight:700;fill:#fff}
+.m06b-hit{font-size:11px;font-weight:700;fill:#16a34a}
+.m06b-miss{font-size:11px;font-weight:700;fill:#f59e0b}
+.m06b-req1{animation:m06bReq 6s linear infinite}
+.m06b-req2{animation:m06bReq 6s linear infinite}
+.m06b-r304{animation:m06bR304 6s linear infinite}
+.m06b-r200{animation:m06bR200 6s linear infinite}
+.m06b-d1{animation:m06bD1 6s linear infinite}
+.m06b-d2{animation:m06bD2 6s linear infinite}
+@keyframes m06bReq{0%{opacity:0;transform:translateX(0)}3%{opacity:1}22%{opacity:1;transform:translateX(300px)}25%,100%{opacity:0;transform:translateX(300px)}}
+@keyframes m06bR304{0%,27%{opacity:0;transform:translateX(0)}30%{opacity:1}45%{opacity:1;transform:translateX(-300px)}48%,100%{opacity:0;transform:translateX(-300px)}}
+@keyframes m06bR200{0%,27%{opacity:0;transform:translateX(0)}30%{opacity:1}84%{opacity:1;transform:translateX(-300px)}92%,100%{opacity:0;transform:translateX(-300px)}}
+@keyframes m06bD1{0%,46%{opacity:0}49%,100%{opacity:1}}
+@keyframes m06bD2{0%,85%{opacity:0}88%,100%{opacity:1}}
+</style>
+<text class="m06b-t" x="12" y="20">Conditional request: cache HIT returns 304 instantly vs MISS sends the whole body</text>
+<text class="m06b-hit" x="12" y="60">CACHE HIT</text>
+<rect class="m06b-box" x="70" y="46" width="90" height="40" rx="8"/><text class="m06b-bl" x="115" y="70" text-anchor="middle">Browser</text>
+<rect class="m06b-box" x="600" y="46" width="90" height="40" rx="8"/><text class="m06b-bl" x="645" y="70" text-anchor="middle">Server</text>
+<line x1="160" y1="66" x2="600" y2="66" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<g class="m06b-req1"><rect x="165" y="52" width="130" height="26" rx="5" fill="#64748b"/><text class="m06b-pt" x="230" y="69" text-anchor="middle">If-None-Match: a3f9</text></g>
+<g class="m06b-r304"><rect x="490" y="52" width="110" height="26" rx="5" fill="#16a34a"/><text class="m06b-pt" x="545" y="69" text-anchor="middle">304 (no body)</text></g>
+<g class="m06b-d1"><text class="m06b-hit" x="115" y="106" text-anchor="middle">✓ reuse cached copy — instant</text></g>
+<text class="m06b-miss" x="12" y="184">CACHE MISS</text>
+<rect class="m06b-box" x="70" y="170" width="90" height="40" rx="8"/><text class="m06b-bl" x="115" y="194" text-anchor="middle">Browser</text>
+<rect class="m06b-box" x="600" y="170" width="90" height="40" rx="8"/><text class="m06b-bl" x="645" y="194" text-anchor="middle">Server</text>
+<line x1="160" y1="190" x2="600" y2="190" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+<g class="m06b-req2"><rect x="165" y="176" width="130" height="26" rx="5" fill="#64748b"/><text class="m06b-pt" x="230" y="193" text-anchor="middle">GET (cache expired)</text></g>
+<g class="m06b-r200"><rect x="450" y="176" width="150" height="26" rx="5" fill="#f59e0b"/><text class="m06b-pt" x="525" y="193" text-anchor="middle">200 OK + full body</text></g>
+<g class="m06b-d2"><text class="m06b-miss" x="115" y="230" text-anchor="middle">full download — slow</text></g>
+<text class="m06b-pt" x="380" y="270" text-anchor="middle" fill="#64748b" style="font-size:11px;font-weight:600">Same expired cache entry — the ETag match is the difference between a tiny 304 and a full re-download.</text>
+</svg>
+<figcaption><b>Conditional revalidation.</b> When a cached item expires the browser re-asks with its <b>ETag</b> (<code>If-None-Match</code>). On a <b>HIT</b> the content is unchanged, so the server returns a tiny <b>304 Not Modified</b> with no body — near-instant. On a <b>MISS</b> it changed, so the full <b>200 OK</b> body comes back — much slower.</figcaption>
+</figure>
 
 **CDNs and edge caching.** A **CDN (Content Delivery Network)** is a global fleet of caching
 servers ("edge" servers / **PoPs**, points of presence) that sit *close to users* and serve

@@ -64,6 +64,46 @@ flowchart LR
   SW --> OUT["Waterfall · audio · decoded packets"]
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 200" role="img" aria-label="Animation: the SDR receive pipeline. An antenna grabs radio waves, a tuner shifts the band down, an ADC samples it into I/Q numbers, and software does the demodulation, with samples flowing into a computer.">
+<style>
+.m16a-t{font-size:13px;font-weight:700;fill:#2c7be5}
+.m16a-bl{font-size:12.5px;font-weight:700;fill:#fff}
+.m16a-sub{font-size:10px;fill:#64748b}
+.m16a-samp{animation:m16asamp 2.4s linear infinite}
+@keyframes m16asamp{0%{opacity:0;transform:translateX(0)}12%{opacity:1}88%{opacity:1}100%{opacity:0;transform:translateX(90px)}}
+</style>
+<text class="m16a-t" x="12" y="20">The SDR pipeline: antenna → tuner → ADC → software (the radio becomes a program)</text>
+<line x1="60" y1="150" x2="60" y2="84" stroke="#64748b" stroke-width="3"/>
+<line x1="60" y1="84" x2="48" y2="68" stroke="#64748b" stroke-width="3"/>
+<line x1="60" y1="84" x2="72" y2="68" stroke="#64748b" stroke-width="3"/>
+<circle cx="60" cy="70" r="6" fill="none" stroke="#2c7be5" stroke-width="2"><animate attributeName="r" values="6;24" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0" dur="2.4s" repeatCount="indefinite"/></circle>
+<circle cx="60" cy="70" r="6" fill="none" stroke="#2c7be5" stroke-width="2"><animate attributeName="r" values="6;24" dur="2.4s" begin="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0" dur="2.4s" begin="1.2s" repeatCount="indefinite"/></circle>
+<text class="m16a-sub" x="60" y="168" text-anchor="middle">Antenna</text>
+<text class="m16a-sub" x="60" y="181" text-anchor="middle">EM waves</text>
+<line x1="92" y1="108" x2="146" y2="108" stroke="#cbd5e1" stroke-width="2.5"/>
+<polygon points="146,103 156,108 146,113" fill="#cbd5e1"/>
+<rect x="158" y="84" width="120" height="48" rx="8" fill="#2c7be5"/>
+<text class="m16a-bl" x="218" y="106" text-anchor="middle">Tuner</text>
+<text x="218" y="122" text-anchor="middle" style="font-size:10px;fill:#dbe9ff">shift band ↓</text>
+<line x1="278" y1="108" x2="316" y2="108" stroke="#cbd5e1" stroke-width="2.5"/>
+<polygon points="316,103 326,108 316,113" fill="#cbd5e1"/>
+<rect x="328" y="84" width="120" height="48" rx="8" fill="#16a34a"/>
+<text class="m16a-bl" x="388" y="106" text-anchor="middle">ADC</text>
+<text x="388" y="122" text-anchor="middle" style="font-size:10px;fill:#d9f5e3">sample → I/Q</text>
+<g class="m16a-samp"><circle cx="458" cy="108" r="4" fill="#f59e0b"/></g>
+<g class="m16a-samp" style="animation-delay:.6s"><circle cx="458" cy="108" r="4" fill="#f59e0b"/></g>
+<g class="m16a-samp" style="animation-delay:1.2s"><circle cx="458" cy="108" r="4" fill="#f59e0b"/></g>
+<g class="m16a-samp" style="animation-delay:1.8s"><circle cx="458" cy="108" r="4" fill="#f59e0b"/></g>
+<text x="503" y="152" text-anchor="middle" style="font-size:10px;fill:#f59e0b;font-weight:700">I/Q samples</text>
+<rect x="548" y="72" width="200" height="72" rx="8" fill="#7c3aed"/>
+<text class="m16a-bl" x="648" y="98" text-anchor="middle">💻 Software (the SDR)</text>
+<text x="648" y="117" text-anchor="middle" style="font-size:10px;fill:#e7dbff">filter • demodulate • decode</text>
+<text x="648" y="132" text-anchor="middle" style="font-size:9.5px;fill:#e7dbff">AM · FM · QPSK · QAM = which code you run</text>
+</svg>
+<figcaption>Once the front end (<b>antenna → tuner → ADC</b>) hands over a stream of <b>I/Q samples</b>, everything else — filter, demodulate, decode — is just <b>software</b>. Those I/Q numbers are the amplitude-and-phase pairs you met in <a href="02-how-data-moves.md">Module 02</a>.</figcaption>
+</figure>
+
 > **Mental model.** A regular radio is an appliance. An SDR is a **general-purpose radio
 > peripheral** — a microphone for the entire radio spectrum — whose behavior is a program.
 > That generality is the whole point, and also why it deserves respect.
@@ -226,6 +266,43 @@ sequenceDiagram
     F-)R: (optionally relays traffic so phone still "works")
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: an IMSI-catcher downgrade attack. A rogue tower broadcasts a strong 2G lure to pull a phone away from the real network, while a shield shows that 5G mutual authentication rejects the fake tower.">
+<style>
+.m16b-t{font-size:13px;font-weight:700;fill:#ef4444}
+.m16b-lbl{font-size:11px;font-weight:700}
+.m16b-sub{font-size:10px;fill:#64748b}
+.m16b-emo{font-size:34px}
+.m16b-beam{stroke:#ef4444;stroke-width:2.5;fill:none;stroke-dasharray:8 6;animation:m16bants 0.7s linear infinite}
+.m16b-shield{animation:m16bpulse 2s ease-in-out infinite}
+@keyframes m16bants{to{stroke-dashoffset:-28}}
+@keyframes m16bpulse{0%,100%{opacity:.55}50%{opacity:1}}
+</style>
+<text class="m16b-t" x="12" y="20">IMSI catcher: a strong fake tower lures a phone down to 2G — and how 5G defeats it</text>
+<circle cx="120" cy="95" r="10" fill="none" stroke="#ef4444" stroke-width="2.5"><animate attributeName="r" values="10;46" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0" dur="1.6s" repeatCount="indefinite"/></circle>
+<circle cx="120" cy="95" r="10" fill="none" stroke="#ef4444" stroke-width="2.5"><animate attributeName="r" values="10;46" dur="1.6s" begin="0.8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.9;0" dur="1.6s" begin="0.8s" repeatCount="indefinite"/></circle>
+<text class="m16b-emo" x="120" y="108" text-anchor="middle">🚨</text>
+<text class="m16b-lbl" x="120" y="150" text-anchor="middle" fill="#ef4444">Rogue "tower"</text>
+<text class="m16b-sub" x="120" y="164" text-anchor="middle">(IMSI catcher)</text>
+<text class="m16b-sub" x="120" y="178" text-anchor="middle">strong 2G lure</text>
+<circle cx="650" cy="95" r="10" fill="none" stroke="#16a34a" stroke-width="2"><animate attributeName="r" values="10;28" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.6;0" dur="2.6s" repeatCount="indefinite"/></circle>
+<text class="m16b-emo" x="650" y="108" text-anchor="middle">🗼</text>
+<text class="m16b-lbl" x="650" y="150" text-anchor="middle" fill="#16a34a">Real 5G network</text>
+<text class="m16b-sub" x="650" y="164" text-anchor="middle">faint but genuine</text>
+<text class="m16b-emo" x="385" y="258" text-anchor="middle">📱</text>
+<text class="m16b-sub" x="385" y="288" text-anchor="middle">Phone seeks the strongest cell</text>
+<path class="m16b-beam" d="M360,238 L150,120"/>
+<text class="m16b-lbl" x="240" y="210" text-anchor="middle" fill="#ef4444">attach to 2G — no network auth 💥</text>
+<g class="m16b-shield">
+<polygon points="500,190 540,204 540,236 500,256 460,236 460,204" fill="#16a34a"/>
+<text x="500" y="228" text-anchor="middle" style="font-size:20px;fill:#fff">✓</text>
+</g>
+<text class="m16b-lbl" x="500" y="274" text-anchor="middle" fill="#16a34a">5G mutual auth</text>
+<text class="m16b-sub" x="500" y="288" text-anchor="middle">fake tower can't prove itself → rejected</text>
+</svg>
+<figcaption>The rogue "tower" wins by being <b>loud</b>, then requests a <b>2G downgrade</b> where the network never proves its identity — exposing the phone's presence. The fix isn't a stronger signal but <b>cryptography</b>: from 4G/5G the <b>network must authenticate to the phone</b> (and 5G encrypts the identity as SUCI), so a fake tower fails the handshake. Turning off 2G removes the lure entirely.</figcaption>
+</figure>
+
 **What an IMSI catcher can reveal:** primarily **presence and identity** — *which specific
 devices are in a location at a time* (attendance at a protest, a building, a border). By
 forcing 2G it may also expose weakly-encrypted or unencrypted call/SMS content. Its power is
@@ -260,6 +337,56 @@ strong carrier that legitimate signals can't be received.** Recall Shannon's law
 [Module 02](02-how-data-moves.md): capacity = Bandwidth × log₂(1 + **SNR**). A jammer simply
 **collapses the SNR** by adding overwhelming interference, driving usable capacity toward
 zero. No decoding, no cleverness — just brute-force denial of service on the physical layer.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 250" role="img" aria-label="Animation: a jammer floods a frequency band with noise, burying a legitimate signal so the receiver can no longer decode it. A note marks that jamming is illegal.">
+<style>
+.m16c-t{font-size:13px;font-weight:700;fill:#ef4444}
+.m16c-lbl{font-size:11px;font-weight:700}
+.m16c-sub{font-size:10px;fill:#64748b}
+.m16c-bl{font-size:11px;font-weight:700;fill:#fff}
+.m16c-sig{fill:none;stroke:#16a34a;stroke-width:2.5}
+.m16c-noise{fill:none;stroke:#ef4444;stroke-width:2}
+.m16c-sscroll{animation:m16csig 2.6s linear infinite}
+.m16c-nscroll{animation:m16cnoise 0.9s linear infinite}
+.m16c-flood{animation:m16cflood 2.8s ease-in-out infinite}
+.m16c-boom{animation:m16cboom 2.8s ease-in-out infinite}
+@keyframes m16csig{from{transform:translateX(0)}to{transform:translateX(-280px)}}
+@keyframes m16cnoise{from{transform:translateX(0)}to{transform:translateX(-240px)}}
+@keyframes m16cflood{0%{opacity:.15}45%{opacity:.15}70%,100%{opacity:.95}}
+@keyframes m16cboom{0%,55%{opacity:0}72%,100%{opacity:1}}
+</style>
+<text class="m16c-t" x="12" y="20">Jamming: drown the band in noise so the real signal can't be recovered</text>
+<rect x="18" y="108" width="82" height="46" rx="8" fill="#16a34a"/>
+<text class="m16c-bl" x="59" y="130" text-anchor="middle">Sender</text>
+<text x="59" y="145" text-anchor="middle" style="font-size:9px;fill:#d9f5e3">clean signal</text>
+<rect x="660" y="108" width="82" height="46" rx="8" fill="#2c7be5"/>
+<text class="m16c-bl" x="701" y="126" text-anchor="middle">Receiver</text>
+<text class="m16c-boom" x="701" y="145" text-anchor="middle" style="font-size:11px;fill:#fff;font-weight:700">signal lost 💥</text>
+<rect x="110" y="98" width="540" height="66" rx="6" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+<clipPath id="m16cclip"><rect x="110" y="98" width="540" height="66"/></clipPath>
+<g clip-path="url(#m16cclip)">
+<g class="m16c-sscroll" transform="translate(110,131)">
+<path class="m16c-sig" d="M0,0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0"/>
+<path class="m16c-sig" d="M280,0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0"/>
+</g>
+<g class="m16c-flood">
+<g class="m16c-nscroll" transform="translate(110,131)">
+<path class="m16c-noise" d="M0,0 L15,-26 L30,12 L45,-20 L60,24 L75,-14 L90,18 L105,-28 L120,10 L135,-18 L150,26 L165,-12 L180,20 L195,-24 L210,14 L225,-16 L240,0"/>
+<path class="m16c-noise" d="M240,0 L255,-26 L270,12 L285,-20 L300,24 L315,-14 L330,18 L345,-28 L360,10 L375,-18 L390,26 L405,-12 L420,20 L435,-24 L450,14 L465,-16 L480,0"/>
+<path class="m16c-noise" d="M480,0 L495,-26 L510,12 L525,-20 L540,24 L555,-14 L570,18 L585,-28 L600,10 L615,-18 L630,26 L645,-12 L660,20 L675,-24 L690,14 L705,-16 L720,0"/>
+</g>
+</g>
+</g>
+<rect x="330" y="26" width="100" height="36" rx="7" fill="#ef4444"/>
+<text class="m16c-bl" x="380" y="49" text-anchor="middle">Jammer 🚫</text>
+<line x1="380" y1="62" x2="380" y2="92" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="6 5"><animate attributeName="stroke-dashoffset" values="0;-22" dur="0.6s" repeatCount="indefinite"/></line>
+<polygon points="374,90 386,90 380,98" fill="#ef4444"/>
+<text class="m16c-sub" x="380" y="196" text-anchor="middle">Noise collapses the SNR (Shannon) → usable capacity falls toward zero.</text>
+<text class="m16c-lbl" x="380" y="216" text-anchor="middle" fill="#ef4444">⚖️ Jamming is illegal everywhere and endangers 911, aviation, and medical links.</text>
+</svg>
+<figcaption>A jammer adds overwhelming interference so the receiver can't pick the real signal (green) out of the noise (red) — a brute-force denial of service on the physical layer. There is <b>no legitimate civilian use</b>; this figure is here so you can <i>recognize</i> interference and reason about resilience (spread spectrum, FEC, jammer-hunting).</figcaption>
+</figure>
 
 That simplicity is exactly why it's treated so severely:
 

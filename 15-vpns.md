@@ -64,6 +64,47 @@ flowchart LR
   DE --> I2["deliver inner packet<br/>to 10.0.0.9"]
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 760 240" role="img" aria-label="Animation: an inner IP packet is wrapped in an encrypted outer header at the laptop, crosses the public internet unreadable, and is unwrapped at the VPN server.">
+<style>
+.m15a-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m15a-ep{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m15a-epl{font-size:12px;font-weight:700;fill:#1f4a7a}
+.m15a-sub{font-size:10.5px;fill:#64748b}
+.m15a-band{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}
+.m15a-bl{font-size:11px;fill:#64748b}
+.m15a-inl{font-size:11px;font-weight:700;fill:#fff}
+.m15a-outl{font-size:10px;font-weight:700;fill:#fff}
+.m15a-pkt{animation:m15amove 8s ease-in-out infinite}
+.m15a-wrap{animation:m15awrap 8s ease-in-out infinite}
+@keyframes m15amove{0%,18%{transform:translateX(0)}70%,100%{transform:translateX(589px)}}
+@keyframes m15awrap{0%,10%{opacity:0}18%,74%{opacity:1}82%,100%{opacity:0}}
+</style>
+<text class="m15a-h" x="12" y="20">A tunnel = one whole packet sealed inside another</text>
+<rect class="m15a-ep" x="20" y="128" width="96" height="52" rx="8"/>
+<text class="m15a-epl" x="68" y="150" text-anchor="middle">Your laptop</text>
+<text class="m15a-sub" x="68" y="168" text-anchor="middle">wrap + encrypt</text>
+<rect class="m15a-ep" x="608" y="128" width="98" height="52" rx="8"/>
+<text class="m15a-epl" x="657" y="150" text-anchor="middle">VPN server</text>
+<text class="m15a-sub" x="657" y="168" text-anchor="middle">unwrap + decrypt</text>
+<rect class="m15a-band" x="124" y="120" width="476" height="70" rx="8"/>
+<text class="m15a-bl" x="362" y="150" text-anchor="middle">Public internet (underlay)</text>
+<text class="m15a-bl" x="362" y="170" text-anchor="middle">forwards the OUTER header only — inner packet is encrypted 🔒</text>
+<g class="m15a-pkt">
+<g class="m15a-wrap">
+<rect x="20" y="140" width="96" height="46" rx="5" fill="#2c7be5"/>
+<rect x="20" y="140" width="26" height="46" rx="5" fill="#1f5bb5"/>
+<text class="m15a-outl" x="33" y="166" text-anchor="middle">OUT</text>
+<text x="104" y="138" text-anchor="middle" style="font-size:14px">🔒</text>
+</g>
+<rect x="38" y="150" width="60" height="26" rx="4" fill="#16a34a"/>
+<text class="m15a-inl" x="68" y="168" text-anchor="middle">inner</text>
+</g>
+<text class="m15a-sub" x="362" y="212" text-anchor="middle">Sealed at the laptop • carried across untouched • opened only at the VPN server</text>
+</svg>
+<figcaption><b>Encapsulation, weaponized.</b> The green <b>inner packet</b> (your real traffic) is wrapped in an encrypted <b>outer header</b> (blue) with a lock as it enters the tunnel. The public internet forwards only that outer header; the inner packet stays unreadable until the VPN server unwraps it — Module 01's nesting-envelopes trick, done again on purpose.</figcaption>
+</figure>
+
 ---
 
 ## 2. Why VPNs exist (five jobs, one mechanism)
@@ -107,6 +148,64 @@ flowchart TB
     GB --- B["Office B LAN<br/>10.2.0.0/16"]
   end
 ```
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 300" role="img" aria-label="Animation: remote-access VPN connects one laptop to a gateway, while site-to-site VPN links two whole office networks through a permanent tunnel between two gateways.">
+<style>
+.m15b-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m15b-cap{font-size:12px;font-weight:700;fill:#1f2d3d}
+.m15b-node{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m15b-net{fill:#f0fdf4;stroke:#16a34a;stroke-width:2}
+.m15b-nl{font-size:11px;font-weight:700;fill:#1f4a7a}
+.m15b-netl{font-size:11px;font-weight:700;fill:#166534}
+.m15b-sub{font-size:10px;fill:#64748b}
+.m15b-wire{stroke:#cbd5e1;stroke-width:2.5}
+.m15b-tun{fill:none;stroke:#7c3aed;stroke-width:2.5;stroke-dasharray:8 6;animation:m15bants 1s linear infinite}
+.m15b-tun2{fill:none;stroke:#7c3aed;stroke-width:4;stroke-dasharray:10 7;animation:m15bants 1s linear infinite}
+.m15b-d1{animation:m15bflow 3s ease-in-out infinite}
+.m15b-d2{animation:m15bs2s1 3s linear infinite}
+.m15b-d3{animation:m15bs2s2 3s linear infinite}
+@keyframes m15bants{to{stroke-dashoffset:-28}}
+@keyframes m15bflow{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(232px);opacity:0}}
+@keyframes m15bs2s1{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(212px);opacity:0}}
+@keyframes m15bs2s2{0%{transform:translateX(0);opacity:0}12%{opacity:1}88%{opacity:1}100%{transform:translateX(-212px);opacity:0}}
+</style>
+<text class="m15b-h" x="12" y="20">Two topologies, one mechanism</text>
+<text class="m15b-cap" x="12" y="46">Remote access — one client to one gateway</text>
+<rect class="m15b-node" x="28" y="62" width="96" height="44" rx="8"/>
+<text class="m15b-nl" x="76" y="82" text-anchor="middle">Laptop</text>
+<text class="m15b-sub" x="76" y="98" text-anchor="middle">10.8.0.6</text>
+<line class="m15b-tun" x1="124" y1="84" x2="360" y2="84"/>
+<rect class="m15b-node" x="360" y="62" width="120" height="44" rx="8"/>
+<text class="m15b-nl" x="420" y="82" text-anchor="middle">VPN gateway</text>
+<text class="m15b-sub" x="420" y="98" text-anchor="middle">203.0.113.7</text>
+<line class="m15b-wire" x1="480" y1="84" x2="560" y2="84"/>
+<rect class="m15b-net" x="560" y="62" width="176" height="44" rx="8"/>
+<text class="m15b-netl" x="648" y="82" text-anchor="middle">Private LAN</text>
+<text class="m15b-sub" x="648" y="98" text-anchor="middle">10.8.0.0/24</text>
+<circle class="m15b-d1" cx="128" cy="84" r="6" fill="#ef4444"/>
+<text class="m15b-sub" x="242" y="122" text-anchor="middle">encrypted tunnel — laptop inherits an inner IP inside the LAN</text>
+<line x1="12" y1="150" x2="748" y2="150" stroke="#e2e8f0" stroke-width="1"/>
+<text class="m15b-cap" x="12" y="176">Site-to-site — network to network, always on</text>
+<rect class="m15b-net" x="20" y="196" width="120" height="52" rx="8"/>
+<text class="m15b-netl" x="80" y="216" text-anchor="middle">Office A LAN</text>
+<text class="m15b-sub" x="80" y="234" text-anchor="middle">10.1.0.0/16</text>
+<line class="m15b-wire" x1="140" y1="222" x2="180" y2="222"/>
+<rect class="m15b-node" x="180" y="200" width="90" height="44" rx="8"/>
+<text class="m15b-nl" x="225" y="226" text-anchor="middle">Gateway A</text>
+<line class="m15b-tun2" x1="270" y1="222" x2="490" y2="222"/>
+<rect class="m15b-node" x="490" y="200" width="90" height="44" rx="8"/>
+<text class="m15b-nl" x="535" y="226" text-anchor="middle">Gateway B</text>
+<line class="m15b-wire" x1="580" y1="222" x2="620" y2="222"/>
+<rect class="m15b-net" x="620" y="196" width="120" height="52" rx="8"/>
+<text class="m15b-netl" x="680" y="216" text-anchor="middle">Office B LAN</text>
+<text class="m15b-sub" x="680" y="234" text-anchor="middle">10.2.0.0/16</text>
+<circle class="m15b-d2" cx="274" cy="216" r="6" fill="#16a34a"/>
+<circle class="m15b-d3" cx="486" cy="228" r="6" fill="#f59e0b"/>
+<text class="m15b-sub" x="380" y="266" text-anchor="middle">permanent encrypted tunnel — the hosts never know a VPN exists</text>
+</svg>
+<figcaption><b>Remote access vs site-to-site.</b> Top: a single <b>laptop</b> builds a tunnel to a <b>gateway</b> and inherits an inner IP on the private LAN. Bottom: two <b>gateways</b> hold a permanent tunnel (traffic flowing both ways) so two whole office LANs behave like one network — the individual hosts are oblivious.</figcaption>
+</figure>
 
 > ⚡ **Latency note.** A tunnel almost always **adds a hop**. Traffic that would have gone
 > `you → server` now goes `you → VPN gateway → server` (and back the same way). If the
@@ -260,6 +359,50 @@ normal internet connection directly.
 
 It's a pure routing-table decision: which destination prefixes point at the tunnel interface
 vs. the physical one.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 760 280" role="img" aria-label="Animation: split tunneling sends corporate traffic through the encrypted VPN tunnel while everyday internet traffic goes out directly.">
+<style>
+.m15c-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m15c-node{fill:#eef5ff;stroke:#2c7be5;stroke-width:2}
+.m15c-nl{font-size:11px;font-weight:700;fill:#1f4a7a}
+.m15c-corp{fill:#f0fdf4;stroke:#16a34a;stroke-width:2}
+.m15c-corpl{font-size:11px;font-weight:700;fill:#166534}
+.m15c-net{fill:#fff7ed;stroke:#f59e0b;stroke-width:2}
+.m15c-netl{font-size:11px;font-weight:700;fill:#9a5b00}
+.m15c-sub{font-size:10px;fill:#64748b}
+.m15c-tun{fill:none;stroke:#7c3aed;stroke-width:2.5;stroke-dasharray:8 6;animation:m15cants 1s linear infinite}
+.m15c-wire{fill:none;stroke:#f59e0b;stroke-width:2.5;stroke-dasharray:2 4;animation:m15cants 1s linear infinite}
+.m15c-up{animation:m15cup 4s ease-in-out infinite}
+.m15c-dn{animation:m15cdn 4s ease-in-out infinite}
+@keyframes m15cants{to{stroke-dashoffset:-28}}
+@keyframes m15cup{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(300px);opacity:0}}
+@keyframes m15cdn{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(380px);opacity:0}}
+</style>
+<text class="m15c-h" x="12" y="20">Split tunneling — some flows tunnelled, the rest go direct</text>
+<rect class="m15c-node" x="24" y="112" width="100" height="52" rx="8"/>
+<text class="m15c-nl" x="74" y="134" text-anchor="middle">Your laptop</text>
+<text class="m15c-sub" x="74" y="152" text-anchor="middle">routing decision</text>
+<line class="m15c-tun" x1="124" y1="128" x2="170" y2="72"/>
+<line class="m15c-wire" x1="124" y1="150" x2="170" y2="210"/>
+<line class="m15c-tun" x1="170" y1="72" x2="470" y2="72"/>
+<rect class="m15c-node" x="470" y="50" width="110" height="44" rx="8"/>
+<text class="m15c-nl" x="525" y="76" text-anchor="middle">VPN gateway</text>
+<line x1="580" y1="72" x2="616" y2="72" stroke="#16a34a" stroke-width="2.5"/>
+<rect class="m15c-corp" x="616" y="50" width="128" height="44" rx="8"/>
+<text class="m15c-corpl" x="680" y="70" text-anchor="middle">Corporate LAN</text>
+<text class="m15c-sub" x="680" y="86" text-anchor="middle">10.0.0.0/8 🔒</text>
+<text class="m15c-sub" x="300" y="44" text-anchor="middle">via VPN — encrypted, extra hop</text>
+<circle class="m15c-up" cx="174" cy="72" r="6" fill="#16a34a"/>
+<line class="m15c-wire" x1="170" y1="210" x2="560" y2="210"/>
+<rect class="m15c-net" x="560" y="188" width="184" height="44" rx="8"/>
+<text class="m15c-netl" x="652" y="208" text-anchor="middle">Public internet</text>
+<text class="m15c-sub" x="652" y="224" text-anchor="middle">Netflix • CDN • browsing</text>
+<text class="m15c-sub" x="300" y="248" text-anchor="middle">direct — fast, local, no tunnel</text>
+<circle class="m15c-dn" cx="174" cy="210" r="6" fill="#f59e0b"/>
+</svg>
+<figcaption><b>Split tunneling.</b> A pure routing-table choice: corporate destinations (<b>10.0.0.0/8</b>) are pushed into the encrypted tunnel and on to the private LAN, while everyday traffic (Netflix, CDNs, browsing) takes the short direct path. You trade some privacy for far lower everyday latency.</figcaption>
+</figure>
 
 > ⚡ **Latency note.** Split tunneling is the direct fix for the Section 3 detour problem.
 > Route only `10.0.0.0/8` (the office) through the tunnel and your video calls, downloads, and

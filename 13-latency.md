@@ -175,6 +175,56 @@ pie showData
     "Content download" : 40
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 175" role="img" aria-label="Animation: a latency budget builds up segment by segment — DNS, then the TCP handshake, then TLS, then the HTTP request — accumulating into a total bar before the first byte arrives.">
+<style>
+.m13a-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m13a-lab{font-size:11px;font-weight:700}
+.m13a-ms{font-size:10px;fill:#64748b}
+.m13a-cap{font-size:11px;font-weight:700;fill:#b45309}
+.m13a-s1{animation:m13a-r1 8s linear infinite}
+.m13a-s2{animation:m13a-r2 8s linear infinite}
+.m13a-s3{animation:m13a-r3 8s linear infinite}
+.m13a-s4{animation:m13a-r4 8s linear infinite}
+.m13a-flag{animation:m13a-r5 8s linear infinite}
+@keyframes m13a-r1{0%,4%{opacity:0}9%,100%{opacity:1}}
+@keyframes m13a-r2{0%,24%{opacity:0}29%,100%{opacity:1}}
+@keyframes m13a-r3{0%,44%{opacity:0}49%,100%{opacity:1}}
+@keyframes m13a-r4{0%,64%{opacity:0}69%,100%{opacity:1}}
+@keyframes m13a-r5{0%,84%{opacity:0}89%,100%{opacity:1}}
+</style>
+<text x="12" y="20" class="m13a-h">The setup budget stacks up — one segment per round-trip →</text>
+<line x1="70" y1="60" x2="70" y2="118" stroke="#cbd5e1" stroke-width="1.5"/>
+<text class="m13a-ms" x="70" y="132" text-anchor="middle">0 ms</text>
+<g class="m13a-s1">
+<rect x="70" y="72" width="18" height="34" rx="3" fill="#64748b"/>
+<text class="m13a-ms" x="79" y="66" text-anchor="middle">DNS</text>
+<text class="m13a-ms" x="79" y="132" text-anchor="middle">~1</text>
+</g>
+<g class="m13a-s2">
+<rect x="88" y="72" width="150" height="34" rx="3" fill="#2c7be5"/>
+<text class="m13a-lab" x="163" y="93" text-anchor="middle" fill="#ffffff">TCP</text>
+<text class="m13a-ms" x="163" y="132" text-anchor="middle">+20 ms</text>
+</g>
+<g class="m13a-s3">
+<rect x="238" y="72" width="150" height="34" rx="3" fill="#7c3aed"/>
+<text class="m13a-lab" x="313" y="93" text-anchor="middle" fill="#ffffff">TLS</text>
+<text class="m13a-ms" x="313" y="132" text-anchor="middle">+20 ms</text>
+</g>
+<g class="m13a-s4">
+<rect x="388" y="72" width="190" height="34" rx="3" fill="#16a34a"/>
+<text class="m13a-lab" x="483" y="93" text-anchor="middle" fill="#ffffff">HTTP request → TTFB</text>
+<text class="m13a-ms" x="483" y="132" text-anchor="middle">+35 ms</text>
+</g>
+<g class="m13a-flag">
+<line x1="578" y1="60" x2="578" y2="118" stroke="#ef4444" stroke-width="2"/>
+<polygon points="578,60 578,74 606,67" fill="#ef4444"/>
+<text class="m13a-cap" x="578" y="150" text-anchor="middle">first byte ≈ 76 ms</text>
+</g>
+</svg>
+<figcaption>Every segment is <b>one round-trip</b> charged by a layer — DNS, TCP, TLS, then the request — and they add up to the wait <b>before the first byte</b>. Reuse a connection or use HTTP/3 and the middle segments collapse toward zero.</figcaption>
+</figure>
+
 Notice: **over a third of the load is handshakes** that a reused connection makes free. The
 propagation-bound RTT of 20 ms appears *three times*. Cut the RTT (a closer edge) and you cut
 all three at once — the single highest-leverage move for a wired request.
@@ -247,6 +297,48 @@ pie showData
     "Content download" : 60
 ```
 
+<figure class="anim-fig">
+<svg viewBox="0 0 720 210" role="img" aria-label="Animation: two latency budget bars compared — a wired request and a mobile-from-idle request. The mobile bar is much longer because of an added RRC radio-setup segment and larger round-trips.">
+<style>
+.m13b-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m13b-t{font-size:11px;font-weight:700;fill:#1f2d3d}
+.m13b-lab{font-size:10px;font-weight:700;fill:#ffffff}
+.m13b-ms{font-size:9.5px;fill:#64748b}
+.m13b-note{font-size:11px;font-weight:700;fill:#b45309}
+.m13b-w{animation:m13b-rw 9s linear infinite}
+.m13b-m{animation:m13b-rm 9s linear infinite}
+.m13b-x{animation:m13b-rx 9s linear infinite}
+@keyframes m13b-rw{0%,4%{opacity:0}10%,100%{opacity:1}}
+@keyframes m13b-rm{0%,40%{opacity:0}46%,100%{opacity:1}}
+@keyframes m13b-rx{0%,86%{opacity:0}91%,100%{opacity:1}}
+</style>
+<text x="12" y="20" class="m13b-h">Same page, two budgets — the radio tax makes mobile longer →</text>
+<text class="m13b-t" x="12" y="60">Wired</text>
+<g class="m13b-w">
+<rect x="110" y="44" width="8" height="24" rx="2" fill="#64748b"/>
+<rect x="118" y="44" width="48" height="24" rx="2" fill="#2c7be5"/><text class="m13b-lab" x="142" y="60" text-anchor="middle">TCP</text>
+<rect x="166" y="44" width="48" height="24" rx="2" fill="#7c3aed"/><text class="m13b-lab" x="190" y="60" text-anchor="middle">TLS</text>
+<rect x="214" y="44" width="84" height="24" rx="2" fill="#16a34a"/><text class="m13b-lab" x="256" y="60" text-anchor="middle">request</text>
+<text class="m13b-ms" x="306" y="60">≈ 76 ms to first byte</text>
+</g>
+<text class="m13b-t" x="12" y="106">Mobile</text>
+<text class="m13b-t" x="12" y="120">(from idle)</text>
+<g class="m13b-m">
+<rect x="110" y="96" width="168" height="24" rx="2" fill="#f59e0b"/><text class="m13b-lab" x="194" y="112" text-anchor="middle">RRC setup ~70 ms</text>
+<rect x="278" y="96" width="8" height="24" rx="2" fill="#64748b"/>
+<rect x="286" y="96" width="120" height="24" rx="2" fill="#2c7be5"/><text class="m13b-lab" x="346" y="112" text-anchor="middle">TCP</text>
+<rect x="406" y="96" width="120" height="24" rx="2" fill="#7c3aed"/><text class="m13b-lab" x="466" y="112" text-anchor="middle">TLS</text>
+<rect x="526" y="96" width="156" height="24" rx="2" fill="#16a34a"/><text class="m13b-lab" x="604" y="112" text-anchor="middle">request</text>
+<text class="m13b-ms" x="110" y="140">≈ 236 ms to first byte — each RTT is ~2.5× bigger on the radio</text>
+</g>
+<g class="m13b-x">
+<rect x="110" y="160" width="572" height="30" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+<text class="m13b-note" x="396" y="179" text-anchor="middle">The extra length is the one-time RRC wake-up • kept warm, mobile collapses toward the wired bar</text>
+</g>
+</svg>
+<figcaption>Two horizontal budgets to scale: the <b>mobile-from-idle</b> bar carries an extra <b>RRC radio-setup</b> segment and fatter TCP/TLS/request round-trips — which is why the same page feels ~2.5× slower on a sleeping phone.</figcaption>
+</figure>
+
 Compare the two pies. The mobile request is **~2.5× slower** for the *same* page, and the
 extra time is almost entirely (a) the one-time RRC wake-up and (b) each RTT being ~2.5×
 larger because the radio access sits in the path. This is why "keep the radio warm" and
@@ -272,6 +364,82 @@ latency exploding under load even though bandwidth looks fine.
 The classic symptom: start a big upload, and suddenly your ping to *anything* jumps from
 20 ms to 300+ ms. The upload filled your modem's upstream buffer, and now every other packet
 — your game, your video call, your DNS query — waits behind it.
+
+<figure class="anim-fig">
+<svg viewBox="0 0 720 250" role="img" aria-label="Animation: packets arrive faster than the link can drain them and pile into an over-large buffer, so the queue and the queuing delay keep growing even though the link output rate stays constant.">
+<style>
+.m13c-h{font-size:13px;font-weight:700;fill:#2c7be5}
+.m13c-t{font-size:10px;font-weight:700;fill:#1f2d3d}
+.m13c-s{font-size:9.5px;fill:#64748b}
+.m13c-note{font-size:11px;font-weight:700;fill:#b91c1c}
+.m13c-in1{animation:m13c-in 2.1s linear infinite}
+.m13c-in2{animation:m13c-in 2.1s linear infinite;animation-delay:-.7s}
+.m13c-in3{animation:m13c-in 2.1s linear infinite;animation-delay:-1.4s}
+.m13c-out1{animation:m13c-out 2.4s linear infinite}
+.m13c-out2{animation:m13c-out 2.4s linear infinite;animation-delay:-1.2s}
+.m13c-q1{animation:m13c-k1 9s linear infinite}
+.m13c-q2{animation:m13c-k2 9s linear infinite}
+.m13c-q3{animation:m13c-k3 9s linear infinite}
+.m13c-q4{animation:m13c-k4 9s linear infinite}
+.m13c-q5{animation:m13c-k5 9s linear infinite}
+.m13c-q6{animation:m13c-k6 9s linear infinite}
+.m13c-q7{animation:m13c-k7 9s linear infinite}
+.m13c-q8{animation:m13c-k8 9s linear infinite}
+.m13c-q9{animation:m13c-k9 9s linear infinite}
+.m13c-q10{animation:m13c-k10 9s linear infinite}
+.m13c-q11{animation:m13c-k11 9s linear infinite}
+.m13c-q12{animation:m13c-k12 9s linear infinite}
+@keyframes m13c-in{0%{transform:translateX(0);opacity:0}12%{opacity:1}86%{opacity:1}100%{transform:translateX(125px);opacity:0}}
+@keyframes m13c-out{0%{transform:translateX(0);opacity:0}15%{opacity:1}82%{opacity:1}100%{transform:translateX(108px);opacity:0}}
+@keyframes m13c-k1{0%,3%{opacity:0}6%,100%{opacity:1}}
+@keyframes m13c-k2{0%,9%{opacity:0}12%,100%{opacity:1}}
+@keyframes m13c-k3{0%,15%{opacity:0}18%,100%{opacity:1}}
+@keyframes m13c-k4{0%,21%{opacity:0}24%,100%{opacity:1}}
+@keyframes m13c-k5{0%,27%{opacity:0}30%,100%{opacity:1}}
+@keyframes m13c-k6{0%,33%{opacity:0}36%,100%{opacity:1}}
+@keyframes m13c-k7{0%,39%{opacity:0}42%,100%{opacity:1}}
+@keyframes m13c-k8{0%,45%{opacity:0}48%,100%{opacity:1}}
+@keyframes m13c-k9{0%,51%{opacity:0}54%,100%{opacity:1}}
+@keyframes m13c-k10{0%,57%{opacity:0}60%,100%{opacity:1}}
+@keyframes m13c-k11{0%,63%{opacity:0}66%,100%{opacity:1}}
+@keyframes m13c-k12{0%,69%{opacity:0}72%,100%{opacity:1}}
+</style>
+<text x="12" y="20" class="m13c-h">Packets pile into an over-large queue — delay grows, throughput does not</text>
+<text class="m13c-t" x="20" y="96">arrivals</text>
+<text class="m13c-s" x="20" y="110">fast / bursty</text>
+<g class="m13c-in1"><rect x="40" y="118" width="16" height="16" rx="2" fill="#2c7be5"/></g>
+<g class="m13c-in2"><rect x="40" y="118" width="16" height="16" rx="2" fill="#2c7be5"/></g>
+<g class="m13c-in3"><rect x="40" y="118" width="16" height="16" rx="2" fill="#2c7be5"/></g>
+<text class="m13c-t" x="350" y="52" text-anchor="middle">over-large buffer (bufferbloat)</text>
+<rect x="175" y="60" width="350" height="92" rx="6" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+<rect class="m13c-q1" x="180" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q2" x="235" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q3" x="290" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q4" x="345" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q5" x="400" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q6" x="455" y="112" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q7" x="180" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q8" x="235" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q9" x="290" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q10" x="345" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q11" x="400" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<rect class="m13c-q12" x="455" y="78" width="44" height="30" rx="3" fill="#2c7be5"/>
+<text class="m13c-t" x="620" y="96" text-anchor="middle">output</text>
+<text class="m13c-s" x="620" y="110" text-anchor="middle">fixed rate</text>
+<g class="m13c-out1"><rect x="530" y="118" width="16" height="16" rx="2" fill="#16a34a"/></g>
+<g class="m13c-out2"><rect x="530" y="118" width="16" height="16" rx="2" fill="#16a34a"/></g>
+<text class="m13c-t" x="20" y="188">queuing delay ↑</text>
+<rect class="m13c-q2" x="175" y="176" width="56" height="16" rx="2" fill="#16a34a"/>
+<rect class="m13c-q4" x="233" y="176" width="56" height="16" rx="2" fill="#16a34a"/>
+<rect class="m13c-q6" x="291" y="176" width="56" height="16" rx="2" fill="#f59e0b"/>
+<rect class="m13c-q8" x="349" y="176" width="56" height="16" rx="2" fill="#f59e0b"/>
+<rect class="m13c-q10" x="407" y="176" width="56" height="16" rx="2" fill="#ef4444"/>
+<rect class="m13c-q12" x="465" y="176" width="56" height="16" rx="2" fill="#ef4444"/>
+<rect x="110" y="210" width="500" height="30" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+<text class="m13c-note" x="360" y="229" text-anchor="middle">Throughput stays fine — the delay explodes. Fix = smaller/smarter queues (AQM), not more bandwidth.</text>
+</svg>
+<figcaption>Packets arrive faster than the link drains, so they <b>stack up in an oversized buffer</b>. The queue — and the <b>queuing delay</b> meter — climb from green to red, while the output rate never changes. That is bufferbloat: latency, not throughput, is the casualty.</figcaption>
+</figure>
 
 > ⚡ **Latency note.** Bufferbloat is why "I have gigabit internet but video calls stutter
 > when someone uploads" happens. The fix isn't more bandwidth — it's **smaller/smarter
