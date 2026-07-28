@@ -106,19 +106,19 @@ correctly.
 - [x] 01 — The Layered Model
 - [x] 02 — How data physically moves
 - [x] 03 — Link layer
-- [ ] 04 — Network layer
-- [ ] 05 — Transport layer
-- [ ] 06 — Application protocols
-- [ ] 07 — RF & wireless basics
-- [ ] 08 — Wi-Fi
-- [ ] 09 — Cellular architecture
-- [ ] 10 — LTE air interface
-- [ ] 11 — LTE protocol stack
-- [ ] 12 — Procedures (paging, RRC, handover)
-- [ ] 13 — Latency end to end
-- [ ] 14 — Constrained & IoT devices
-- [ ] 15 — VPNs & tunneling
-- [ ] 16 — The RF underworld
+- [x] 04 — Network layer
+- [x] 05 — Transport layer
+- [x] 06 — Application protocols
+- [x] 07 — RF & wireless basics
+- [x] 08 — Wi-Fi
+- [x] 09 — Cellular architecture
+- [x] 10 — LTE air interface
+- [x] 11 — LTE protocol stack
+- [x] 12 — Procedures (paging, RRC, handover)
+- [x] 13 — Latency end to end
+- [x] 14 — Constrained & IoT devices
+- [x] 15 — VPNs & tunneling
+- [x] 16 — The RF underworld
 - [ ] Capstone projects
 
 *Check these off as we go. We're starting with Module 01.*

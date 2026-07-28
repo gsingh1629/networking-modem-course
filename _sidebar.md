@@ -16,25 +16,25 @@
 
 - **Part II — Core networking**
   - [03 · Link layer](03-link-layer.md)
-  - 04 · Network layer *(soon)*
-  - 05 · Transport layer *(soon)*
-  - 06 · Application protocols *(soon)*
+  - [04 · Network layer](04-network-layer.md)
+  - [05 · Transport layer](05-transport-layer.md)
+  - [06 · Application protocols](06-application-protocols.md)
 
 - **Part III — Wireless & modem**
-  - 07 · RF & wireless basics *(soon)*
-  - 08 · Wi-Fi *(soon)*
-  - 09 · Cellular architecture *(soon)*
+  - [07 · RF & wireless basics](07-rf-wireless.md)
+  - [08 · Wi-Fi](08-wifi.md)
+  - [09 · Cellular architecture](09-cellular-architecture.md)
 
 - **Part IV — 4G/LTE internals**
-  - 10 · LTE air interface *(soon)*
-  - 11 · LTE protocol stack *(soon)*
-  - 12 · Paging, RRC & handover *(soon)*
+  - [10 · LTE air interface](10-lte-air-interface.md)
+  - [11 · LTE protocol stack](11-lte-protocol-stack.md)
+  - [12 · Paging, RRC & handover](12-procedures.md)
 
 - **Part V — Advanced & hidden**
-  - 13 · Latency end to end *(soon)*
-  - 14 · Constrained & IoT devices *(soon)*
-  - 15 · VPNs & tunneling *(soon)*
-  - 16 · The RF underworld *(soon)*
+  - [13 · Latency end to end](13-latency.md)
+  - [14 · Constrained & IoT devices](14-constrained-devices.md)
+  - [15 · VPNs & tunneling](15-vpns.md)
+  - [16 · The RF underworld](16-rf-underworld.md)
 
 - **Meta**
   - [Contributing](CONTRIBUTING.md)
